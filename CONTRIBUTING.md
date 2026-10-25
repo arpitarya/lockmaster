@@ -20,7 +20,7 @@ Python 3.9 or newer, nothing else.
 ```bash
 git clone https://github.com/arpitarya/lockmaster.git
 cd lockmaster
-python3 scripts/bootstrap.py
+PYTHONPATH=src python3 -m lockmaster install .
 python3 -m unittest discover tests
 python3 scripts/check-work-system.py
 ```

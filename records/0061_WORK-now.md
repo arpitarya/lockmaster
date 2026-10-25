@@ -100,6 +100,11 @@ where someone will pick it up, not in a live view.
   row, closes dead sessions), `show` on every prompt, `sync` after Bash, Agent
   and worktree calls, `stop` on `Stop` (asks once for an empty `working on`
   cell), `end` on `SessionEnd` (cleans or queues what the session left — SR-WORK-CLEANUP — then removes the rows).
+- **Every write goes through one renderer** — `lockmaster.now`
+  ([SR-ARCHITECTURE](0101_architecture.md) decision 14) when lockmaster is
+  importable, else the same shape in `now-ledger.py` — and drops any resource
+  row whose path is gone, so NOW.md equals `lockmaster status --now` after
+  each session end, as it does after each landing.
 - A crash loses nothing that matters: the row survives until the next session
   closes it, and its leftovers become a work item then.
 - `require-progress.sh` ([SR-WORK-SESSION](./0054_WORK-session.md)) still nudges a session that

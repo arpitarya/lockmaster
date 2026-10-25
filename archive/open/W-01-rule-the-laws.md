@@ -7,7 +7,8 @@ filed: 2026-10-25
 filed_by: "Arpit (Cowork, Opus 5.5)"
 updated: 2026-10-25
 updated_by: "Arpit (Cowork, Opus 5.5)"
-ball: arpit
+ball: none
+closed: 2026-10-25
 ---
 
 # W-01 — rule the five proposed laws
@@ -16,13 +17,20 @@ ball: arpit
 
 | step | what we do | what it gives us | state |
 |---|---|---|---|
-| 1 | The decider reads the five proposals below | what binds lockmaster beyond L0–L2 | 🔴 decider decides |
-| 2 | An agent writes each accepted law as its own `SR-LAW-n` record | one home per law (L0) | ⏳ |
-| 3 | SR-LAWS gets its rows, `CLAUDE.md` its lines, the register its rows | the law is findable | ⏳ |
+| 1 | The decider reads the five proposals below | what binds lockmaster beyond L0–L2 | ✅ ruled 2026-10-25 |
+| 2 | An agent writes each accepted law as its own `SR-LAW-n` record | one home per law (L0) | ✅ `0005`–`0009` |
+| 3 | SR-LAWS gets its rows, `CLAUDE.md` its lines, the register its rows | the law is findable | ✅ |
 
 **Arpit, 2026-10-25:** *"Here is the lock master repo. Add the necessary documents, add whatever is needed for the tool to be built out."*
 
 **Model:** Sonnet once ruled: five short records in the shape of SR-LAW-2.
+
+## Ruling
+
+**Arpit, 2026-10-25 (Cowork):** *"All the blockers, I accept whatever is said over there."* — then, on L6: *"I want this to be Python only project. I don't believe we need npm."*
+
+- **L3, L4, L5, L7 accepted** as proposed → SR-LAW-3, SR-LAW-4, SR-LAW-5, SR-LAW-7.
+- **L6 changed:** not *PyPI and npm* but **Python only, PyPI only** → SR-LAW-6.
 
 ## Goal
 
@@ -40,8 +48,8 @@ Every rule lockmaster cannot break is a law, ruled by the decider, in one record
 
 | DoD | what | state |
 |---|---|---|
-| 1 · ruled | each of L3–L7 accepted, changed or rejected, in the decider's words | ⏳ |
-| 2 · written | one `SR-LAW-n` record per accepted law; SR-LAWS, the register and `CLAUDE.md` updated in the same change | ⏳ |
+| 1 · ruled | each of L3–L7 accepted, changed or rejected, in the decider's words | ✅ |
+| 2 · written | one `SR-LAW-n` record per accepted law; SR-LAWS, the register and `CLAUDE.md` updated in the same change | ✅ |
 
 ## Blockers
 

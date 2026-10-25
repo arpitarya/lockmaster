@@ -109,7 +109,7 @@ check that slips on the first busy day.
 
 - [`scripts/sr-guard.sh`](../scripts/sr-guard.sh) — decisions 3 and 6.
 - [`records/README.md`](README.md) §Ownership and §Describes — the two tables.
-- [`records/RULE-SINCE`](RULE-SINCE) — the audit baseline, written by `scripts/bootstrap.py` at the first commit; each later move is noted in the file with its reason.
+- [`records/RULE-SINCE`](RULE-SINCE) — the audit baseline, the first commit's sha; each later move is noted in the file with its reason.
 
 ### Veto condition
 

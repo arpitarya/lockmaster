@@ -10,23 +10,28 @@ lockmaster puts the changes onto `main` one at a time — only the claimed files
 generated files rebuilt, your checks run — and cleans up after each. Like a
 canal lock-keeper: one boat through at a time, the water levels kept safe.
 
-> **Status: design, not yet built.** The design of record is
-> [SR-ARCHITECTURE](records/0101_architecture.md); the build order is the queue
-> in [`work/OPEN-WORK.md`](work/OPEN-WORK.md).
+> **Status: the core loop works, unreleased.** Claims, the queue, landing,
+> generated files, structural merges, the kit's hooks and `install` are built
+> and tested on scratch repositories; nothing is on PyPI yet. The design of
+> record is [SR-ARCHITECTURE](records/0101_architecture.md); what is left is
+> the queue in [`work/OPEN-WORK.md`](work/OPEN-WORK.md).
 
 ## How a change moves
 
 ```text
 lockmaster start W-12 --paths src/a.py src/b.py   # branch + worktree + claim
-# … the agent edits only the claimed files …
-lockmaster submit                                  # joins the queue
-lockmaster run                                     # lands queued changes, one at a time
+cd .claude/worktrees/W-12                          # … the agent edits only the claimed files …
+lockmaster submit -m "W-12: the parser"            # joins the queue and lands it, one at a time
 lockmaster queue                                   # what is waiting, landed, or red
+lockmaster status                                  # sessions, changes, worktrees, disk use
+lockmaster doctor                                  # stale locks, orphan worktrees, unmerged branches
 ```
 
 A change that cannot land cleanly — a real conflict, a failed check — goes
-**red** and waits for a person. lockmaster never runs `--force`, `branch -D`,
-`reset --hard` or `git clean`.
+**red**, is set aside so the next change still lands, and waits for its agent
+or a person. lockmaster never runs `--force`, `branch -D`, `reset --hard` or
+`git clean`; a worktree or branch is removed only when git itself shows nothing
+in it is missing from `main`.
 
 ## What it is not
 
@@ -41,25 +46,31 @@ as Anthropic did for its monorepo: [`work/compare/source-control.compare.md`](wo
 [main]
 branch = "main"
 
-[checks]
-run = ["pytest -q"]
+[checks]                         # name = command; every one must pass before a landing
+tests = "pytest -q"
 
-[generated]                      # rebuilt on landing, never merged
+[generated]                      # path or glob = command; rebuilt on landing, never merged
 "CHANGELOG.md" = "python3 scripts/gen-changelog.py"
 
 [merge]                          # structural merges: two new rows never conflict
 "work/WORKLOG.md" = "append-newest-first"
 "work/OPEN-WORK.md" = "table-rows"
+"work/LESSONS.md" = "append"
 ```
+
+`lockmaster drivers` registers the merge drivers in `.git/config` and writes
+the `[merge]` paths into `.gitattributes`; plain `git merge` uses them too.
+`lockmaster install <repo>` puts the work-system kit — hooks, settings, the
+`docket` skill, CI — into a repository, pinned in `.claude/lockmaster.lock`.
 
 ## Working on lockmaster
 
 Python ≥ 3.9, standard library only.
 
 ```bash
-python3 scripts/bootstrap.py          # once per clone: installs kit/ into .claude/ and .github/, the commit guard
-python3 -m lockmaster --help          # the stub names its commands
-python3 -m unittest discover tests    # the tests
+PYTHONPATH=src python3 -m lockmaster install .   # once per clone: kit/ into .claude/ and .github/, the commit guard, the merge drivers
+PYTHONPATH=src python3 -m lockmaster --help      # every command
+python3 -m unittest discover tests               # the tests — scratch git repositories, one file per work item
 python3 scripts/check-work-system.py  # the work-system checks
 ```
 

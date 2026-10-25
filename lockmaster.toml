@@ -1,0 +1,18 @@
+# lockmaster's own landing rules — SR-ARCHITECTURE decision 13.
+# Read by `lockmaster` from the main checkout; every landing runs [checks].
+
+[main]
+branch = "main"
+
+[checks]
+tests = "python3 -B -m unittest discover -s tests -q"
+work-system = "python3 -B scripts/check-work-system.py"
+inbox = "python3 -B scripts/check-open-work-inbox.py"
+
+[merge]
+"work/WORKLOG.md" = "append-newest-first"
+"work/LESSONS.md" = "append-newest-first"
+"work/IMPLEMENTATION.md" = "append-newest-first"
+"work/OPEN-WORK.md" = "table-rows"
+"work/BACKLOG.md" = "table-rows"
+"archive/README.md" = "table-rows"

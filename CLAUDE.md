@@ -63,6 +63,11 @@ Each law is stated in exactly one record and is **not restated here**:
 - **L0** — SRs are the only source of truth; Law records outrank every other record — [SR-LAW-0](records/0002_LAW-0-authority.md)
 - **L1** — a retired record is archived, never deleted — [SR-LAW-1](records/0003_LAW-1-retired-records-archived.md)
 - **L2** — `work/MACHINE.md`'s budget section is always followed — 5 GB of disk per project, all agents combined; every GB past it needs the decider's approval — [SR-LAW-2](records/0004_LAW-2-machine-budget.md)
+- **L3** — lockmaster never loses work — never a forced git operation; what would lose data stops red for the decider — [SR-LAW-3](records/0005_LAW-3-never-lose-work.md)
+- **L4** — zero runtime dependencies — the Python standard library alone — [SR-LAW-4](records/0006_LAW-4-zero-dependencies.md)
+- **L5** — git stays the store — every landing is a plain git commit; lockmaster keeps no history of its own — [SR-LAW-5](records/0007_LAW-5-git-stays-the-store.md)
+- **L6** — Python only — one package, on PyPI and nowhere else; no npm — [SR-LAW-6](records/0008_LAW-6-python-only.md)
+- **L7** — no model in the lander — lockmaster never calls an AI model — [SR-LAW-7](records/0009_LAW-7-no-model-in-the-lander.md)
 
 [SR-LAWS](records/0001_LAWS.md) assigns the handles and routes each to its
 record; that is all it does. Add a law by adding a record in the law range and
@@ -115,12 +120,16 @@ archive/     THE ONE ARCHIVE — everything retired, mirroring the live tree
 src/         THE TOOL — the `lockmaster` package, Python ≥ 3.9, standard library only
 tests/       scratch-repo tests, one per decision as it is built
 kit/         WHAT LOCKMASTER INSTALLS — kit/claude → .claude/, kit/github → .github/
-scripts/     the commit guard, the work-system checks, bootstrap.py (installs kit/ here)
-.claude/     installed from kit/claude by scripts/bootstrap.py — edit kit/, never the copy
-.github/     installed from kit/github by scripts/bootstrap.py
+scripts/     the commit guard and the work-system checks
+.claude/     installed from kit/claude by `lockmaster install .` — edit kit/, never the copy
+.github/     installed from kit/github by `lockmaster install .`
+lockmaster.toml  this repo's own landing rules: its checks and merge drivers
 ```
 
 **Dogfooding.** lockmaster is built with the work system it will install.
-Change a hook in `kit/claude/hooks/`, then run `python3 scripts/bootstrap.py`
-to install it here; an edit made only in `.claude/` is overwritten by the next
-bootstrap.
+Change a hook in `kit/claude/hooks/`, then run
+`PYTHONPATH=src python3 -m lockmaster install .` to install it here; an edit
+made only in `.claude/` is reported by `lockmaster doctor` and overwritten by
+the next install. Once the kit is installed, an agent session cannot commit to
+`main`: work goes through `lockmaster start` / `submit`
+([SR-ARCHITECTURE](records/0101_architecture.md) decision 12).

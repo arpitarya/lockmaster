@@ -48,7 +48,7 @@ record to become wrong?*
 
 | range | holds | a new record takes |
 |---|---|---|
-| `0001`–`0050` | the **Law** records only — `0001` SR-LAWS, `0002` SR-LAW-0, `0003` SR-LAW-1, `0004` SR-LAW-2 | the next free number after the highest law |
+| `0001`–`0050` | the **Law** records only — `0001` SR-LAWS, `0002` SR-LAW-0, `0003` SR-LAW-1, `0004` SR-LAW-2, `0005`–`0009` SR-LAW-3 to SR-LAW-7 | the next free number after the highest law |
 | `0051`–`0100` | the **WORK** records only — how work is done | the next free number after the highest |
 | `0101`– | every other record | the next free number after the highest |
 
@@ -88,7 +88,7 @@ on.
 | where | what it does |
 |---|---|
 | `scripts/sr-guard.sh` | a `commit-msg` hook: refuses a commit that changes an owned component without staging its owning record and every describer — unless the message carries `no SR affected` on its own line. Install: `ln -sf ../../scripts/sr-guard.sh .git/hooks/commit-msg` |
-| `records/RULE-SINCE` | the baseline commit sha from which the rule applies — written by `scripts/bootstrap.py` at the first commit; CI replays the guard from it |
+| `records/RULE-SINCE` | the baseline commit sha from which the rule applies — the first commit's sha, written once it existed; CI replays the guard from it |
 
 **The escape hatch is a claim in git history under your name**, not a silent
 skip. What none of this proves: that a touched record is **coherent**.
@@ -107,6 +107,11 @@ Start from `TEMPLATE.md`.
 | [0002](0002_LAW-0-authority.md) | **SR-LAW-0** | **L0** — records are the only source of truth; Law records outrank every other record | accepted | yes |
 | [0003](0003_LAW-1-retired-records-archived.md) | **SR-LAW-1** | **L1** — a retired record is archived, never deleted | accepted | yes |
 | [0004](0004_LAW-2-machine-budget.md) | **SR-LAW-2** | **L2** — `work/MACHINE.md`'s budget section is always followed — 5 GB of disk per project, all agents combined; every GB past it approved first | accepted | yes |
+| [0005](0005_LAW-3-never-lose-work.md) | **SR-LAW-3** | **L3** — lockmaster never loses work — never a forced git operation; what would lose data stops red for the decider | accepted | partly |
+| [0006](0006_LAW-4-zero-dependencies.md) | **SR-LAW-4** | **L4** — zero runtime dependencies — the Python standard library alone | accepted | yes |
+| [0007](0007_LAW-5-git-stays-the-store.md) | **SR-LAW-5** | **L5** — git stays the store — every landing is a plain git commit; lockmaster keeps no history of its own | accepted | yes |
+| [0008](0008_LAW-6-python-only.md) | **SR-LAW-6** | **L6** — Python only — one package, on PyPI and nowhere else; no npm | accepted | yes |
+| [0009](0009_LAW-7-no-model-in-the-lander.md) | **SR-LAW-7** | **L7** — no model in the lander — lockmaster never calls an AI model | accepted | partly |
 | [0051](0051_WORK-open-queue.md) | **SR-WORK-OPEN-QUEUE** | How `OPEN-WORK.md` works — the queue discipline in eight groups | accepted | yes |
 | [0052](0052_WORK-backlog.md) | **SR-WORK-BACKLOG** | How `BACKLOG.md` works — the named-but-unclaimed in five classes | accepted | yes |
 | [0053](0053_WORK-lifecycle.md) | **SR-WORK-LIFECYCLE** | How a feature travels — compare, proposal, handoff in the item file, the model line, one record | accepted | yes |
@@ -138,7 +143,6 @@ yet is owned by an open `W-nn`.
 | `scripts/sr-guard.sh` | SR-WORK-OWNERSHIP | the guard is the executable form of decisions 3 and 6 |
 | `scripts/check-open-work-inbox.py` | SR-WORK-OPEN-QUEUE | rule 45a's check |
 | `scripts/check-work-system.py` | SR-WORK-OPEN-QUEUE | the row, inbox and lost-id checks; it also runs the ownership, registry and archive checks |
-| `scripts/bootstrap.py` | SR-ARCHITECTURE | decision 15: installs the kit into this repo until `lockmaster install` exists |
 | `.claude/hooks/guard-open-work-inbox.sh` | SR-WORK-OPEN-QUEUE | rule 45a, in-session |
 | `.claude/hooks/inject-inbox.sh` | SR-WORK-BLOCKERS | decision 7 |
 | `.claude/hooks/stop-if-blocked.sh` | SR-WORK-BLOCKERS | decision 7 |
@@ -148,10 +152,13 @@ yet is owned by an open `W-nn`.
 | `.claude/hooks/require-progress.sh` | SR-WORK-SESSION | decision 5 |
 | `.claude/hooks/now-ledger.py` | SR-WORK-NOW | decisions 2–5 |
 | `.claude/hooks/disk-budget.py` | SR-LAW-2 | decision 4 |
+| `.claude/hooks/claim-guard.py` | SR-ARCHITECTURE | decision 5: warns on a write outside a change's claim |
+| `.claude/hooks/block-main.py` | SR-ARCHITECTURE | decision 12: refuses an agent's commit or push to `main` |
 | `kit` | SR-ARCHITECTURE | decision 15: the hooks, settings, skill and CI lockmaster installs; `.claude/` and `.github/` here are installed copies of it |
 | `src` | SR-ARCHITECTURE | decisions 1–14: the `lockmaster` package |
 | `tests` | SR-ARCHITECTURE | scratch-repo tests for every decision as it is built |
 | `pyproject.toml` | SR-ARCHITECTURE | decision 2: the package, Python ≥ 3.9, no dependencies |
+| `lockmaster.toml` | SR-ARCHITECTURE | decision 13: this repository's own checks and merge drivers |
 
 <!-- OWNERSHIP-TABLE-END -->
 

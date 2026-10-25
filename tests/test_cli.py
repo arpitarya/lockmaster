@@ -1,30 +1,41 @@
-"""The stub's contract: every command SR-ARCHITECTURE decision 14 names exists,
-and none pretends to work before it is built."""
+"""The command's contract: every command SR-ARCHITECTURE decision 14 names
+exists, help exits 0, and a refusal is exit 2 with the reason on stderr."""
 import io
-import os
-import sys
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+from support import ScratchCase
 
-from lockmaster.cli import COMMANDS, main  # noqa: E402
+from lockmaster.cli import COMMANDS, main
 
 
-class StubContract(unittest.TestCase):
+class Contract(unittest.TestCase):
     def test_decision_14_commands_exist(self):
-        for name in ("start", "claim", "submit", "run", "queue", "status", "abandon", "doctor", "install"):
+        for name in ("start", "claim", "submit", "run", "queue", "status", "abandon", "doctor", "install",
+                     "regen", "drivers"):
             self.assertIn(name, COMMANDS)
-
-    def test_unbuilt_command_fails_loudly(self):
-        err = io.StringIO()
-        with redirect_stderr(err):
-            self.assertEqual(main(["run"]), 2)
-        self.assertIn("not built yet", err.getvalue())
 
     def test_help_exits_zero(self):
         with redirect_stdout(io.StringIO()):
             self.assertEqual(main([]), 0)
+
+
+class Refusals(ScratchCase):
+    def test_submit_outside_a_change_is_refused_with_its_reason(self):
+        code, _, err = self.cli("submit")
+        self.assertEqual(code, 2)
+        self.assertIn("not inside a change's worktree", err)
+
+    def test_a_bad_item_id_is_refused(self):
+        code, _, err = self.cli("start", "../x", "--paths", "a.txt")
+        self.assertEqual(code, 2)
+        self.assertIn("item id", err)
+
+    def test_starting_a_live_change_twice_is_refused(self):
+        self.assertEqual(self.cli("start", "W-1", "--paths", "a.txt")[0], 0)
+        code, _, err = self.cli("start", "W-1", "--paths", "a.txt")
+        self.assertEqual(code, 2)
+        self.assertIn("already has", err)
 
 
 if __name__ == "__main__":

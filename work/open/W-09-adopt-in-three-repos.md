@@ -6,7 +6,7 @@ item: W-09
 filed: 2026-10-25
 filed_by: "Arpit (Cowork, Opus 5.5)"
 updated: 2026-10-25
-updated_by: "Arpit (Cowork, Opus 5.5)"
+updated_by: "Claude Code (Opus 5.5), W-06 closed"
 ball: agent
 ---
 
@@ -38,7 +38,7 @@ fux, sheetpane and codelaw run the same kit at a pinned version, and each declar
 
 ## Blockers
 
-W-06.
+None — W-06 closed 2026-10-25: `lockmaster install` exists.
 
 ## Record affected
 
@@ -50,4 +50,4 @@ Each repo's own records that own `.claude/hooks/*` — amended there, not here.
 
 ## Reference
 
-- [W-06](W-06-install.md)
+- [W-06](../../archive/open/W-06-install.md) (closed) · [SR-ARCHITECTURE](../../records/0101_architecture.md) decisions 14–15

@@ -1,4 +1,4 @@
-# Installed from kit/github/workflows/ci.yml by scripts/bootstrap.py — edit the kit, not this copy.
+# Installed from kit/github/workflows/ci.yml by `lockmaster install` — edit the kit, not this copy.
 name: ci
 
 on:
@@ -49,4 +49,4 @@ jobs:
             SR_GUARD_COMMIT=$c scripts/sr-guard.sh
           done
       - name: no forced git operation in the tool (SR-ARCHITECTURE decision 11)
-        run: "! grep -rnE -- '--force|branch -D|reset --hard|git clean' src"
+        run: "! grep -rnE -- '--force|branch -D|reset --hard|git clean|push -f' src kit/claude"
