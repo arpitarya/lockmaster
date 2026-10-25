@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lockmaster"
+version = "0.0.0"
+description = "Lands AI-agent changes into main one at a time, without ever losing work."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Arpit Arya" }]
+requires-python = ">=3.9"
+dependencies = []
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Environment :: Console",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Version Control :: Git",
+]
+
+[project.urls]
+Homepage = "https://github.com/arpitarya/lockmaster"
+
+[project.scripts]
+lockmaster = "lockmaster.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

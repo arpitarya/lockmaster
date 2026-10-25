@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+/build/
+/dist/
+*.egg-info/
+
+# agent-session scratch: locks, nudge flags, ledger state (SR-WORK-BLOCKERS, SR-WORK-NOW, SR-WORK-CLEANUP, SR-LAW-2)
+.claude/.locks/
+.claude/.stop-attempts
+.claude/.progress-nudged
+.claude/.now-nudged
+.claude/.now.lock/
+.claude/.sessions/
+.claude/.disk-usage
+.claude/.disk-nudged
+.claude/.disk-approved
+.claude/worktrees/
+.claude/settings.local.json
+work/.NOW.md.tmp
+
+.DS_Store
