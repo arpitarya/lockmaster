@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-10-25 — committed; the release pipeline built and 0.0.1 cut  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"commit everything and publish the package."* — then, mid-task: *"create a full-fledged CI/CD pipeline to publish the package."*
+- **Done:** everything committed (`d522854`; the guard's three unstaged describers claimed `no SR affected` in the message, each with its reason). `.github/workflows/release.yml`: test (3 OS × Python 3.9/3.13) · lint · build (tag/version/CHANGELOG agree, `twine check --strict`, every kit file in the wheel) · verify (the wheel alone on every OS: install the kit, doctor, land a change) · TestPyPI · PyPI (trusted publishing, `pypi` environment) · GitHub release. `scripts/release.py` (prepare/check/notes); `pyproject.toml`: dynamic version, kit shipped as `lockmaster/kit` (B-005 closed). 0.0.1 cut. The kit installed into this repo with `lockmaster install .`, so CI and the release's lint can pass. SR-ARCHITECTURE decision 17; `CLAUDE.md` §Layout names `.github/workflows/release.yml` as edited in place (said out loud, SR-WORK-DOCS 7a).
+- **Decided / left open:** not published — PyPI trusted publishing needs the decider to add the pending publishers on pypi.org and test.pypi.org and the GitHub environments, then push `main` and `v0.0.1` (W-08). The sdist carries the source, so publishing makes the code public before the repository is; decision 17 already allows public once the core loop works.
+- **Mistakes:** the first commit attempt was refused by the commit guard, as it should be: two kit hooks had changed mode only (an earlier `chmod`), and `check-work-system.py` carried the previous session's queue-check edit.
+- **Next:** the decider does W-08 steps 1a and 1b.
+
 ## 2026-10-25 — W-03 to W-07 built: the core loop, merge drivers, hooks, install, status  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"look into all the OpenWork items . Implement all of them"*

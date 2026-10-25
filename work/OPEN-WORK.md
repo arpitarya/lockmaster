@@ -22,7 +22,7 @@ here. Read that record before changing anything below it.
 
 | what the decider decides | filed |
 |---|---|
-| 🔴 **Hold the name on PyPI** — publish a placeholder 0.0.1 of `lockmaster` to PyPI from your account (L6: Python only, no npm); and keep or delete the empty npm org `@lockmaster`, created a minute before your npm ruling ([W-08](open/W-08-hold-the-name.md)) | 2026-10-25 |
+| 🔴 **Hold the name on PyPI** — the release pipeline and 0.0.1 are ready: add the trusted publishers and the two GitHub environments (CONTRIBUTING.md §Releasing), then push `main` and the tag `v0.0.1`; and keep or delete the empty npm org `@lockmaster` ([W-08](open/W-08-hold-the-name.md)) | 2026-10-25 |
 | ↳ **blocks:** nothing else in the queue | |
 
 ---
@@ -31,7 +31,7 @@ here. Read that record before changing anything below it.
 
 ### build
 
-🔴 **W-08** `arpit` Hold the name on PyPI: a placeholder 0.0.1 of `lockmaster` from Arpit's account; npm is dropped (L6), and the empty npm org `@lockmaster` is his to keep or delete. Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
+🔴 **W-08** `arpit` Hold the name on PyPI: the pipeline and 0.0.1 are ready; Arpit adds the trusted publishers and environments, then pushes the tag `v0.0.1`. Keep or delete the npm org `@lockmaster`. Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
 
 ### testing
 

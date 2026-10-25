@@ -15,6 +15,8 @@ owns:
   - lockmaster.toml
   - .claude/hooks/claim-guard.py
   - .claude/hooks/block-main.py
+  - scripts/release.py
+  - .github/workflows/release.yml
 laws: [L0, L1, L2, L3, L4, L5, L6, L7]
 timestamp: 2026-10-25T13:00:00Z
 content_sha: ""
@@ -221,6 +223,20 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     one package, `lockmaster`; no npm package. **The repository stays private
     until 0.1.0** — public once the core loop works (ruled 2026-10-25, W-02);
     a placeholder 0.0.1 on PyPI holds the name before then (W-08).
+    **A release is a tag `v<version>`, and only a tag publishes.**
+    `.github/workflows/release.yml` — lockmaster's own, never in `kit/` —
+    runs the tests on Linux, macOS and Windows under Python 3.9 and 3.13 and
+    the work-system checks; checks that the tag, `lockmaster.__version__` (the
+    one version source) and a `CHANGELOG.md` section agree
+    (`scripts/release.py check`); builds the sdist and wheel, `twine check`s
+    them and confirms the wheel carries every kit file; installs the wheel
+    alone on every OS and Python, installs the kit into a scratch repository
+    with it and lands one change; then publishes to TestPyPI and to PyPI by
+    trusted publishing (no stored token), PyPI behind the `pypi` environment's
+    reviewer; then creates the GitHub release from the CHANGELOG section.
+    `scripts/release.py prepare <version>` cuts a version. The wheel carries
+    `kit/` as `lockmaster/kit`, so `lockmaster install` works from a pip
+    install.
 
 ### Consequences
 
@@ -228,10 +244,9 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
   a time is also what L2's budget wants), at the cost of a queue that waits.
 - Two agents changing the same lines with different intent is still a
   conflict; lockmaster stops and asks, a person decides.
-- Decisions 1–16 are built (W-03 to W-07) and tested on scratch repositories
-  under `tests/`. The kit is found beside the source; a wheel does not carry
-  it yet, so `lockmaster install` runs from a checkout until the package
-  ships `kit/` (backlog).
+- Decisions 1–17 are built (W-03 to W-07, and the release pipeline) and
+  tested on scratch repositories under `tests/`; publishing waits on the
+  decider's one-time trusted-publisher setup (W-08).
 - `main`'s first-parent chain is exactly the landings; an agent's own commits
   are reachable through a landing's second parent. `git log --first-parent`
   reads the landings alone.
@@ -258,6 +273,7 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
 - [`src/lockmaster/`](../src/lockmaster) — decisions 1–15: `land.py` (4–8, 11), `generated.py` (9), `merge.py` and `drivers.py` (10), `config.py` (13), `status.py` and `now.py` (14), `install.py` and `doctor.py` (14–15).
 - [`tests/`](../tests) — one scratch-repo test file per work item that built them.
 - [`lockmaster.toml`](../lockmaster.toml) — this repository's own checks and merge drivers (decision 13).
+- [`.github/workflows/release.yml`](../.github/workflows/release.yml), [`scripts/release.py`](../scripts/release.py), [`pyproject.toml`](../pyproject.toml) — decision 17.
 
 ### Veto condition
 

@@ -1,0 +1,52 @@
+# Installed from kit/github/workflows/ci.yml by `lockmaster install` — edit the kit, not this copy.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.9", "3.13"]
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: unit tests
+        run: python -m unittest discover tests -v
+
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: work-system checks (SR-WORK-OPEN-QUEUE, -OWNERSHIP, -REGISTRY, -ARCHIVE)
+        run: python scripts/check-work-system.py
+      - name: inbox shape (SR-WORK-OPEN-QUEUE rule 45a)
+        run: python scripts/check-open-work-inbox.py
+      - name: replay the commit guard (SR-WORK-OWNERSHIP decision 7)
+        run: |
+          base="$(grep -v '^#' records/RULE-SINCE | head -1 || true)"
+          for c in $(git rev-list --no-merges "${base:+$base..}HEAD"); do
+            SR_GUARD_COMMIT=$c scripts/sr-guard.sh
+          done
+      - name: no forced git operation in the tool (SR-ARCHITECTURE decision 11)
+        run: "! grep -rnE -- '--force|branch -D|reset --hard|git clean|push -f' src kit/claude"

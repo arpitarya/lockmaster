@@ -11,6 +11,7 @@ against this file before an item may be closed
 
 | date | item | what landed | outcome | evidence |
 |---|---|---|---|---|
+| 2026-10-25 | W-08 (step 1) | the release pipeline (`.github/workflows/release.yml`), `scripts/release.py`, one version source, the wheel carrying `kit/` (B-005 closed), 0.0.1 cut | **built** — publishing waits on the decider's trusted-publisher setup and tag push | `tests/test_release.py`, `tests/test_packaging.py`; the built 0.0.1 wheel passes `twine check --strict` and, installed alone in a fresh venv, installs the kit and lands a change |
 | 2026-10-25 | W-07 | `lockmaster status` (`--now`, `--write-now`); `lockmaster.now`, the one NOW.md renderer, written by every landing and by the kit's `now-ledger.py` | **built** — W-07 closed | `tests/test_status.py` |
 | 2026-10-25 | W-06 | `lockmaster install <repo> [--backup]` and `lockmaster doctor`; `.claude/lockmaster.lock`; `scripts/bootstrap.py` archived; `records/RULE-SINCE` = first commit | **built** — W-06 closed; the wheel does not carry `kit/` yet (B-005) | `tests/test_install.py`; an install on a copy of this repo turns `scripts/check-work-system.py` green |
 | 2026-10-25 | W-05 | `kit/claude/hooks/claim-guard.py` and `block-main.py`, wired in `kit/claude/settings.json` | **built** — W-05 closed; live here after `lockmaster install .` | `tests/test_hooks.py` |

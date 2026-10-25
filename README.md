@@ -10,11 +10,19 @@ lockmaster puts the changes onto `main` one at a time — only the claimed files
 generated files rebuilt, your checks run — and cleans up after each. Like a
 canal lock-keeper: one boat through at a time, the water levels kept safe.
 
-> **Status: the core loop works, unreleased.** Claims, the queue, landing,
-> generated files, structural merges, the kit's hooks and `install` are built
-> and tested on scratch repositories; nothing is on PyPI yet. The design of
+> **Status: 0.0.1, pre-alpha.** 0.0.1 holds the name on PyPI. Claims, the
+> queue, landing, generated files, structural merges, the kit's hooks and
+> `install` are built and tested on scratch repositories; commands and files
+> may still change before 0.1.0. The design of
 > record is [SR-ARCHITECTURE](records/0101_architecture.md); what is left is
 > the queue in [`work/OPEN-WORK.md`](work/OPEN-WORK.md).
+
+## Install
+
+```bash
+pip install lockmaster            # Python ≥ 3.9, no dependencies
+lockmaster install .              # the work-system kit into this repository, pinned
+```
 
 ## How a change moves
 
