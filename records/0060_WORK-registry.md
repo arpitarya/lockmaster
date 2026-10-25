@@ -92,27 +92,27 @@ into a scan anyone can do at task end.
 
 | Document | Update trigger | Last verified | Notes |
 |---|---|---|---|
-| `CLAUDE.md` | any rule or pointer changes | 2026-10-25 | 2026-10-25 — §Layout and Dogfooding: `lockmaster install .` replaces bootstrap (W-06) |
+| `CLAUDE.md` | any rule or pointer changes | 2026-10-25 | 2026-10-25 — §Layout: `.github/workflows/release.yml` is lockmaster's own |
 | `AGENTS.md` | CLAUDE.md is renamed or the agents it points at change | 2026-10-25 | 2026-10-25 — created at setup |
-| `README.md` | a command, the status or the install steps change | 2026-10-25 | 2026-10-25 — status, commands and config after W-03–W-07 |
-| `CHANGELOG.md` | a user-visible change lands; a release is cut | 2026-10-25 | 2026-10-25 — the core loop, install, status, hooks (W-03–W-07) |
-| `CONTRIBUTING.md` | the build, test or contribution steps change | 2026-10-25 | 2026-10-25 — build steps: `lockmaster install .` (W-06) |
+| `README.md` | a command, the status or the install steps change | 2026-10-25 | 2026-10-25 — status 0.0.1, `pip install` |
+| `CHANGELOG.md` | a user-visible change lands; a release is cut | 2026-10-25 | 2026-10-25 — [0.0.1] cut; the release pipeline |
+| `CONTRIBUTING.md` | the build, test or contribution steps change | 2026-10-25 | 2026-10-25 — §Releasing: the tag, the one-time trusted-publisher setup |
 | `SECURITY.md` | the reporting channel or the supported versions change | 2026-10-25 | 2026-10-25 — created at setup |
 | `CODE_OF_CONDUCT.md` | the code or its contact changes | 2026-10-25 | 2026-10-25 — created at setup |
 | `work/README.md` | a file is added to or removed from `work/` | 2026-10-25 | 2026-10-25 — created at setup |
-| `work/OPEN-WORK.md` | the same change as the work it tracks | 2026-10-25 | 2026-10-25 — W-03–W-07 closed; W-09 🟢 |
-| `work/BACKLOG.md` | a record names something nobody is doing | 2026-10-25 | 2026-10-25 — B-005, B-006 |
+| `work/OPEN-WORK.md` | the same change as the work it tracks | 2026-10-25 | 2026-10-25 — W-08 rows: the pipeline is ready |
+| `work/BACKLOG.md` | a record names something nobody is doing | 2026-10-25 | 2026-10-25 — B-005 closed (the wheel carries the kit); B-006 open |
 | `work/open/README.md` | the item-file contract changes | 2026-10-25 | 2026-10-25 — created at setup |
-| `work/INTERVIEW.md` | direction, a decision or the live state changes — during the session | 2026-10-25 | 2026-10-25 — state after W-03–W-07 |
-| `work/IMPLEMENTATION.md` | something lands | 2026-10-25 | 2026-10-25 — W-03–W-07 rows |
-| `work/WORKLOG.md` | every session, before it ends — chat-only ones too | 2026-10-25 | 2026-10-25 — the build session |
+| `work/INTERVIEW.md` | direction, a decision or the live state changes — during the session | 2026-10-25 | 2026-10-25 — kit installed here; release pipeline; next is W-08 |
+| `work/IMPLEMENTATION.md` | something lands | 2026-10-25 | 2026-10-25 — W-08 step 1 row |
+| `work/WORKLOG.md` | every session, before it ends — chat-only ones too | 2026-10-25 | 2026-10-25 — the commit and release-pipeline session |
 | `work/NOW.md` | kept by hooks and every landing: a row per live session; empty when nothing runs | 2026-10-25 | 2026-10-25 — written through `lockmaster status --now`'s renderer (W-07) |
 | `work/LESSONS.md` | a failure teaches something durable | 2026-10-25 | 2026-10-25 — created at setup |
 | `work/MACHINE.md` | a surface breaks in a way the code did not cause; the budget is ruled (L2) | 2026-10-25 | 2026-10-25 — the Cowork row names `lockmaster install .` |
 | `work/compare/README.md` | a fork opens, closes, or its trigger fires | 2026-10-25 | 2026-10-25 — created at setup |
 | `work/proposals/README.md` | an idea is filed, graduates, or is rejected | 2026-10-25 | 2026-10-25 — created at setup |
 | `docs/GLOSSARY.md` | a term is coined or redefined | 2026-10-25 | 2026-10-25 — land lock, left behind, lockmaster.lock; red redefined |
-| `records/README.md` | a record's state, ownership or number changes | 2026-10-25 | 2026-10-25 — ownership: two hooks and `lockmaster.toml` in, `bootstrap.py` out |
+| `records/README.md` | a record's state, ownership or number changes | 2026-10-25 | 2026-10-25 — ownership: `scripts/release.py`, `.github/workflows/release.yml` |
 | `records/TEMPLATE.md` | the convention changes | 2026-10-25 | 2026-10-25 — created at setup |
 
 ---

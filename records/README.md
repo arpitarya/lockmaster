@@ -141,6 +141,8 @@ yet is owned by an open `W-nn`.
 | component | owner | note |
 |---|---|---|
 | `scripts/sr-guard.sh` | SR-WORK-OWNERSHIP | the guard is the executable form of decisions 3 and 6 |
+| `scripts/release.py` | SR-ARCHITECTURE | decision 17: cuts and checks a release |
+| `.github/workflows/release.yml` | SR-ARCHITECTURE | decision 17: the release pipeline; lockmaster's own, not part of the kit |
 | `scripts/check-open-work-inbox.py` | SR-WORK-OPEN-QUEUE | rule 45a's check |
 | `scripts/check-work-system.py` | SR-WORK-OPEN-QUEUE | the row, inbox and lost-id checks; it also runs the ownership, registry and archive checks |
 | `.claude/hooks/guard-open-work-inbox.sh` | SR-WORK-OPEN-QUEUE | rule 45a, in-session |

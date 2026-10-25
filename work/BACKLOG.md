@@ -24,7 +24,6 @@ it, and do not read it top-down as a priority order.
 
 | id | what is outstanding | named in | what closes it |
 |---|---|---|---|
-| B-005 | The wheel does not carry `kit/`: `lockmaster install` finds the kit beside a source checkout (or `$LOCKMASTER_KIT`), not in a pip-installed package | [SR-ARCHITECTURE](../records/0101_architecture.md) Consequences | `pyproject.toml` ships `kit/` as package data and a test installs from a built wheel — before 0.1.0 |
 | B-006 | L3 decision 4 says lockmaster puts a row in the decider's inbox when work would be lost; the lander prints the row for the agent and keeps the worktree, and only the session-end ledger files it. Writing `OPEN-WORK.md` from the lander would leave an uncommitted edit in `main`'s checkout | [SR-LAW-3](../records/0005_LAW-3-never-lose-work.md) decision 4 · [SR-ARCHITECTURE](../records/0101_architecture.md) decision 11 | the decider rules whether the lander writes the inbox row itself, and how that edit reaches `main` |
 
 ## `ungated` — a stated rule nothing mechanically checks

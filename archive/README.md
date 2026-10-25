@@ -44,3 +44,9 @@ Rules: [SR-WORK-ARCHIVE](../records/0057_WORK-archive.md).
 | file | retired | successor |
 |---|---|---|
 | [bootstrap.py](scripts/bootstrap.py) | 2026-10-25 — W-06 | `lockmaster install .` ([`src/lockmaster/install.py`](../src/lockmaster/install.py), [SR-ARCHITECTURE](../records/0101_architecture.md) decision 15); the checks it ran are CI's |
+
+## `backlog/`
+
+| id | closed | what absorbed it |
+|---|---|---|
+| B-005 | 2026-10-25 — the wheel carries `kit/` | `pyproject.toml` `[tool.setuptools]`; `tests/test_packaging.py`; the release workflow's "the wheel carries the kit" and verify steps |

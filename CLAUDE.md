@@ -122,7 +122,7 @@ tests/       scratch-repo tests, one per decision as it is built
 kit/         WHAT LOCKMASTER INSTALLS — kit/claude → .claude/, kit/github → .github/
 scripts/     the commit guard and the work-system checks
 .claude/     installed from kit/claude by `lockmaster install .` — edit kit/, never the copy
-.github/     installed from kit/github by `lockmaster install .`
+.github/     installed from kit/github by `lockmaster install .`, plus workflows/release.yml — lockmaster's own release pipeline, edited here
 lockmaster.toml  this repo's own landing rules: its checks and merge drivers
 ```
 

@@ -31,18 +31,18 @@ lock, red set aside, generated files rebuilt, three structural merge drivers,
 `status`/`doctor`, `install`; the kit carries `claim-guard.py` and
 `block-main.py`. 53 scratch-repo tests pass on Python 3.9. Committed
 on `main` with the previous session's work.
-**Not yet done here:** the kit is not installed in this repo (`.claude/` does
-not exist), so `scripts/check-work-system.py` fails on the `.claude/hooks/*`
-ownership rows until it is — the same check passes on a copy after an install.
+The kit is installed here (`lockmaster install .`), so the hooks are live for
+new sessions: **an agent cannot commit to `main` by hand any more** — it lands
+through `lockmaster start` / `submit`. The release pipeline is built and 0.0.1
+is cut; nothing is on PyPI until the decider finishes W-08.
 The laws in force are L0–L7; L6 makes lockmaster **Python only, on PyPI only**.
 
 ## 2 · In flight, and the immediate next step
 
-Nothing in flight. **Next:** the decider runs
-`PYTHONPATH=src python3 -m lockmaster install .` (kit into `.claude/` and
-`.github/`, merge drivers, commit guard) and commits that. From then on an
-agent session here cannot commit to `main`: it uses `lockmaster start` /
-`submit`. Then W-08 (the decider's PyPI placeholder) and W-09 — which waits,
+Nothing in flight. **Next:** W-08 — the decider adds the pending trusted
+publishers (pypi.org, test.pypi.org) and the `testpypi` / `pypi` GitHub
+environments, then `git push origin main && git tag -a v0.0.1 -m "lockmaster
+0.0.1" && git push origin v0.0.1` (CONTRIBUTING.md §Releasing). Then W-09 — which waits,
 by its own hazard, until each of fux, sheetpane and codelaw has an empty
 `work/NOW.md` (fux and codelaw had live rows on 2026-10-25).
 

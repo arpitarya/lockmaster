@@ -1,28 +1,65 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "lockmaster"
-version = "0.0.0"
+dynamic = ["version"]           # one source: lockmaster.__version__ (src/lockmaster/__init__.py)
 description = "Lands AI-agent changes into main one at a time, without ever losing work."
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Arpit Arya" }]
 requires-python = ">=3.9"
-dependencies = []
+dependencies = []               # SR-LAW-4: the standard library alone
+keywords = ["git", "merge-queue", "ai-agents", "worktree", "claude-code"]
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "Development Status :: 2 - Pre-Alpha",
   "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Version Control :: Git",
 ]
 
 [project.urls]
 Homepage = "https://github.com/arpitarya/lockmaster"
+Changelog = "https://github.com/arpitarya/lockmaster/blob/main/CHANGELOG.md"
+Issues = "https://github.com/arpitarya/lockmaster/issues"
 
 [project.scripts]
 lockmaster = "lockmaster.cli:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.setuptools]
+# kit/ ships inside the package as lockmaster/kit, so `lockmaster install`
+# works from a pip install (SR-ARCHITECTURE decision 15).
+package-dir = { "" = "src", "lockmaster.kit" = "kit" }
+# Every kit/ directory is listed; tests/test_packaging.py fails when one is not.
+packages = [
+  "lockmaster",
+  "lockmaster.kit",
+  "lockmaster.kit.claude",
+  "lockmaster.kit.claude.hooks",
+  "lockmaster.kit.claude.skills",
+  "lockmaster.kit.claude.skills.docket",
+  "lockmaster.kit.github",
+  "lockmaster.kit.github.workflows",
+]
+
+[tool.setuptools.package-data]
+"lockmaster.kit" = ["*"]
+"lockmaster.kit.claude" = ["*"]
+"lockmaster.kit.claude.hooks" = ["*"]
+"lockmaster.kit.claude.skills" = ["*"]
+"lockmaster.kit.claude.skills.docket" = ["*"]
+"lockmaster.kit.github" = ["*"]
+"lockmaster.kit.github.workflows" = ["*"]
+
+[tool.setuptools.exclude-package-data]
+"*" = [".DS_Store", "*.pyc"]
+
+[tool.setuptools.dynamic]
+version = { attr = "lockmaster.__version__" }
