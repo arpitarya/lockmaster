@@ -100,6 +100,8 @@ of it and the decider's call on the other.
    [SR-WORK-BLOCKERS](0056_WORK-blockers.md) decision 7) are keyed by the session's id, swept
    by `session-lock.sh` on every write once past their 900-second TTL, and a
    session's own are released by `release-locks.sh` on `Stop` and `SessionEnd`.
+   The same hook also sweeps any write lock past its 900-second TTL, whoever
+   holds it (W-09): the TTL is the test, not a liveness check.
 9. **A git lock file** — `index.lock`, `HEAD.lock`, a ref's or a worktree's
    `.lock` — older than 10 minutes while no git process runs is removed by
    `release-locks.sh`; on a surface that cannot unlink it is renamed into
