@@ -219,7 +219,8 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     A file the kit would replace that no earlier install wrote stops the
     install by name, or with `--backup` is moved aside first. This repository
     installs its own kit the same way; `scripts/bootstrap.py` is retired
-    (2026-10-25, W-06).
+    (2026-10-25, W-06). The kit's hooks read any repository's inbox heading and
+    name no law number (2026-10-26, W-09).
 16. **What stays in each repository:** its records, work items, backlog,
     worklog, lessons — the project's own papers — its CI, and its `lockmaster.toml`.
 

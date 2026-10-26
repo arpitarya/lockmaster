@@ -81,7 +81,8 @@ holds if it outranks the session that wants to exceed it — so it is a law.
    raises a permission prompt for an action that would grow the project into
    an unapproved GB; `PostToolUse` records a yes and says so the moment the
    project has grown past what was approved; every prompt shows the usage from
-   80 % of the budget.
+   80 % of the budget. Its messages name the disk budget, not a law number, so
+   the same hook serves each repository that adopts this law (W-09).
 5. **A Cowork session runs no hooks, so it keeps the law by hand:** it measures
    (`du -sh` of the repo) before it starts agents, worktrees or builds, and asks
    the decider in chat before going past the budget or an approved GB.

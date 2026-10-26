@@ -12,8 +12,15 @@ All notable changes to lockmaster. The format follows
   `pre-commit`, …) and not its `post-*` hooks (2026-10-26, W-09,
   SR-ARCHITECTURE decision 18): fux's re-index hooks no longer run inside a
   landing or in `main`'s checkout.
+- Tests for the kit's disk-budget, NOW-ledger, worktree-cleanup and lock-release
+  hooks, ported from fux's own (2026-10-26, W-09).
 
 ### Changed
+
+- The kit's hooks read any repo's inbox heading (`## Blocked on …`), name no
+  law number in the disk-budget messages, and sweep write locks past their TTL
+  at Stop; worktree cleanup counts fux's and codelaw's build output
+  (`htmlcov`, `.eggs`, `runtime`, `.codelaw`) (2026-10-26, W-09).
 
 - The kit no longer carries a CI workflow (2026-10-25, W-09): it held
   lockmaster's own `ci.yml`, which `lockmaster install --backup` would have

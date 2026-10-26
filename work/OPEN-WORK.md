@@ -29,16 +29,16 @@ here. Read that record before changing anything below it.
 
 ## Open items
 
-### build
+### build (1)
 
 🔴 **W-08** `arpit` Hold the name on PyPI: the pipeline and 0.0.1 are ready; Arpit adds the trusted publishers and environments, then pushes the tag `v0.0.1`. Keep or delete the npm org `@lockmaster`. Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
 
-### testing
+### testing (1)
 
-🟢 **W-09** `agent` Adopt lockmaster in fux, sheetpane, codelaw and milo: sheetpane and milo installed; fux and codelaw next, each once its live sessions end. Filed by Arpit (Cowork). [detail](open/W-09-adopt-in-three-repos.md)
+🟢 **W-09** `agent` Adopt lockmaster in fux, sheetpane, codelaw and milo: all four installed; left: the first real landing in each on the Mac, and fux's per-landing index time. Filed by Arpit (Cowork). [detail](open/W-09-adopt-in-three-repos.md)
 
-### record update
+### record update (0)
 
-### research
+### research (0)
 
 ---
