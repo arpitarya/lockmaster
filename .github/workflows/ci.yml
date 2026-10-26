@@ -1,4 +1,4 @@
-# Installed from kit/github/workflows/ci.yml by `lockmaster install` — edit the kit, not this copy.
+# lockmaster's own CI — not in the kit: a repository's CI is its own (SR-ARCHITECTURE decision 16).
 name: ci
 
 on:

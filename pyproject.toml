@@ -45,8 +45,6 @@ packages = [
   "lockmaster.kit.claude.hooks",
   "lockmaster.kit.claude.skills",
   "lockmaster.kit.claude.skills.docket",
-  "lockmaster.kit.github",
-  "lockmaster.kit.github.workflows",
 ]
 
 [tool.setuptools.package-data]
@@ -55,8 +53,6 @@ packages = [
 "lockmaster.kit.claude.hooks" = ["*"]
 "lockmaster.kit.claude.skills" = ["*"]
 "lockmaster.kit.claude.skills.docket" = ["*"]
-"lockmaster.kit.github" = ["*"]
-"lockmaster.kit.github.workflows" = ["*"]
 
 [tool.setuptools.exclude-package-data]
 "*" = [".DS_Store", "*.pyc"]

@@ -35,7 +35,7 @@ here. Read that record before changing anything below it.
 
 ### testing
 
-🟢 **W-09** `agent` Adopt lockmaster in fux, sheetpane and codelaw: each gets the kit by `lockmaster install` and a `lockmaster.toml`; their hand-copied hooks retire. Filed by Arpit (Cowork). [detail](open/W-09-adopt-in-three-repos.md)
+🟢 **W-09** `agent` Adopt lockmaster in fux, sheetpane, codelaw and milo: sheetpane and milo installed; fux and codelaw next, each once its live sessions end. Filed by Arpit (Cowork). [detail](open/W-09-adopt-in-three-repos.md)
 
 ### record update
 

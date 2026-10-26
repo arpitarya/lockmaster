@@ -25,4 +25,4 @@ description: "Recurring terms, defined once."
 | land lock | the `mkdir` mutex in lockmaster's state directory that keeps landings to one at a time; a dead holder's lock is taken over; SR-ARCHITECTURE decision 7 |
 | left behind | what a change's branch or worktree holds outside its claim: never landed, reported, and keeps the worktree and branch from being removed; SR-ARCHITECTURE decision 5 |
 | lockmaster.lock | `.claude/lockmaster.lock` in an installed repository: the kit's version, digest and file hashes, checked by `lockmaster doctor`; SR-ARCHITECTURE decision 15 |
-| kit | what lockmaster installs into a repository — `kit/claude` → `.claude/`, `kit/github` → `.github/` |
+| kit | what lockmaster installs into a repository — `kit/claude` → `.claude/` (`kit/github` → `.github/`, empty: a repository's CI is its own) |

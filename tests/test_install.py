@@ -24,7 +24,7 @@ class Install(ScratchCase):
         self.assertEqual(code, 0, err)
         for src, rel in install.kit_files(install.find_kit()):
             self.assertEqual((self.root / rel).read_bytes(), src.read_bytes(), rel)
-        self.assertTrue((self.root / ".github/workflows/ci.yml").is_file())
+        self.assertFalse((self.root / ".github").exists())  # a repository's CI is its own (decision 16)
         for groups in self.settings()["hooks"].values():
             for g in groups:
                 for h in g["hooks"]:
@@ -50,17 +50,26 @@ class Install(ScratchCase):
         self.assertEqual(sum(len(v) for v in again["hooks"].values()), n_kit + 1)
 
     def test_a_file_lockmaster_did_not_write_is_never_overwritten_silently(self):
+        hook = self.root / ".claude/hooks/inject-inbox.sh"
+        hook.parent.mkdir(parents=True)
+        hook.write_text("the repo's own hook\n")
+        code, _, err = self.install()
+        self.assertEqual(code, 2)
+        self.assertIn(".claude/hooks/inject-inbox.sh", err)
+        self.assertEqual(hook.read_text(), "the repo's own hook\n")
+        self.assertFalse((self.root / ".claude/settings.json").exists())
+        code, out, err = self.install("--backup")
+        self.assertEqual(code, 0, err)
+        self.assertEqual((hook.parent / "inject-inbox.sh.pre-lockmaster").read_text(), "the repo's own hook\n")
+
+    def test_the_repos_own_ci_is_never_touched(self):
         ci = self.root / ".github/workflows/ci.yml"
         ci.parent.mkdir(parents=True)
         ci.write_text("the repo's own CI\n")
         code, _, err = self.install()
-        self.assertEqual(code, 2)
-        self.assertIn(".github/workflows/ci.yml", err)
-        self.assertEqual(ci.read_text(), "the repo's own CI\n")
-        self.assertFalse((self.root / ".claude").exists())
-        code, out, err = self.install("--backup")
         self.assertEqual(code, 0, err)
-        self.assertEqual((ci.parent / "ci.yml.pre-lockmaster").read_text(), "the repo's own CI\n")
+        self.assertEqual(ci.read_text(), "the repo's own CI\n")
+        self.assertFalse((ci.parent / "ci.yml.pre-lockmaster").exists())
 
     def test_the_version_is_pinned_and_doctor_reports_a_mismatch(self):
         self.install()

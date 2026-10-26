@@ -22,6 +22,12 @@ class Packaging(unittest.TestCase):
                 self.assertIn('"{}",'.format(name), self.pyproject)
                 self.assertIn('"{}" = ["*"]'.format(name), self.pyproject)
 
+    def test_every_listed_kit_package_has_its_directory(self):
+        # A kit/ directory removed but still listed breaks the build (setuptools refuses it).
+        for name in re.findall(r'"(lockmaster\.kit[a-z.]*)",', self.pyproject):
+            with self.subTest(name):
+                self.assertTrue((ROOT / "kit").joinpath(*name.split(".")[2:]).is_dir(), name)
+
     def test_the_version_has_one_source(self):
         self.assertIn('version = { attr = "lockmaster.__version__" }', self.pyproject)
         project = self.pyproject.split("[project]", 1)[1].split("\n[", 1)[0]
