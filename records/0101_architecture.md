@@ -164,7 +164,11 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     marked red with its reason, until it is fixed and resubmitted or abandoned.
 12. **Only lockmaster writes to `main`.** A kit hook (`block-main.py`) refuses
     an agent's `git commit`, `merge`, `cherry-pick`, `revert`, `am` or `rebase`
-    while `main` is checked out, and any `git push` that would update `main`.
+    while `main` is checked out. **A plain push of `main` passes** (ruled
+    2026-10-26): every option on the hook's allow-list and no refspec that
+    forces (`+`) or deletes, so the remote takes only a fast-forward of the
+    landings. Any other push that would update `main` is refused, an unknown
+    option included. A heredoc's body is input, not commands, and is not judged.
     lockmaster's own landing runs git inside `lockmaster`, not through the
     agent's shell tool, so it passes. The hook binds agent sessions only: the
     decider's own terminal can still commit to `main`.
