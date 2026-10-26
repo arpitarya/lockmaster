@@ -244,6 +244,20 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     `kit/` as `lockmaster/kit`, so `lockmaster install` works from a pip
     install.
 
+**The repository's own git hooks**
+
+18. **lockmaster's own git steps run a repository's gate hooks, not its post-*
+    hooks** (2026-10-26, W-09). Every git command lockmaster runs carries
+    `-c core.hooksPath=<git-common-dir>/lockmaster/hooks`, where a forwarder for
+    each gate hook — `pre-commit`, `prepare-commit-msg`, `commit-msg`,
+    `pre-merge-commit`, `pre-rebase`, `pre-push`, `applypatch-msg`,
+    `pre-applypatch` — runs the repository's own (its `core.hooksPath` or
+    `.git/hooks`). So a commit guard still refuses a landing, and a post-commit,
+    post-merge or post-checkout side effect does not run inside a worktree
+    lockmaster is about to remove or in `main`'s checkout. **What a landing must
+    produce, it produces through `[generated]`** (decision 9) — in fux, the
+    committed index. A person's or an agent's own git commands are untouched.
+
 ### Consequences
 
 - Landings are serial by design: on one laptop that is the point (one build at

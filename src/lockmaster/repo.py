@@ -8,6 +8,8 @@ import fnmatch
 import json
 import os
 import re
+import shlex
+import stat
 import time
 from pathlib import Path
 
@@ -20,6 +22,20 @@ WORKTREES_DIR = ".claude/worktrees"
 # A change's status, in the order it moves through them.
 OPEN, QUEUED, LANDING, LANDED, RED, ABANDONED = "open", "queued", "landing", "landed", "red", "abandoned"
 LIVE = (OPEN, QUEUED, LANDING, RED)
+
+# SR-ARCHITECTURE decision 18: the hooks that can refuse a step. A repository's
+# post-* hooks (a re-index, a notification) are side effects of a person's or an
+# agent's own git step; lockmaster's steps leave them out. What a landing must
+# produce, it produces through [generated].
+GATE_HOOKS = ("applypatch-msg", "pre-applypatch", "pre-commit", "pre-merge-commit",
+              "prepare-commit-msg", "commit-msg", "pre-rebase", "pre-push")
+FORWARDER = """#!/bin/sh
+# Written by lockmaster (SR-ARCHITECTURE decision 18): while lockmaster runs git,
+# the repository's gate hooks run and its post-* hooks do not. Rewritten each run.
+hook={}
+[ -x "$hook" ] || exit 0
+exec "$hook" "$@"
+"""
 
 
 class LockmasterError(Exception):
@@ -40,8 +56,30 @@ class Repo:
         self.root = Path(git.worktrees(cwd)[0]["path"])
         self.state = self.common / "lockmaster"
         self.changes_dir = self.state / "changes"
+        self._gate_hooks_only()
         self.config = config_mod.load(self.root / config_mod.FILENAME)
         self.main = self.config.main
+
+    def _gate_hooks_only(self):
+        """Point every git step lockmaster runs at forwarders for the repository's
+        gate hooks only (decision 18)."""
+        git.HOOKS = []
+        code, val, _ = git.run(["config", "--get", "core.hooksPath"], self.root, check=False)
+        real = Path(os.path.expanduser(val.strip())) if code == 0 and val.strip() else self.common / "hooks"
+        if not real.is_absolute():
+            real = self.root / real
+        hooks = self.state / "hooks"
+        try:
+            hooks.mkdir(parents=True, exist_ok=True)
+            for name in GATE_HOOKS:
+                f = hooks / name
+                text = FORWARDER.format(shlex.quote(str(real / name)))
+                if not f.is_file() or f.read_text(encoding="utf-8") != text:
+                    f.write_text(text, encoding="utf-8")
+                f.chmod(f.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+        except OSError:
+            return  # cannot write the forwarders: run the repository's hooks as they are
+        git.HOOKS = ["-c", "core.hooksPath=" + str(hooks)]
 
     # ------------------------------------------------------------ changes
 

@@ -6,6 +6,10 @@ of SR-LAW-3 decision 3 have one place to be kept out of. Nothing here forces.
 import os
 import subprocess
 
+#: `-c core.hooksPath=…` while a Repo is open: lockmaster's own git steps run the
+#: repository's gate hooks and not its post-* hooks (SR-ARCHITECTURE decision 18).
+HOOKS = []
+
 
 class GitError(Exception):
     """A git command exited non-zero."""
@@ -25,7 +29,7 @@ def run(args, cwd, check=True, env=None, input=None):
     if env:
         full_env = dict(os.environ)
         full_env.update(env)
-    r = subprocess.run(["git"] + list(args), cwd=str(cwd), capture_output=True, text=True,
+    r = subprocess.run(["git"] + HOOKS + list(args), cwd=str(cwd), capture_output=True, text=True,
                        env=full_env, input=input)
     if not check:
         return r.returncode, r.stdout, r.stderr
