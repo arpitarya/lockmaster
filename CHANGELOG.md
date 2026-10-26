@@ -6,6 +6,13 @@ All notable changes to lockmaster. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- lockmaster's own git steps run a repository's gate hooks (`commit-msg`,
+  `pre-commit`, …) and not its `post-*` hooks (2026-10-26, W-09,
+  SR-ARCHITECTURE decision 18): fux's re-index hooks no longer run inside a
+  landing or in `main`'s checkout.
+
 ### Changed
 
 - The kit no longer carries a CI workflow (2026-10-25, W-09): it held
