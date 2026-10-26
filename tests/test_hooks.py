@@ -47,14 +47,30 @@ class BlockMain(ScratchCase):
                                      "tool_input": {"command": command}})
         return out["hookSpecificOutput"]["permissionDecisionReason"] if out else None
 
-    def test_commit_and_push_to_main_are_refused(self):
+    def test_commits_on_main_and_unplain_pushes_of_main_are_refused(self):
         for cmd in ("git commit -m x", "git add . && git commit -am 'x y'", "git -C {} commit -m x".format(self.root),
-                    "git push origin main", "git push", "git push origin HEAD", "git push origin +lm/x:main",
-                    "git merge lm/W-1", "FOO=1 git cherry-pick abc", "cd {} && git commit -m x".format(self.root)):
+                    "git push -f origin main", "git push --force-with-lease", "git push origin +main",
+                    "git push origin +lm/x:main", "git push origin :main", "git push --delete origin main",
+                    "git push --no-verify origin main", "git push --all", "git push --mirror",
+                    "git merge lm/W-1", "FOO=1 git cherry-pick abc", "cd {} && git commit -m x".format(self.root),
+                    "cat <<EOF\nhello\nEOF\ngit commit -m x"):
             with self.subTest(cmd):
                 reason = self.bash(cmd)
                 self.assertIsNotNone(reason, cmd)
                 self.assertIn("lockmaster submit", reason)
+
+    def test_a_plain_push_of_main_passes(self):
+        # Ruled 2026-10-26: main holds only landings, so a push that cannot force may send it.
+        for cmd in ("git push", "git push origin main", "git push -u origin main", "git push origin HEAD",
+                    "git push --follow-tags origin main", "git push origin main v0.0.1"):
+            with self.subTest(cmd):
+                self.assertIsNone(self.bash(cmd), cmd)
+
+    def test_a_heredoc_body_is_text_not_commands(self):
+        for cmd in ("python3 - <<'EOF'\nprint('git commit -m x')\nEOF",
+                    "cat > f <<EOF\ngit push -f origin main\nEOF\necho done"):
+            with self.subTest(cmd):
+                self.assertIsNone(self.bash(cmd), cmd)
 
     def test_work_on_a_change_branch_and_lockmasters_landing_pass(self):
         change, _ = land.start(self.repo(), "W-1", ["a.txt"])
@@ -69,8 +85,8 @@ class BlockMain(ScratchCase):
         git(self.root, "branch", "-m", "main", "trunk")
         (self.root / "lockmaster.toml").write_text('[main]\nbranch = "trunk"\n')
         self.assertIsNotNone(self.bash("git commit -m x"))
-        self.assertIsNotNone(self.bash("git push origin trunk"))
-        self.assertIsNone(self.bash("git push origin main"))
+        self.assertIsNotNone(self.bash("git push origin +trunk"))
+        self.assertIsNone(self.bash("git push origin +main"))  # main is not this repository's main
 
 
 class WithoutTheWorkSystem(ScratchCase):

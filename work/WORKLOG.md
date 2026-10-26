@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-10-26 — plain pushes of main allowed; the build-output list grown  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"commit everything. And push."* — then ruled: *"Allow plain pushes"*.
+- **Done:** another session's W-09 step landed (`03e46a1`): `htmlcov`, `.eggs`, `runtime`, `.codelaw` joined the build-output list in both copies, noted in SR-WORK-CLEANUP. `block-main.py`: a push of `main` passes when every option is on an allow-list and no refspec forces or deletes; a heredoc body is no longer judged as commands (it had refused a Python edit script whose text named a commit). SR-ARCHITECTURE decision 12 rewritten; tests for both. Landed through lockmaster, then pushed.
+- **Decided / left open:** the decider ruled plain pushes of `main` allowed (2026-10-26).
+- **Mistakes:** none.
+- **Next:** the decider finishes W-08: trusted publishers, environments, the tag `v0.0.1`.
+
 ## 2026-10-26 — another session's W-09 work landed; the build it broke, fixed  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"commit everything and push"*

@@ -2,10 +2,17 @@
 """PreToolUse(Bash) — SR-ARCHITECTURE decision 12: only lockmaster writes to main.
 
 An agent's `git commit` (or merge, cherry-pick, revert, am, rebase) while
-`main` is checked out, and a `git push` that would update `main`, are refused
-with the way round: `lockmaster start` / `lockmaster submit`. lockmaster's own
-landing runs git from inside `lockmaster`, never through the agent's Bash
-tool, so it is not seen here and passes.
+`main` is checked out is refused, with the way round: `lockmaster start` /
+`lockmaster submit`. lockmaster's own landing runs git from inside
+`lockmaster`, never through the agent's Bash tool, so it is not seen here.
+
+A `git push` that updates `main` passes only when it is plain: every option
+is on SAFE_PUSH_OPTIONS and no refspec forces (`+`) or deletes (`:main`), so
+the remote takes it only as a fast-forward of what lockmaster landed
+(ruled by the decider, 2026-10-26). Anything else that would update `main`
+is refused. An allow-list, so an option this hook does not know is refused.
+
+A heredoc's body is text, not commands, and is not judged.
 
 It binds agent sessions only: it is a Claude Code hook, so the decider's own
 terminal is untouched and can still commit to main by hand (W-05 hazard).
@@ -21,6 +28,10 @@ import sys
 
 WRITES = ("commit", "merge", "cherry-pick", "revert", "am", "rebase")
 HARMLESS = ("--abort", "--quit", "-h", "--help")
+# The only options a push that updates main may carry.
+SAFE_PUSH_OPTIONS = {"-u", "--set-upstream", "-q", "--quiet", "-v", "--verbose", "--atomic",
+                     "--follow-tags", "--no-follow-tags", "--porcelain", "--progress", "--no-progress"}
+HEREDOC_RE = re.compile(r"<<-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1")
 OPERATORS = {"&&", "||", ";", "|", "&", ";;", "|&"}
 # git's global options that take a value as the next word.
 VALUED = {"-C", "-c", "--git-dir", "--work-tree", "--namespace", "--exec-path", "--config-env"}
@@ -49,7 +60,21 @@ def main_branch(cwd):
     return "main"
 
 
+def without_heredocs(command):
+    """The command with every heredoc body taken out: those lines are input, not commands."""
+    out, ending = [], []
+    for line in command.split("\n"):
+        if ending:
+            if line.strip() == ending[0]:
+                ending.pop(0)
+            continue
+        out.append(line)
+        ending = [m.group(2) for m in HEREDOC_RE.finditer(line)]
+    return "\n".join(out)
+
+
 def segments(command):
+    command = without_heredocs(command)
     lexer = shlex.shlex(command.replace("\n", " ; "), posix=True, punctuation_chars=True)
     lexer.whitespace_split = True
     seg = []
@@ -101,17 +126,23 @@ def refused(command, cwd):
         if sub in WRITES and current == main and not any(a in HARMLESS for a in rest):
             return "`git {}` on {}".format(sub, main)
         if sub == "push":
-            if "--all" in rest or "--mirror" in rest:
-                return "`git push {}` includes {}".format(" ".join(rest), main)
-            words = [a for a in rest if not a.startswith("-")]
-            refspecs = words[1:]
-            if not refspecs and current == main:
-                return "`git push` from {}".format(main)
+            options = [a for a in rest if a.startswith("-")]
+            refspecs = [a for a in rest if not a.startswith("-")][1:]
+            targets_main = (not refspecs and current == main) or any(
+                o in ("--all", "--mirror", "--branches") for o in options)
+            unsafe = []
             for spec in refspecs:
                 src, _, dst = spec.lstrip("+").partition(":")
                 dst = dst or src
                 if dst in (main, "refs/heads/" + main) or (dst == "HEAD" and current == main):
-                    return "`git push {}` updates {}".format(" ".join(rest), main)
+                    targets_main = True
+                    if spec.startswith("+") or (":" in spec and not src):
+                        unsafe.append(spec)
+            if targets_main:
+                unsafe += [o for o in options if o not in SAFE_PUSH_OPTIONS]
+                if unsafe:
+                    return "`git push {}` updates {} with {} — only a plain push may".format(
+                        " ".join(rest), main, ", ".join(unsafe))
     return None
 
 
@@ -130,7 +161,8 @@ def main():
         "hookEventName": "PreToolUse",
         "permissionDecision": "deny",
         "permissionDecisionReason": (
-            "Refused: {}. Only lockmaster writes to main (SR-ARCHITECTURE decision 12). "
+            "Refused: {}. Only lockmaster writes to main, and only a plain push sends it "
+            "(SR-ARCHITECTURE decision 12). "
             "Work on a change instead: `lockmaster start <W-nn> --paths <path>…`, edit in its "
             "worktree, then `lockmaster submit -m \"…\"` — it lands on main for you. "
             "The decider can still commit to main by hand from a terminal.").format(why)}}))
