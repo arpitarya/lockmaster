@@ -105,6 +105,8 @@ where someone will pick it up, not in a live view.
   importable, else the same shape in `now-ledger.py` — and drops any resource
   row whose path is gone, so NOW.md equals `lockmaster status --now` after
   each session end, as it does after each landing.
+- **No `work/NOW.md`, no ledger:** in a repository that has lockmaster's kit
+  but not the work system, `now-ledger.py` does nothing and writes nothing (W-09).
 - A crash loses nothing that matters: the row survives until the next session
   closes it, and its leftovers become a work item then.
 - `require-progress.sh` ([SR-WORK-SESSION](./0054_WORK-session.md)) still nudges a session that

@@ -119,10 +119,10 @@ docs/        WHAT THE PROJECT IS — the glossary
 archive/     THE ONE ARCHIVE — everything retired, mirroring the live tree
 src/         THE TOOL — the `lockmaster` package, Python ≥ 3.9, standard library only
 tests/       scratch-repo tests, one per decision as it is built
-kit/         WHAT LOCKMASTER INSTALLS — kit/claude → .claude/, kit/github → .github/
+kit/         WHAT LOCKMASTER INSTALLS — kit/claude → .claude/ (kit/github is empty: CI stays each repo's own)
 scripts/     the commit guard and the work-system checks
 .claude/     installed from kit/claude by `lockmaster install .` — edit kit/, never the copy
-.github/     installed from kit/github by `lockmaster install .`, plus workflows/release.yml — lockmaster's own release pipeline, edited here
+.github/     lockmaster's own — workflows/ci.yml and workflows/release.yml, edited here; never in kit/
 lockmaster.toml  this repo's own landing rules: its checks and merge drivers
 ```
 

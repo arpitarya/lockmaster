@@ -1,7 +1,7 @@
 """`lockmaster install <repo>` — SR-ARCHITECTURE decisions 14 and 15.
 
     kit/claude/**  ->  <repo>/.claude/**   hooks made executable
-    kit/github/**  ->  <repo>/.github/**
+    kit/github/**  ->  <repo>/.github/**   (none today: a repository's CI is its own)
     kit/claude/settings.json is MERGED into <repo>/.claude/settings.json: the
         kit's hook entries replace the ones a previous install wrote; the
         repo's own entries and keys are kept

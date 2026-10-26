@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-10-26 — another session's W-09 work landed; the build it broke, fixed  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"commit everything and push"*
+- **Done:** the tree held another session's W-09 step (no live NOW row): `kit/github/` removed — a repository's CI is its own. That left `pyproject.toml` listing `lockmaster.kit.github*`, so `python -m build` failed while all tests passed. Fixed: the two packages dropped; `tests/test_packaging.py` now also fails when a listed kit package has no directory. Everything landed through `lockmaster submit` (block-main refuses a hand commit on `main`).
+- **Decided / left open:** not pushed by the agent — block-main refuses an agent's push to `main` (SR-ARCHITECTURE decision 12); the decider pushes from a terminal.
+- **Mistakes:** none.
+- **Next:** the decider pushes `main`, then finishes W-08.
+
 ## 2026-10-25 — committed; the release pipeline built and 0.0.1 cut  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"commit everything and publish the package."* — then, mid-task: *"create a full-fledged CI/CD pipeline to publish the package."*

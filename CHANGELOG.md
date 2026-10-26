@@ -6,6 +6,12 @@ All notable changes to lockmaster. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The kit no longer carries a CI workflow (2026-10-25, W-09): it held
+  lockmaster's own `ci.yml`, which `lockmaster install --backup` would have
+  moved a target repository's CI aside for. A repository's CI is its own.
+
 ## [0.0.1] - 2026-10-25
 
 ### Added

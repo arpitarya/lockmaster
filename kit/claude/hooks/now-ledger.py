@@ -334,6 +334,8 @@ def end(sid, _hook):
 
 
 def main(argv):
+    if not NOW_MD.is_file():
+        return 0  # a repository without the work system has no NOW to keep (W-09)
     mode = argv[0] if argv else "show"
     fn = {"start": start, "show": show, "sync": sync, "stop": stop, "end": end}.get(mode)
     if fn is None:

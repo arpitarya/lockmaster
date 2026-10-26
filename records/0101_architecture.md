@@ -205,7 +205,9 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
 
 15. **`kit/` is what lockmaster installs into a repository:** `kit/claude/`
     (the hooks, their `settings.json`, the `docket` skill) becomes the target's
-    `.claude/`, and `kit/github/` its `.github/`. One source, installed —
+    `.claude/`, and `kit/github/` (none today) its `.github/` — a repository's
+    CI is its own (decision 16; amended 2026-10-25, W-09: the kit carried
+    lockmaster's own `ci.yml`, which would have replaced the target's). One source, installed —
     never three hand-copied versions. `lockmaster install` copies it, merges
     the kit's hook entries into the target's `settings.json` (the target's own
     entries and keys kept), and records the version, the kit's digest and every
@@ -215,7 +217,7 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     installs its own kit the same way; `scripts/bootstrap.py` is retired
     (2026-10-25, W-06).
 16. **What stays in each repository:** its records, work items, backlog,
-    worklog, lessons — the project's own papers — and its `lockmaster.toml`.
+    worklog, lessons — the project's own papers — its CI, and its `lockmaster.toml`.
 
 **Distribution**
 

@@ -73,5 +73,24 @@ class BlockMain(ScratchCase):
         self.assertIsNone(self.bash("git push origin main"))
 
 
+class WithoutTheWorkSystem(ScratchCase):
+    """W-09: a repository that has lockmaster but not the work system (no
+    work/NOW.md) gets no NOW ledger and no progress nudge — and no traceback."""
+
+    def test_the_now_hooks_are_silent_and_write_nothing(self):
+        code, _, err = self.cli("install", str(self.root))
+        self.assertEqual(code, 0, err)
+        (self.root / "a.txt").write_text("changed\n")
+        hooks = self.root / ".claude" / "hooks"
+        for mode in ("start", "show", "sync", "stop", "end"):
+            with self.subTest(mode):
+                r = subprocess.run([sys.executable, str(hooks / "now-ledger.py"), mode],
+                                   input=json.dumps({"session_id": "s1"}), capture_output=True, text=True)
+                self.assertEqual((r.returncode, r.stdout, r.stderr), (0, "", ""))
+        r = subprocess.run(["bash", str(hooks / "require-progress.sh")], input="{}", capture_output=True, text=True)
+        self.assertEqual((r.returncode, r.stdout), (0, ""))
+        self.assertFalse((self.root / "work").exists())
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -69,7 +69,7 @@ tests = "pytest -q"
 `lockmaster drivers` registers the merge drivers in `.git/config` and writes
 the `[merge]` paths into `.gitattributes`; plain `git merge` uses them too.
 `lockmaster install <repo>` puts the work-system kit — hooks, settings, the
-`docket` skill, CI — into a repository, pinned in `.claude/lockmaster.lock`.
+`docket` skill — into a repository, pinned in `.claude/lockmaster.lock`.
 
 ## Working on lockmaster
 
