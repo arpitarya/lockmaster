@@ -19,3 +19,4 @@ Rule: [SR-WORK-NOW](../records/0061_WORK-now.md).
 | kind | where | host | session | created |
 |---|---|---|---|---|
 | worktree | `/Users/arpitarya/my_programs/lockmaster/.claude/worktrees/handoff-20261105-055911` | Arpits-MacBook | 4b39f56b-a885-4c6e-8830-403016355ea6 | 2026-11-05 |
+| worktree | `/Users/arpitarya/my_programs/lockmaster/.claude/worktrees/W-11-land` | Arpits-MacBook | 4b39f56b-a885-4c6e-8830-403016355ea6 | 2026-11-05 |
