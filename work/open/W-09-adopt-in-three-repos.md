@@ -5,8 +5,8 @@ description: "Arpit, 2026-10-25: once installable, lockmaster replaces the hand-
 item: W-09
 filed: 2026-10-25
 filed_by: "Arpit (Cowork, Opus 5.5)"
-updated: 2026-10-26
-updated_by: "Arpit (Claude, cloud linked to the Mac, Opus 5.5)"
+updated: 2026-10-28
+updated_by: "Cowork (Opus 5.5): the queue reviewed — landings counted, fux's time split out to W-12"
 ball: agent
 ---
 
@@ -19,7 +19,8 @@ ball: agent
 | 1 | `lockmaster install` into each repo | one kit, four repos | ✅ sheetpane, milo 2026-10-25 · codelaw, fux 2026-10-26 (Arpit: *"implement in codelaw and fux"*; fux with a live session, by his word) |
 | 2 | A `lockmaster.toml` per repo: its checks, generated files, merge drivers | each repo's own rules | ✅ all four |
 | 3 | Retire the copied hooks and `install-agent-hooks.py` | nothing drifts | ✅ every hand copy replaced; fux's hook tests moved here as `tests/test_kit_hooks.py` (fux has no `install-agent-hooks.py` left to retire) |
-| 4 | The first real landing in each repo, on the Mac | proof, and fux's per-landing index cost measured | ⏳ |
+| 4 | The first real landing in each repo, on the Mac | proof, and fux's per-landing index cost measured | ◐ codelaw ✅ (64 landings by 2026-10-28) · fux ✅ (**fux W-304**, 2026-10-26; 599 s → [W-12](W-12-fux-landing-time.md)) · milo ⏳ · sheetpane ⏳ |
+| 5 | milo and sheetpane: their adoption — `.claude/`, `lockmaster.toml`, `.gitattributes` — was installed from Cowork on 2026-10-25 and never committed; it is now W-11's handoff `lockmaster-W-11` in each, landed by the next Claude Code session there. That landing is step 4 for both | the kit is on their `main` | ⏳ handed off 2026-10-28 |
 
 **Arpit, 2026-10-25:** *"Here is the lock master repo. Add the necessary documents, add whatever is needed for the tool to be built out."*
 
@@ -55,7 +56,11 @@ Each repo's own records that own `.claude/hooks/*` — amended there, not here.
 - fux's post-commit / post-merge / post-checkout re-index ran inside lockmaster's own git steps (a landing worktree, `main`'s checkout). lockmaster now runs a repo's gate hooks only (SR-ARCHITECTURE decision 18, `tests/test_gate_hooks.py`).
 - fux registered its hooks without `python3 ` in front, so the kit's entries came in beside them: the old seven were removed by hand; fux's `tests/test_agent_hooks.py` now fails on a second spelling.
 - The kit restated fux's fingerprinted rule 41 in `docket`; reworded. The kit's inbox hook read only `## Blocked on the decider` (fux's is *on Arpit*) and doubled fux's stored `age` column; both fixed.
-- Not measured: how long `fux ingest --no-fetch` takes in a fresh landing worktree on the Mac (no runtime cache). The VM run was killed before it finished. Step 4 measures it; if it is minutes, the fork goes back to Arpit.
+- Not measured: how long `fux ingest --no-fetch` takes in a fresh landing worktree on the Mac (no runtime cache). The VM run was killed before it finished. Step 4 measures it; if it is minutes, the fork goes back to Arpit. **Measured 2026-10-28:** fux's one landing took 599 s queued → landed; the fork is [W-12](W-12-fux-landing-time.md).
+
+## Found while reviewing (2026-10-28)
+
+- **The merge-driver paths, a second time.** W-11's re-install from the Cowork bridge wrote the bridge's `python3` and `merge.py` paths into all five repositories' `.git/config`, as the 2026-10-25 install did. Two strikes → a gate (SR-WORK-SESSION decision 13): `install` on a surface that cannot commit registers no driver, every `lockmaster run` re-points a driver that names a missing path, and `doctor` reports one (SR-ARCHITECTURE decision 10; `tests/test_autoland.py`). The five repositories heal on their next landing.
 
 ## Hazards
 

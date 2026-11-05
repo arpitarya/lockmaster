@@ -65,6 +65,11 @@ def check(repo):
                    if not git.ok(["config", "--get", "merge.lockmaster-{}.driver".format(d)], repo.root)]
         if missing:
             out.append("merge drivers not registered ({}) — `lockmaster drivers`".format(", ".join(missing)))
+        from lockmaster import drivers as drivers_mod
+        stale = drivers_mod.stale(repo)
+        if stale:
+            out.append("merge drivers registered with another machine's paths ({}) — the next landing re-points "
+                       "them, or `lockmaster drivers`".format(", ".join(stale)))
 
     out += kit_problems(repo.root)
     return out

@@ -48,7 +48,7 @@ record to become wrong?*
 
 | range | holds | a new record takes |
 |---|---|---|
-| `0001`–`0050` | the **Law** records only — `0001` SR-LAWS, `0002` SR-LAW-0, `0003` SR-LAW-1, `0004` SR-LAW-2, `0005`–`0009` SR-LAW-3 to SR-LAW-7 | the next free number after the highest law |
+| `0001`–`0050` | the **Law** records only — `0001` SR-LAWS, `0002` SR-LAW-0, `0003` SR-LAW-1, `0004` SR-LAW-2, `0005`–`0012` SR-LAW-3 to SR-LAW-10 | the next free number after the highest law |
 | `0051`–`0100` | the **WORK** records only — how work is done | the next free number after the highest |
 | `0101`– | every other record | the next free number after the highest |
 
@@ -112,6 +112,9 @@ Start from `TEMPLATE.md`.
 | [0007](0007_LAW-5-git-stays-the-store.md) | **SR-LAW-5** | **L5** — git stays the store — every landing is a plain git commit; lockmaster keeps no history of its own | accepted | yes |
 | [0008](0008_LAW-6-python-only.md) | **SR-LAW-6** | **L6** — Python only — one package, on PyPI and nowhere else; no npm | accepted | yes |
 | [0009](0009_LAW-7-no-model-in-the-lander.md) | **SR-LAW-7** | **L7** — no model in the lander — lockmaster never calls an AI model | accepted | partly |
+| [0010](0010_LAW-8-parallel-requests.md) | **SR-LAW-8** | **L8** — lockmaster handles parallel requests — every request served or queued, never lost, never left for a person | accepted | yes |
+| [0011](0011_LAW-9-cowork-and-claude-code-together.md) | **SR-LAW-9** | **L9** — Cowork and Claude Code work in parallel with no manual step — every change reaches `main` without the decider | accepted | partly |
+| [0012](0012_LAW-10-work-files-current.md) | **SR-LAW-10** | **L10** — the work files are always up to date, wherever lockmaster is used | accepted | partly |
 | [0051](0051_WORK-open-queue.md) | **SR-WORK-OPEN-QUEUE** | How `OPEN-WORK.md` works — the queue discipline in eight groups | accepted | yes |
 | [0052](0052_WORK-backlog.md) | **SR-WORK-BACKLOG** | How `BACKLOG.md` works — the named-but-unclaimed in five classes | accepted | yes |
 | [0053](0053_WORK-lifecycle.md) | **SR-WORK-LIFECYCLE** | How a feature travels — compare, proposal, handoff in the item file, the model line, one record | accepted | yes |
@@ -156,6 +159,7 @@ yet is owned by an open `W-nn`.
 | `.claude/hooks/disk-budget.py` | SR-LAW-2 | decision 4 |
 | `.claude/hooks/claim-guard.py` | SR-ARCHITECTURE | decision 5: warns on a write outside a change's claim |
 | `.claude/hooks/block-main.py` | SR-ARCHITECTURE | decision 12: refuses an agent's commit or push to `main` |
+| `.claude/hooks/auto-land.py` | SR-ARCHITECTURE | decisions 19–20: lands a session's changes each turn and the handoffs from Cowork |
 | `kit` | SR-ARCHITECTURE | decision 15: the hooks, settings, skill and CI lockmaster installs; `.claude/` and `.github/` here are installed copies of it |
 | `src` | SR-ARCHITECTURE | decisions 1–14: the `lockmaster` package |
 | `tests` | SR-ARCHITECTURE | scratch-repo tests for every decision as it is built |

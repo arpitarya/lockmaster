@@ -155,7 +155,7 @@ class FiledItems(Installed):
     """W-09 / rule 37b: what a session leaves is filed under `### build (N)`, the
     count bumped, in the queue's own row style."""
 
-    QUEUE = "# OPEN-WORK\n\n## Blocked on the decider\n\n| what | filed |\n|---|---|\n\n*Empty since 2026-10-01*\n\n---\n\n## Open items\n\n### {build} (1)\n\n{row}\n\n### testing (0)\n\n---\n"
+    QUEUE = "# OPEN-WORK\n\n## Blocked on the decider\n\n| what | filed |\n|---|---|\n\n*Empty since 2026-10-01*\n\n---\n\n## Open items (1)\n\n### {build} (1)\n\n{row}\n\n### testing (0)\n\n---\n"
 
     def leave_a_file(self, queue):
         (self.root / "work" / "open").mkdir(parents=True)
@@ -169,6 +169,7 @@ class FiledItems(Installed):
     def test_a_plain_queue_gets_a_plain_row_and_the_count_moves(self):
         text = self.leave_a_file(self.QUEUE.format(build="build", row="🟢 **W-01** `agent` x. Filed by A (B). [detail](open/W-01-x.md)"))
         self.assertIn("### build (2)", text)
+        self.assertIn("## Open items (2)", text)
         self.assertIn("🟢 **W-02** `agent` Clean up what session s1 left.", text)
         item = (self.root / "work" / "open" / "W-02-session-cleanup.md").read_text()
         self.assertIn('filed_by: "now-ledger.py (Claude Code)"', item)

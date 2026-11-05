@@ -5,8 +5,8 @@ description: "Arpit, 2026-10-25: hold `lockmaster` on PyPI — checked free that
 item: W-08
 filed: 2026-10-25
 filed_by: "Arpit (Cowork, Opus 5.5)"
-updated: 2026-10-25
-updated_by: "Claude Code (Opus 5.5): the release pipeline built, 0.0.1 prepared"
+updated: 2026-10-28
+updated_by: "Cowork (Opus 5.5): checked — still not on PyPI"
 ball: arpit
 ---
 
@@ -33,7 +33,7 @@ ball: arpit
 
 | DoD | what | state |
 |---|---|---|
-| 1 · PyPI | `pip index versions lockmaster` shows 0.0.1 | ⏳ |
+| 1 · PyPI | `pip index versions lockmaster` shows 0.0.1 | ⏳ — 2026-10-28: *"No matching distribution found"*; no `v0.0.1` tag in the Mac clone |
 | 2 · npm org | the decider has said keep or delete `@lockmaster`; `lock-master` was never created | ⏳ |
 
 ## Blockers

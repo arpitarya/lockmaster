@@ -126,6 +126,15 @@ class Repo:
                 return change
         raise LockmasterError("not inside a change's worktree; name the item (--item W-nn)")
 
+    def change_holding(self, path):
+        """The live change whose worktree holds `path`, or None."""
+        here = os.path.realpath(str(path))
+        for change in self.changes():
+            wt = os.path.realpath(change.get("worktree", ""))
+            if change["status"] in LIVE and (here == wt or here.startswith(wt + os.sep)):
+                return change
+        return None
+
     def worktree_for(self, item):
         return self.root / WORKTREES_DIR / item
 
@@ -198,8 +207,8 @@ class LandLock:
     the holder. A lock whose holder is dead is stale: it is moved aside
     (atomically, so only one lander wins it) and taken."""
 
-    def __init__(self, repo):
-        self.dir = repo.state / "land.lock"
+    def __init__(self, repo, name="land.lock"):
+        self.dir = repo.state / name
         self.held = False
 
     def holder(self):
@@ -228,7 +237,7 @@ class LandLock:
             except FileExistsError:
                 if not self.stale():
                     return False
-                aside = self.dir.with_name("land.lock.stale.{}.{}".format(os.getpid(), int(time.time())))
+                aside = self.dir.with_name("{}.stale.{}.{}".format(self.dir.name, os.getpid(), int(time.time())))
                 try:
                     os.rename(str(self.dir), str(aside))
                 except OSError:

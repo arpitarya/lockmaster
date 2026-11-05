@@ -30,10 +30,27 @@ lockmaster install .              # the work-system kit into this repository, pi
 lockmaster start W-12 --paths src/a.py src/b.py   # branch + worktree + claim
 cd .claude/worktrees/W-12                          # … the agent edits only the claimed files …
 lockmaster submit -m "W-12: the parser"            # joins the queue and lands it, one at a time
-lockmaster queue                                   # what is waiting, landed, or red
+lockmaster queue                                   # what is waiting, held, handed off, landed, or red
 lockmaster status                                  # sessions, changes, worktrees, disk use
 lockmaster doctor                                  # stale locks, orphan worktrees, unmerged branches
 ```
+
+**Nobody has to remember to land.** In Claude Code the kit's `auto-land.py`
+hook lands a session's change at the end of every turn — the change stays
+open and its worktree follows `main`, so conflicts stay small — and lands and
+cleans it up when the session ends. A `claude --worktree` session is adopted
+the same way. `[land] auto = "off"` in `lockmaster.toml` turns it off.
+
+**From Cowork, or anywhere that edited `main`'s checkout directly:**
+
+```text
+lockmaster save -m "W-12: the parser" src/a.py     # lands it — or hands it off
+```
+
+Where the surface can commit, that lands it. Where it cannot — the Cowork
+bridge cannot remove files and sees the Mac's repository at another path —
+it records a handoff and exits 0; the next Claude Code session lands it
+(`lockmaster pickup`, run by the kit's hook). `lockmaster can-commit` says which.
 
 A change that cannot land cleanly — a real conflict, a failed check — goes
 **red**, is set aside so the next change still lands, and waits for its agent

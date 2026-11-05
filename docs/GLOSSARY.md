@@ -22,6 +22,10 @@ description: "Recurring terms, defined once."
 | generated file | a file rebuilt by a command on landing, never merged; listed in `lockmaster.toml` `[generated]` |
 | structural merge | a merge driver that knows a file's shape (worklog entries, queue rows, lessons), so two additions never conflict |
 | red | a change that cannot land as it is — a conflict, a failed rebuild or check, a refused commit; set aside so the next change lands, it waits for its agent, then the decider; SR-ARCHITECTURE decision 11 |
+| kept landing | a landing at the end of a turn: the change stays open and its worktree follows `main`; SR-ARCHITECTURE decision 20 |
+| held | a kept landing that could not land — a failed check, a conflict: the change stays open with the reason for its own agent, nothing goes to the decider, the next turn retries; SR-ARCHITECTURE decision 20 |
+| adopted | a worktree lockmaster did not create (`claude --worktree`, an agent's own) made a change claiming all it changed; landed like one, never removed by lockmaster; SR-ARCHITECTURE decision 20 |
+| handoff | edits in `main`'s checkout that a surface unable to commit (the Cowork bridge) recorded with `lockmaster save`, for the next Claude Code session to land; SR-ARCHITECTURE decision 19 |
 | land lock | the `mkdir` mutex in lockmaster's state directory that keeps landings to one at a time; a dead holder's lock is taken over; SR-ARCHITECTURE decision 7 |
 | left behind | what a change's branch or worktree holds outside its claim: never landed, reported, and keeps the worktree and branch from being removed; SR-ARCHITECTURE decision 5 |
 | lockmaster.lock | `.claude/lockmaster.lock` in an installed repository: the kit's version, digest and file hashes, checked by `lockmaster doctor`; SR-ARCHITECTURE decision 15 |

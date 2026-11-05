@@ -33,6 +33,8 @@ Rules: [SR-WORK-ARCHIVE](../records/0057_WORK-archive.md).
 | [W-05-claim-and-block-main-hooks.md](open/W-05-claim-and-block-main-hooks.md) | 2026-10-25 — built: `claim-guard.py`, `block-main.py` | [SR-ARCHITECTURE](../records/0101_architecture.md) decisions 5, 12 · `kit/claude/hooks/` |
 | [W-06-install.md](open/W-06-install.md) | 2026-10-25 — built: `lockmaster install`, `doctor`; `bootstrap.py` retired | [SR-ARCHITECTURE](../records/0101_architecture.md) decisions 14, 15 · `src/lockmaster/install.py` |
 | [W-07-status.md](open/W-07-status.md) | 2026-10-25 — built: `lockmaster status`, NOW.md as its view | [SR-ARCHITECTURE](../records/0101_architecture.md) decision 14 · [SR-WORK-NOW](../records/0061_WORK-now.md) |
+| [W-11-land-every-turn-and-cowork-handoff.md](open/W-11-land-every-turn-and-cowork-handoff.md) | 2026-10-28 — built: landing at the end of every turn, `save`/`pickup` handoffs from Cowork, identical checkout edits accepted | [SR-ARCHITECTURE](../records/0101_architecture.md) decisions 8a, 19, 20 · `kit/claude/hooks/auto-land.py` |
+| [W-12-fux-landing-time.md](open/W-12-fux-landing-time.md) | 2026-11-05 — ruled: A, keep rebuilding `.fux/index` on every landing; the ten minutes is accepted (B-007) | [SR-ARCHITECTURE](../records/0101_architecture.md) decision 20 · fux's `lockmaster.toml` |
 
 ## `records/`
 

@@ -54,6 +54,35 @@ def write_attributes(root, merge):
     return True
 
 
+def stale(repo):
+    """The drivers whose registered command cannot run on this machine — its
+    interpreter or merge.py is missing here, as when `install` ran on another
+    surface (the Cowork bridge sees the repository at another path). Only
+    drivers that are registered count; an unregistered one is `doctor`'s."""
+    out = []
+    for name in DRIVERS:
+        code, cmd, _ = git.run(["config", "--get", "merge.lockmaster-{}.driver".format(name)], repo.root,
+                               check=False)
+        if code != 0:
+            continue
+        try:
+            words = shlex.split(cmd.strip())
+        except ValueError:
+            words = []
+        if len(words) < 2 or not Path(words[0]).exists() or not Path(words[1]).exists():
+            out.append(name)
+    return out
+
+
+def heal(repo):
+    """Re-register the drivers when their command points at another machine's
+    paths (SR-ARCHITECTURE decision 10). Returns the drivers re-pointed."""
+    names = stale(repo)
+    for name in names:
+        git.run(["config", "merge.lockmaster-{}.driver".format(name), driver_command(name)], repo.root)
+    return names
+
+
 def install(repo):
     """Register every driver in .git/config; write .gitattributes from [merge]."""
     for name in DRIVERS:

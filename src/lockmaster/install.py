@@ -172,9 +172,17 @@ def install(target, backup=False, out=print):
     from lockmaster import drivers
     repo = Repo(target)
     if (target / "lockmaster.toml").is_file():
-        if drivers.install(repo):
-            out("  .gitattributes: lockmaster's [merge] block written — commit it")
-        out("  merge drivers registered in .git/config")
+        from lockmaster import surface
+        if surface.foreign(repo) or not surface.can_unlink(repo):
+            # Decision 10: a driver registered here would name this surface's
+            # paths; the machine that commits registers it on its first landing.
+            if drivers.write_attributes(repo.root, repo.config.merge):
+                out("  .gitattributes: lockmaster's [merge] block written — commit it")
+            out("  merge drivers not registered from here: the next landing on the machine that commits does it")
+        else:
+            if drivers.install(repo):
+                out("  .gitattributes: lockmaster's [merge] block written — commit it")
+            out("  merge drivers registered in .git/config")
     _guard(repo, out)
     return lock
 

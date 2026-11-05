@@ -25,9 +25,11 @@ class GitError(Exception):
 def run(args, cwd, check=True, env=None, input=None):
     """Run `git <args>` in `cwd`; return stdout. With check=False, return
     (code, stdout, stderr) instead of raising."""
-    full_env = None
+    # No optional locks: a `git status` that refreshes the index takes
+    # index.lock and removes it, which a surface that cannot unlink (the
+    # Cowork bridge) would leave behind (SR-ARCHITECTURE decision 19).
+    full_env = dict(os.environ, GIT_OPTIONAL_LOCKS="0")
     if env:
-        full_env = dict(os.environ)
         full_env.update(env)
     r = subprocess.run(["git"] + HOOKS + list(args), cwd=str(cwd), capture_output=True, text=True,
                        env=full_env, input=input)
