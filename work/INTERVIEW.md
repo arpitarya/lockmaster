@@ -24,27 +24,31 @@ entry.**
 
 ## 1 · State of play
 
-*Updated 2026-10-25 (Claude Code, Opus 5.5 — W-03 to W-07 built).*
-**Where things stand:** the tool works. `src/lockmaster/` implements
-SR-ARCHITECTURE decisions 1–16: claims, the queue, landing under the land
-lock, red set aside, generated files rebuilt, three structural merge drivers,
-`status`/`doctor`, `install`; the kit carries `claim-guard.py` and
-`block-main.py`. 53 scratch-repo tests pass on Python 3.9. Committed
-on `main` with the previous session's work.
-The kit is installed here (`lockmaster install .`), so the hooks are live for
-new sessions: **an agent cannot commit to `main` by hand any more** — it lands
-through `lockmaster start` / `submit`. The release pipeline is built and 0.0.1
-is cut; nothing is on PyPI until the decider finishes W-08.
-The laws in force are L0–L7; L6 makes lockmaster **Python only, on PyPI only**.
+*Updated 2026-10-28 (Cowork, Opus 5.5 — W-11 built, the queue reviewed).*
+**Where things stand:** the tool works and is adopted in fux, codelaw, milo
+and sheetpane. `src/lockmaster/` implements SR-ARCHITECTURE decisions 1–20.
+W-11 (2026-10-28) made landing continuous: the kit's `auto-land.py` lands a
+Claude Code session's changes in the background at the end of every turn,
+keeping them open; Cowork runs `lockmaster save`, which lands where the
+surface can commit and otherwise hands the edits to the next Claude Code
+session (`lockmaster pickup`). 114 scratch-repo tests pass on Python 3.9.
+**W-11 is not on `main` yet:** built from Cowork, it waits as the handoff
+`W-11` here and `lockmaster-W-11` in the other four, landed by the next Claude
+Code session opened in each. Nothing is on PyPI until the decider finishes
+W-08. The laws in force are L0–L10. L10 (the six work files always current,
+in every repository lockmaster is installed in) is enforced by judgment
+only until W-15. L8 (parallel requests) is proven by
+`tests/test_parallel.py` (W-13). L9 (Cowork and Claude Code with no manual
+step): handoffs land at the next Claude Code session's start — no background
+job, the decider's ruling — and only what was handed over (W-14); its last
+decision waits on W-10. W-13 and W-14 are built but handed off, not landed.
 
 ## 2 · In flight, and the immediate next step
 
-Nothing in flight. **Next:** W-08 — the decider adds the pending trusted
-publishers (pypi.org, test.pypi.org) and the `testpypi` / `pypi` GitHub
-environments, then `git push origin main && git tag -a v0.0.1 -m "lockmaster
-0.0.1" && git push origin v0.0.1` (CONTRIBUTING.md §Releasing). Then W-09 — which waits,
-by its own hazard, until each of fux, sheetpane and codelaw has an empty
-`work/NOW.md` (fux and codelaw had live rows on 2026-10-25).
+**Next:** open Claude Code once in each of the five repositories — its start
+picks up the handoff and lands it (W-11; for milo and sheetpane that is also
+their first landing, W-09). Then the two rulings in the inbox: W-08 (PyPI) and
+W-12 is ruled (keep the rebuild; closed 2026-11-05). W-10 is the next agent item.
 
 ## 3 · Standing constraints
 
@@ -60,10 +64,20 @@ by its own hazard, until each of fux, sheetpane and codelaw has an empty
 - `main`'s first-parent chain is the landings; when a whole branch lands its
   tip is the landing's second parent, so `git branch -d` can prove it merged
   (SR-LAW-3 decision 2 allows nothing stronger).
-- The Cowork bridge cannot write `.claude/` or `.github/`, and cannot unlink:
-  installs and cleanups run on the Mac.
+- **The Cowork bridge never commits** (SR-ARCHITECTURE decision 19): it cannot
+  unlink, and it sees the Mac's repositories at another path, so a prune from
+  it would cut off the Mac's worktrees. Its shell can write `.claude/` and
+  `.git/` (its file tools cannot); git there runs with no optional locks.
+  Edits from Cowork land through `lockmaster save` → a handoff.
 
 ## 4 · Lessons learned
+
+- 2026-10-28: anything lockmaster writes that names a path names the machine
+  that wrote it — the merge drivers were registered with the bridge's paths
+  twice. `work/LESSONS.md` has it; decision 10 now heals it.
+- 2026-10-28: an independent review of W-11 before it landed found eight
+  faults the author's tests missed — the worst landed another session's
+  change. For a change that runs in every session's hooks, review first.
 
 - A dogfood landing on a copy of this repo went red on its first try because
   the test worklog entry named a work-item id that has no item file — the

@@ -18,6 +18,10 @@ COMMANDS = {
     "queue": "what is waiting, landed or red",
     "status": "live sessions, changes, worktrees, disk use; --now prints work/NOW.md",
     "abandon": "drop a change; remove its worktree only if nothing is lost",
+    "save": "land edits made in main's checkout; hand them to Claude Code where this surface cannot commit",
+    "pickup": "land the edits other surfaces handed over",
+    "sync": "land this session's open changes now (the kit's hooks, at the end of a turn)",
+    "can-commit": "say whether this surface can commit (exit 0) or must hand off (exit 1)",
     "doctor": "stale locks, orphan worktrees, unmerged branches, kit mismatch",
     "install": "install the kit into a repository, pinned",
     "regen": "rebuild the generated files lockmaster.toml lists",
@@ -56,6 +60,24 @@ def _parser():
     s = sub.add_parser("abandon", help=COMMANDS["abandon"])
     s.add_argument("--item")
 
+    s = sub.add_parser("save", help=COMMANDS["save"])
+    s.add_argument("paths", nargs="+", metavar="PATH")
+    s.add_argument("-m", "--message", required=True)
+    s.add_argument("--item", help="the work item, when there is one (default: save-<time>)")
+    s.add_argument("--by", default="", help="who hands it over, for the record (e.g. \"Cowork\")")
+    s.add_argument("--handoff", action="store_true", help="hand off even where this surface could commit")
+
+    sub.add_parser("pickup", help=COMMANDS["pickup"])
+
+    s = sub.add_parser("sync", help=COMMANDS["sync"])
+    s.add_argument("--session", default="")
+    s.add_argument("--cwd", default="")
+    s.add_argument("--final", action="store_true", help="the session is ending: land and clean up")
+    s.add_argument("--no-adopt", action="store_true", help="do not adopt a worktree lockmaster did not create")
+    s.add_argument("--pickup", action="store_true", help="then land the handoffs too")
+
+    sub.add_parser("can-commit", help=COMMANDS["can-commit"])
+
     sub.add_parser("doctor", help=COMMANDS["doctor"])
 
     s = sub.add_parser("install", help=COMMANDS["install"])
@@ -88,6 +110,25 @@ def main(argv=None):
 
 def _out(text):
     print(text)
+
+
+def _save(repo, args):
+    from lockmaster import land, surface
+    paths = land._relative(repo, args.paths)
+    ok, why = (False, "asked to hand off") if args.handoff else surface.can_commit(repo)
+    if ok:
+        change = land.save(repo, paths, args.message, item=args.item, out=_out)
+        if change is None:
+            print("nothing uncommitted under " + ", ".join(paths))
+            return 0
+        return 1 if change["status"] == "red" else 0
+    h = land.handoff(repo, paths, args.message, item=args.item, by=args.by)
+    if h is None:
+        print("nothing uncommitted under " + ", ".join(paths))
+        return 0
+    print("handed off {}: {} file{} ({}).".format(h["item"], len(h["files"]), "s" * (len(h["files"]) != 1), why))
+    print("The next Claude Code session in this repository lands it — nothing else to do here.")
+    return 0
 
 
 def _dispatch(args):
@@ -130,6 +171,27 @@ def _dispatch(args):
     if args.command == "abandon":
         land.abandon(repo, repo.current_change(args.item), out=_out)
         return 0
+    if args.command == "save":
+        return _save(repo, args)
+    if args.command == "pickup":
+        results = land.pickup(repo, out=_out)
+        if not results:
+            print("no handoffs")
+        return 1 if any(r in ("red", "failed") for _, r, _ in results) else 0
+    if args.command == "sync":
+        queued = land.sync(repo, session=args.session or os.environ.get("CLAUDE_SESSION_ID", ""),
+                           cwd=args.cwd or None, final=args.final, adopt_cwd=not args.no_adopt, out=_out)
+        if not queued:
+            print("nothing to land")
+        if args.pickup:
+            land.pickup(repo, out=_out)
+        return 0
+    if args.command == "can-commit":
+        from lockmaster import surface
+        ok, why = surface.can_commit(repo)
+        print("yes — this surface lands its own changes" if ok else "no — {}; `lockmaster save` hands "
+              "edits to the next Claude Code session".format(why))
+        return 0 if ok else 1
     if args.command == "status":
         from lockmaster import now, status
         if args.write_now:

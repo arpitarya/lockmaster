@@ -24,6 +24,54 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-05 — W-12 ruled: fux keeps rebuilding its index on every landing  ·  Cowork (Opus 5.5)
+
+- **Asked:** *"what are open work items"*, then *"keep rebuilding on every landing;"*
+- **Done:** W-12 closed on option A and archived; its inbox row and queue row removed; the ten-minute landing filed as accepted cost B-007; SR-ARCHITECTURE decision 20's mention updated. Nothing to build — fux already rebuilds `.fux/index` on landing (not re-checked: fux's folder not connected).
+- **Decided / left open:** Arpit ruled A. W-08 is the one inbox item left.
+- **Mistakes:** none.
+- **Next:** W-10.
+
+## 2026-11-05 — law L10: the work files always up to date, wherever lockmaster is used  ·  Cowork (Opus 5.5)
+
+- **Asked:** *"create an sr law open work, backlog, interview, machine, lessons, worklog should always be upto date who so ever uses lockmaster"*
+- **Done:** SR-LAW-10 (`records/0012`), accepted on the ruling; it routes each file to the record or registry trigger that says what "current" means, and restates none. SR-LAWS, the register, `CLAUDE.md` §The laws (one line added — steering file changed), SR-ARCHITECTURE `laws:`, CHANGELOG. W-15 filed: `install` creates missing work files, `doctor` and a Stop hook catch stale ones. A lesson added (a one-line ruling drafted into a law). Handed off.
+- **Decided / left open:** nothing in BACKLOG or MACHINE changed. L10 is `built: partly` — judgment only until W-15.
+- **Mistakes:** none.
+- **Next:** the next Claude Code session lands the four handoffs; then W-15.
+
+## 2026-11-05 — L8 and L9 fixed: proven with concurrent processes; a handoff lands only what was handed over  ·  Cowork (Opus 5.5)
+
+- **Asked:** *"fix l8 and l9"*
+- **Done:** W-13 — `tests/test_parallel.py` runs six processes at once per case; it found three L8 breaches, fixed in `land.py`: saves in one second took one name (`_start_unique`), handoffs written at once overwrote each other (exclusive create), two end-of-turn landings of one session could commit in one worktree (a per-session sync lock); also a second `start` of one item says so plainly and a pickup re-reads before it lets go. W-14 — per-file digests in a handoff; a file edited after it is held, not swept in; handoffs sharing a file land together under all their messages; `queue` marks a missed handoff. SR-LAW-8 `built: yes`; SR-LAW-9 rewritten to the ruling; SR-ARCHITECTURE decisions 19–20; CHANGELOG. 122 tests pass.
+- **Decided / left open:** Arpit, asked whether a `launchd` job should land handoffs: *"no background job, when ever next time the claude code starts it can go ahead and commit it."* L9 decision 4 waits on W-10.
+- **Mistakes:** the first L9 draft required handoffs to land with no Claude Code session; the ruling corrected it.
+- **Next:** the next Claude Code session here lands W-11, the laws and this change together (they share files) — then close W-13.
+
+## 2026-11-05 — two laws: L8 parallel requests, L9 Cowork and Claude Code with no manual step  ·  Cowork (Opus 5.5)
+
+- **Asked:** *"create 2 SR law 1. lock master should handle parallel requests 2. lock master should handle cowork and claude code in parallel without manual intervention"*
+- **Done:** SR-LAW-8 (`records/0010`) and SR-LAW-9 (`records/0011`), accepted on the ruling; SR-LAWS table, the register, `CLAUDE.md` §The laws (two lines added — steering file changed), SR-ARCHITECTURE `laws:`. W-13 (prove L8 with a multi-process test) and W-14 (meet L9: handoffs land with nobody opening Claude Code; pickup lands the content handed over) filed in `build`. Handed off with `lockmaster save`.
+- **Decided / left open:** the decisions and veto thresholds (one hour for a handoff) are this session's reading of the two one-line rulings — the decider may tighten them. Both laws are `built: partly`; L9's veto condition is met today (W-11's handoff, waiting since 2026-10-28).
+- **Mistakes:** none.
+- **Next:** W-14 step 1 — a `pickup` that runs on its own.
+
+## 2026-10-28 — the queue reviewed: W-09 counted, W-10 queued, W-12 filed; drivers heal  ·  Cowork (Opus 5.5)
+
+- **Asked:** *"review all the open work items. Get them up to date. Update the whole open"*
+- **Done:** every item checked against the repositories. W-08: still not on PyPI (`pip index versions` finds nothing). W-09: codelaw (64 landings) and fux (one) land for real; milo's and sheetpane's adoption was never committed and rides W-11's handoff. W-10, filed 2026-10-27 as an untracked file with no row, queued — step 1 in part by W-11. W-12 filed, in the inbox: fux's one landing took 599 s. Found: W-11's install from the bridge had written the bridge's paths into every repo's merge drivers, the second time — gated (decision 10: `install` there registers none, `run` re-points, `doctor` names). The end-of-turn landing moved to the background. INTERVIEW brought current. All of it joins the `W-11` handoff.
+- **Decided / left open:** W-08 and W-12 to the decider; the split of fux's 599 s is not measured.
+- **Mistakes:** the driver paths — W-11's own install caused the regression it then gated.
+- **Next:** open Claude Code in each repository to land the handoffs.
+
+## 2026-10-28 — land at the end of every turn; Cowork's edits handed to Claude Code  ·  Cowork (Opus 5.5)
+
+- **Asked:** *"Whenever we are working on work tree and the task is done, it doesn't merge the changes to main … If co-work can commit it, then it should go ahead and commit it. If co-work cannot commit it, then probably Claude Code should go ahead and commit it. Make the necessary changes and have it updated in all the repositories."*
+- **Done:** W-11 — SR-ARCHITECTURE decisions 8a, 19, 20; `land.py` (`sync`, `adopt`, `save`, `handoff`, `pickup`, kept and held landings, `_accept_identical`), `surface.py`, four commands, `[land] auto`; `kit/claude/hooks/auto-land.py` wired at SessionStart, PostToolUse, Stop and SessionEnd; the `landing` skill; `tests/test_autoland.py`. The kit installed in all five repositories from the bridge; each repository's install handed off with `lockmaster save`, for the next Claude Code session to land.
+- **Decided / left open:** the bridge never commits — not even with deletes allowed — because it sees the Mac's repository at another path and a prune from it would cut off the Mac's worktrees (decision 19). Also landed here: the 2026-10-27 session's uncommitted `## Open items (N)` count (rule 37b), which sat in `main`'s checkout. The untracked dirty-checkout item file in `work/open/` stays for its own session.
+- **Mistakes:** a probe for unlink left a file in codelaw's `.git/`; renamed onto `.git/lockmaster/probe`, which lockmaster's own probe now reuses. An independent review before landing found eight faults, none losing data — the worst: standing in another session's worktree landed its change, and `SessionEnd` never finished a change already landed kept; all fixed, each with a test.
+- **Next:** open Claude Code in each repository once; its start lands the handoff.
+
 ## 2026-10-26 — plain pushes of main allowed; the build-output list grown  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"commit everything. And push."* — then ruled: *"Allow plain pushes"*.

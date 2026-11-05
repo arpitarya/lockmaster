@@ -68,6 +68,9 @@ Each law is stated in exactly one record and is **not restated here**:
 - **L5** — git stays the store — every landing is a plain git commit; lockmaster keeps no history of its own — [SR-LAW-5](records/0007_LAW-5-git-stays-the-store.md)
 - **L6** — Python only — one package, on PyPI and nowhere else; no npm — [SR-LAW-6](records/0008_LAW-6-python-only.md)
 - **L7** — no model in the lander — lockmaster never calls an AI model — [SR-LAW-7](records/0009_LAW-7-no-model-in-the-lander.md)
+- **L8** — lockmaster handles parallel requests — every request served or queued, never lost, never left for a person — [SR-LAW-8](records/0010_LAW-8-parallel-requests.md)
+- **L9** — Cowork and Claude Code work in parallel with no manual step — every change reaches `main` without the decider — [SR-LAW-9](records/0011_LAW-9-cowork-and-claude-code-together.md)
+- **L10** — the work files are always up to date, wherever lockmaster is used — OPEN-WORK, BACKLOG, INTERVIEW, MACHINE, LESSONS, WORKLOG, by whoever works there — [SR-LAW-10](records/0012_LAW-10-work-files-current.md)
 
 [SR-LAWS](records/0001_LAWS.md) assigns the handles and routes each to its
 record; that is all it does. Add a law by adding a record in the law range and

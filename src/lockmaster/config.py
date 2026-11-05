@@ -12,6 +12,9 @@
     [merge]                                  # path or glob = structural driver
     "work/WORKLOG.md" = "append-newest-first"
 
+    [land]                                   # optional
+    auto = "on"                              # "off": no landing at the end of a turn (decision 20)
+
 Read with `tomllib` on Python >= 3.11 and with the subset reader below on
 3.9-3.10. Both feed the same validation, so a file means the same thing on
 every Python: four tables of string values and nothing else. Anything outside
@@ -20,7 +23,8 @@ that subset is a loud error, never a guess (W-03 hazard).
 import re
 
 DRIVERS = ("append-newest-first", "table-rows", "append")
-TABLES = ("main", "checks", "generated", "merge")
+TABLES = ("main", "checks", "generated", "merge", "land")
+AUTO = ("on", "off")
 FILENAME = "lockmaster.toml"
 
 
@@ -29,15 +33,17 @@ class ConfigError(Exception):
 
 
 class Config:
-    def __init__(self, main="main", checks=None, generated=None, merge=None):
+    def __init__(self, main="main", checks=None, generated=None, merge=None, auto="on"):
         self.main = main
+        self.auto_land = auto == "on"
         self.checks = dict(checks or {})
         self.generated = dict(generated or {})
         self.merge = dict(merge or {})
 
     def as_dict(self):
         return {"main": {"branch": self.main}, "checks": self.checks,
-                "generated": self.generated, "merge": self.merge}
+                "generated": self.generated, "merge": self.merge,
+                "land": {"auto": "on" if self.auto_land else "off"}}
 
 
 # ---------------------------------------------------------------- the subset reader
@@ -169,7 +175,14 @@ def validate(data):
         if driver not in DRIVERS:
             raise ConfigError("lockmaster.toml: [merge] {} = \"{}\" is no driver; the drivers are {}".format(
                 path, driver, ", ".join(DRIVERS)))
-    return Config(main.get("branch", "main"), data.get("checks"), data.get("generated"), merge)
+    land = data.get("land", {})
+    extra = set(land) - {"auto"}
+    if extra:
+        raise ConfigError("lockmaster.toml: [land] knows only `auto` (got " + ", ".join(sorted(extra)) + ")")
+    auto = land.get("auto", "on")
+    if auto not in AUTO:
+        raise ConfigError("lockmaster.toml: [land] auto = \"{}\"; it is \"on\" or \"off\"".format(auto))
+    return Config(main.get("branch", "main"), data.get("checks"), data.get("generated"), merge, auto)
 
 
 def load(path):

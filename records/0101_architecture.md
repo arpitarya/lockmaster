@@ -15,9 +15,10 @@ owns:
   - lockmaster.toml
   - .claude/hooks/claim-guard.py
   - .claude/hooks/block-main.py
+  - .claude/hooks/auto-land.py
   - scripts/release.py
   - .github/workflows/release.yml
-laws: [L0, L1, L2, L3, L4, L5, L6, L7]
+laws: [L0, L1, L2, L3, L4, L5, L6, L7, L8, L9, L10]
 timestamp: 2026-10-25T13:00:00Z
 content_sha: ""
 ratifies: "Arpit, 2026-10-25 (Cowork): after the land proposal and the name search — 'Let's call it a lockmaster … Now create a document. Now go to GitHub and create me a new repository for this.' → 'Here is the lock master repo. Add the necessary documents, add whatever is needed for the tool to be built out.' → on W-02's three forks: 'All the blockers, I accept whatever is said over there.' → 'I want this to be Python only project. I don't believe we need npm.'"
@@ -136,6 +137,14 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
    lost ([SR-WORK-CLEANUP](0062_WORK-cleanup.md) decisions 1–2); what cannot
    be is kept and reported. A failed attempt's landing worktree is committed
    to its own detached HEAD before it is removed.
+8a. **Edits in `main`'s checkout that are the landing's own do not stop it**
+   (2026-10-28, W-11). Before the fast-forward, lockmaster compares each
+   uncommitted path in `main`'s checkout that the landing changes with the
+   landing's version. When every one is byte-for-byte the same — edits made in
+   the checkout and landed by `save` (decision 19), or a Cowork edit another
+   session committed — they are staged, which loses nothing, and git takes the
+   fast-forward. When any differs, nothing is staged, the change goes red and
+   the reason names the differing paths, never an empty line.
 9. **Generated files are never merged, only rebuilt.** Each repo lists them,
    with the command that rebuilds each, in `lockmaster.toml` `[generated]`.
    Rebuilding restores each to `main`'s version first — unless it has
@@ -151,6 +160,13 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     `append-newest-first`, in landing order otherwise, and a row both sides
     added kept once for `table-rows`. Anything else goes to `git merge-file`,
     so a true conflict still conflicts. Plain `git merge` uses them too.
+    **A driver names the machine that registered it** — its interpreter and
+    `merge.py` paths — so it is registered only where lockmaster commits
+    (2026-10-28, W-11; registered from the Cowork bridge, twice, it named the
+    bridge's paths): `install` on a surface that cannot commit (decision 19)
+    writes `.gitattributes` and registers nothing, every `lockmaster run`
+    re-points a driver whose interpreter or `merge.py` is missing on this
+    machine, and `doctor` names one.
 11. **Red, never forced.** A conflict outside a structural merge, a failed
     rebuild or check, a refused commit, or local edits in `main`'s checkout
     that the fast-forward would overwrite stop that change: it is marked red
@@ -162,6 +178,7 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     set aside and the next queued change lands** (ruled 2026-10-25, W-02): one
     bad change does not hold up the rest. It stays in `lockmaster queue`,
     marked red with its reason, until it is fixed and resubmitted or abandoned.
+    An auto-landing (decision 20) that cannot land is **held**, not red.
 12. **Only lockmaster writes to `main`.** A kit hook (`block-main.py`) refuses
     an agent's `git commit`, `merge`, `cherry-pick`, `revert`, `am` or `rebase`
     while `main` is checked out. **A plain push of `main` passes** (ruled
@@ -177,8 +194,9 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
 
 13. **`lockmaster.toml` at the repo root** — `[main]` (the branch), `[checks]`
     (name → command; each must pass), `[generated]` (path or glob → rebuild
-    command), `[merge]` (path or glob → structural driver). Four tables of
-    string values, nothing else; anything outside that subset is a loud error.
+    command), `[merge]` (path or glob → structural driver), and an optional
+    `[land]` whose only key, `auto`, is `"on"` (the default) or `"off"`
+    (decision 20). Five tables of string values, nothing else; anything outside that subset is a loud error.
     It is read with `tomllib` on Python ≥ 3.11, checked against lockmaster's
     own reader of the same subset — the reader used on 3.9–3.10 — so a file
     means the same on every Python and no dependency is added.
@@ -194,6 +212,10 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     | `lockmaster queue` | the decider | what is waiting, landed or red |
     | `lockmaster status` | anyone | live sessions, changes, worktrees, disk use against L2's budget; `--now` prints `work/NOW.md` as it should be, `--write-now` writes it |
     | `lockmaster abandon` | agent or the decider | drop a change; remove its worktree and branch only if nothing is lost |
+    | `lockmaster save -m … <path>…` | Cowork, or any session that edited `main`'s checkout | land those edits, or hand them off where this surface cannot commit (decision 19) |
+    | `lockmaster pickup` | the kit's hook, or anyone | land the handoffs (decision 19) |
+    | `lockmaster sync` | the kit's hook | land a session's open changes now (decision 20) |
+    | `lockmaster can-commit` | anyone | whether this surface can commit (exit 0) or hands off (exit 1) |
     | `lockmaster doctor` | anyone | stale locks, orphan worktrees, unmerged branches, an installed kit that is not this lockmaster's |
     | `lockmaster install <repo>` | the decider | install a pinned kit into a repository |
     | `lockmaster regen` | anyone | rebuild the `[generated]` files by hand |
@@ -259,12 +281,89 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     produce, it produces through `[generated]`** (decision 9) — in fux, the
     committed index. A person's or an agent's own git commands are untouched.
 
+**Every surface lands, and landing does not wait for the end** (Arpit,
+2026-10-28: *"As soon as the changes are done, it should keep merging it to
+main so that there aren't too many conflicts later on … If co-work can commit
+it, then it should go ahead and commit it. If co-work cannot commit it, then
+probably Claude Code should go ahead and commit it."*)
+
+19. **A surface that cannot commit hands its edits to one that can** (W-11).
+    `lockmaster save -m … <path>…` lands uncommitted edits made directly in
+    `main`'s checkout: a change is started on the paths, the checkout's
+    versions are copied into its worktree, and it is submitted (decisions 6–8,
+    with 8a accepting the checkout's identical edits). It first asks whether
+    this surface can commit (`surface.py`): it must be able to remove a file
+    in the state directory (the Cowork bridge cannot, so git's lock files
+    would stay), and the checkout must not be another machine's seen through a
+    mount — git lists worktrees that do not exist here, outside this checkout,
+    under the state directory's `home` (the primary checkout's path where
+    lockmaster first committed, written once, else read off its changes'
+    worktree paths) or
+    at a `.claude/worktrees/` path: a prune from here would cut them off. Every
+    git command lockmaster runs takes no optional locks, so even reading leaves
+    no `index.lock` on a surface that cannot remove it. Where it cannot, `save` writes a **handoff** — one new
+    file in `handoffs/` naming the paths, the message and who handed it over,
+    written aside and renamed in, so nothing is removed — says so in one line,
+    and exits 0: handing off is success, not a problem for the decider. The
+    kit's `auto-land.py` runs `lockmaster pickup` on a Claude Code session's
+    start and at the end of each of its turns — no background job
+    ([SR-LAW-9](0011_LAW-9-cowork-and-claude-code-together.md) decision 2). A
+    handoff's name is taken exclusively, so two written at once never
+    overwrite each other, and it records each file's content digest.
+    Handoffs that name a common file land together, as one change under the
+    newest one's message with the earlier ones listed. Each is saved; one whose
+    edits are already on `main` or reverted is dropped; one with a file
+    edited after it was handed off, and not handed off again, is **held** —
+    nothing lands — and said once, until that edit is handed off or undone;
+    one that goes red keeps
+    its one change, is reported once to that session's agent — who fixes the
+    files where they are, in `main`'s checkout — and is retried on that same
+    change only once those edits change. One failing handoff never stops the
+    rest. A pickup re-reads the handoffs before it lets go of its lock, and
+    stamps when it ran; `queue` marks a handoff older than that stamp, with no
+    reason given, `MISSED`.
+20. **A Claude Code session's changes land at the end of every turn** (W-11).
+    The kit's `auto-land.py` exports the session's id at its start, so
+    `lockmaster start` records whose change it is, and at each `Stop` starts
+    `lockmaster sync --pickup` in the background — a landing runs the checks
+    and rebuilds, which takes fux ten minutes, accepted (B-007), so no turn waits on it;
+    what it landed, held or could not land is said at the next `Stop`. It
+    lands on a surface that can commit only: every open change
+    of that session (by its recorded id; only a change with none is matched by
+    the worktree holding the session's directory, so standing in another
+    session's worktree never lands it) that holds claimed work not on `main`
+    (generated files aside; a path whose content is already `main`'s is not
+    pending) is committed and landed **kept** — it stays open, and
+    its worktree is brought up to the landing (a fast-forward, or a merge when
+    committed paths outside the claim stayed behind), so the next turn builds
+    on `main` and conflicts stay small. A kept landing that cannot land is
+    **held**: the change stays open with the reason, nothing goes to the
+    decider, the agent is told once per state of the change, and the next turn
+    tries again. A worktree lockmaster did not create — `claude --worktree`,
+    an agent's own — is **adopted** as a change claiming everything it
+    changed, landed the same way, and never removed by lockmaster; once its
+    owner removes it, the change is abandoned; a branch with no history in
+    common with `main` is not adopted. At `SessionEnd`, in the background,
+    the session's changes are landed and cleaned up as by `submit`; one with
+    nothing new is finished — landed if it landed kept before, else
+    abandoned — its worktree and branch removed if nothing is lost.
+    Files the session wrote straight into `main`'s checkout are noted, and at
+    `Stop` the agent is told once to `save` them. A `Stop` reached while
+    already continuing for a `Stop` hook never blocks again: it only says.
+    Two end-of-turn landings of one session never run at once: a turn's end
+    skips while one runs (the next turn retries), the session's end waits for
+    it ([SR-LAW-8](0010_LAW-8-parallel-requests.md)).
+    `[land] auto = "off"` turns it off.
+
 ### Consequences
 
 - Landings are serial by design: on one laptop that is the point (one build at
   a time is also what L2's budget wants), at the cost of a queue that waits.
 - Two agents changing the same lines with different intent is still a
   conflict; lockmaster stops and asks, a person decides.
+- Decisions 19 and 20 land work every turn: `main` sees work in progress
+  that passes the checks, and a repository whose checks are slow pays that
+  time at the end of each turn that changed something.
 - Decisions 1–17 are built (W-03 to W-07, and the release pipeline) and
   tested on scratch repositories under `tests/`; publishing waits on the
   decider's one-time trusted-publisher setup (W-08).
@@ -290,6 +389,7 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
 
 ### Reference (required)
 
+- [`kit/claude/hooks/auto-land.py`](../kit/claude/hooks/auto-land.py) and [`kit/claude/skills/landing/`](../kit/claude/skills/landing/SKILL.md) — decisions 19–20; `src/lockmaster/surface.py` (19); `land.py`'s `save`, `handoff`, `pickup`, `sync`, `adopt` (19–20) and `_accept_identical` (8a); [`tests/test_autoland.py`](../tests/test_autoland.py).
 - [`kit/`](../kit) — decisions 5, 12 and 15; [`kit/claude/hooks/claim-guard.py`](../kit/claude/hooks/claim-guard.py) (5), [`kit/claude/hooks/block-main.py`](../kit/claude/hooks/block-main.py) (12).
 - [`src/lockmaster/`](../src/lockmaster) — decisions 1–15: `land.py` (4–8, 11), `generated.py` (9), `merge.py` and `drivers.py` (10), `config.py` (13), `status.py` and `now.py` (14), `install.py` and `doctor.py` (14–15).
 - [`tests/`](../tests) — one scratch-repo test file per work item that built them.
