@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-05 — the waiting Cowork handoffs landed on main  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"commit everything"*
+- **Done:** the five handoffs (W-11 and four from 2026-11-05) landed as one change, `W-11-land` → `9c747a7`. `pickup` then dropped them as already landed and removed the red landing worktree `handoff-20261105-055911`.
+- **Decided / left open:** the commit message carries `no SR affected`: the now-ledger/check-work-system edits only follow rule 37b, and record 0051 is in the same commit.
+- **Mistakes:** the first two `save` runs got all paths as one argument (zsh doesn't word-split) and landed nothing. Then `save` went red on its own `work/NOW.md` ledger row; noted under W-10.
+- **Next:** W-10.
+
 ## 2026-11-05 — W-12 ruled: fux keeps rebuilding its index on every landing  ·  Cowork (Opus 5.5)
 
 - **Asked:** *"what are open work items"*, then *"keep rebuilding on every landing;"*
