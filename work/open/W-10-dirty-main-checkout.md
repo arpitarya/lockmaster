@@ -30,6 +30,10 @@ ball: agent
 
 A Cowork session with no lockmaster access edited codelaw's `work/OPEN-WORK.md`, `README.md`, `CHANGELOG.md` and others directly in `main`'s checkout and left them uncommitted. A Claude Code session committed the same edits on its `lm/` branch in codelaw and submitted. `merge --ff-only` in the checkout refused, so **codelaw W-36** — and **codelaw W-85** and **codelaw W-91**, which also touch `work/OPEN-WORK.md` — went **red**. `lockmaster queue` showed only *"main's checkout at /Users/arpitarya/my_programs/codelaw refused the fast-forward:"* with **nothing after the colon**: git's message was lost (`(e or o)` empty). The work queue looked frozen for about 40 minutes. **codelaw W-36** and **codelaw W-85** landed by 08:47 IST once the checkout was clean; **codelaw W-91** needed a resubmit.
 
+## Seen again (lockmaster, 2026-11-05) — `save` blocks itself on `work/NOW.md`
+
+`lockmaster save` from main's checkout copied 53 edited paths into its worktree; the kit's `now-ledger.py` then wrote the new worktree's row into the checkout's `work/NOW.md`. The landing held the copy without that row, so decision 8a found `work/NOW.md` differing and the fast-forward was refused (red, reason empty after the colon again). Copying the checkout's `NOW.md` into the worktree and resubmitting landed it (`9c747a7`). Fix with this item: `save` should leave `work/NOW.md` out of its copy (it is live state, SR-WORK-NOW), or 8a should accept a ledger-only difference.
+
 ## Definition of done
 
 - The reason for a refused fast-forward names the overlapping paths, or says git gave none, never an empty line.
