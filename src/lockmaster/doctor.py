@@ -34,6 +34,15 @@ def check(repo):
             out.append("change {} was landing when its lander stopped — `lockmaster run` queues it again".format(
                 c["item"]))
 
+    from lockmaster import land
+    for item, st, paths in land.checkout_overlaps(repo):  # W-10 step 3
+        out.append("main's checkout has uncommitted edits to {} that change {} ({}) claims — its landing "
+                   "waits until they are committed elsewhere, saved (`lockmaster save`) or undone".format(
+                       ", ".join(paths), item, st))
+    for c in live:
+        if c["status"] == "waiting":
+            out.append("change {} is waiting: {}".format(c["item"], (c.get("reason") or "").splitlines()[0]))
+
     # A landed or abandoned change whose cleanup kept something: kept on purpose, nothing lost.
     kept = [c for c in changes if c["status"] not in LIVE and c.get("cleanup")
             and (os.path.isdir(c["worktree"]) or git.ok(["rev-parse", "--verify", "--quiet",

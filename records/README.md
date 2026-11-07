@@ -113,7 +113,7 @@ Start from `TEMPLATE.md`.
 | [0008](0008_LAW-6-python-only.md) | **SR-LAW-6** | **L6** — Python only — one package, on PyPI and nowhere else; no npm | accepted | yes |
 | [0009](0009_LAW-7-no-model-in-the-lander.md) | **SR-LAW-7** | **L7** — no model in the lander — lockmaster never calls an AI model | accepted | partly |
 | [0010](0010_LAW-8-parallel-requests.md) | **SR-LAW-8** | **L8** — lockmaster handles parallel requests — every request served or queued, never lost, never left for a person | accepted | yes |
-| [0011](0011_LAW-9-cowork-and-claude-code-together.md) | **SR-LAW-9** | **L9** — Cowork and Claude Code work in parallel with no manual step — every change reaches `main` without the decider | accepted | partly |
+| [0011](0011_LAW-9-cowork-and-claude-code-together.md) | **SR-LAW-9** | **L9** — Cowork and Claude Code work in parallel with no manual step — every change reaches `main` without the decider | accepted | yes |
 | [0012](0012_LAW-10-work-files-current.md) | **SR-LAW-10** | **L10** — the work files are always up to date, wherever lockmaster is used | accepted | partly |
 | [0051](0051_WORK-open-queue.md) | **SR-WORK-OPEN-QUEUE** | How `OPEN-WORK.md` works — the queue discipline in eight groups | accepted | yes |
 | [0052](0052_WORK-backlog.md) | **SR-WORK-BACKLOG** | How `BACKLOG.md` works — the named-but-unclaimed in five classes | accepted | yes |

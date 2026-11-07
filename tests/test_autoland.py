@@ -10,7 +10,7 @@ from pathlib import Path
 from support import ROOT, SRC, ScratchCase, git
 
 from lockmaster import land, surface
-from lockmaster.repo import LANDED, OPEN, RED
+from lockmaster.repo import LANDED, OPEN, RED, WAITING
 
 HOOK = ROOT / "kit" / "claude" / "hooks" / "auto-land.py"
 
@@ -210,7 +210,7 @@ class AutoLand(ScratchCase):
         land.submit(self.repo(), self.repo().load("W-1"), "W-1: a")
         land.run(self.repo())
         c = self.repo().load("W-1")
-        self.assertEqual(c["status"], RED)
+        self.assertEqual(c["status"], WAITING)  # W-10: waiting, not red
         self.assertIn("a.txt", c["reason"])
         self.assertEqual((self.root / "a.txt").read_text(), "someone else's\n")  # never overwritten (L3)
         self.assertEqual(git(self.root, "diff", "--cached", "--name-only"), "")  # nothing staged either

@@ -172,12 +172,12 @@ class Loop(ScratchCase):
         log = git(self.root, "show", "main:work/WORKLOG.md")
         self.assertLess(log.index("## two"), log.index("## one"))
 
-    def test_main_checkout_with_local_edits_to_a_landed_path_is_red_not_overwritten(self):
+    def test_main_checkout_with_local_edits_to_a_landed_path_waits_and_is_not_overwritten(self):
         w = self.start("W-1", "a.txt")
         (w / "a.txt").write_text("landing\n")
         (self.root / "a.txt").write_text("the decider's unsaved edit\n")
         change = self.submit("W-1")
-        self.assertEqual(change["status"], RED)
+        self.assertEqual(change["status"], "waiting")  # W-10: waiting, not red
         self.assertEqual((self.root / "a.txt").read_text(), "the decider's unsaved edit\n")
 
     # -------------------------------------------------------- DoD 4

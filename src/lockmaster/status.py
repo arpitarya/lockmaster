@@ -89,6 +89,14 @@ def report(repo):
     if not live:
         lines.append("  none")
 
+    from lockmaster import land
+    overlaps = land.checkout_overlaps(repo)
+    if overlaps:  # W-10: the clash, before the landing
+        lines.append("main's checkout")
+        for item, st, paths in overlaps:
+            lines.append("  uncommitted {} — claimed by {} ({}): its landing waits until they are "
+                         "committed, saved or undone".format(", ".join(paths), item, st))
+
     lines.append("worktrees")
     by_path = {os.path.realpath(c["worktree"]): c for c in live}
     for t in git.worktrees(repo.root):

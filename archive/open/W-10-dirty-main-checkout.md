@@ -5,8 +5,8 @@ description: "Arpit, 2026-10-27: uncommitted edits in main's checkout turned thr
 item: W-10
 filed: 2026-10-27
 filed_by: "Arpit (Cowork, Opus 5.5)"
-updated: 2026-10-28
-updated_by: "Cowork (Opus 5.5): step 1 in part by W-11; codelaw ids marked as codelaw's"
+updated: 2026-11-07
+updated_by: "Claude Code (Opus 5.5): steps 1–5 built; the ledger fix; closed"
 ball: agent
 ---
 
@@ -16,11 +16,11 @@ ball: agent
 
 | step | what we do | what it gives us | state |
 |---|---|---|---|
-| 1 | When `merge --ff-only` in `main`'s checkout is refused, find the cause: the checkout's uncommitted paths (`git status --porcelain`) that the landing commit touches. The reason names them: *"main's checkout at <path> has uncommitted edits to work/OPEN-WORK.md, … that this landing would overwrite"* — never an empty line | the decider sees why, at a glance | ◐ [W-11](../../archive/open/W-11-land-every-turn-and-cowork-handoff.md), SR-ARCHITECTURE decision 8a: edits identical to the landing are staged and the fast-forward goes; differing ones are named, never an empty line. Left: the step-2 behaviour for the differing case |
-| 2 | That cause is not red: the change is **waiting** (a new status, or `queued` with a `waiting_on` reason). The landing commit is kept; `lockmaster run` retries waiting changes on each pass and on `submit`, and fast-forwards as soon as the overlap is gone. Every other cause stays red (decision 11) | no resubmit by hand for a cause that clears itself | ⏳ |
-| 3 | `lockmaster status` and `doctor` list uncommitted edits in `main`'s checkout that overlap a queued, waiting or open change's claim, with the change's id | the clash is visible before the landing | ⏳ |
-| 4 | A kit hook (beside `claim-guard.py`) warns a session that edits, in `main`'s checkout, a path an open change claims: *"<item> claims this file; edit it in its worktree or through lockmaster"* | the cause is stopped at the source | ⏳ |
-| 5 | Tests in scratch repos: an edit in the checkout overlapping the landing → waiting with the paths named → the edit is committed elsewhere or reverted → the next `run` lands it; an edit not overlapping → lands at once; the checkout's edit is never touched (L3) | proof | ⏳ |
+| 1 | When `merge --ff-only` in `main`'s checkout is refused, find the cause: the checkout's uncommitted paths (`git status --porcelain`) that the landing commit touches. The reason names them: *"main's checkout at <path> has uncommitted edits to work/OPEN-WORK.md, … that this landing would overwrite"* — never an empty line | the decider sees why, at a glance | ✅ [W-11](../../archive/open/W-11-land-every-turn-and-cowork-handoff.md), SR-ARCHITECTURE decision 8a: edits identical to the landing are staged and the fast-forward goes; differing ones are named, never an empty line. 2026-11-07: the differing case waits (step 2) |
+| 2 | That cause is not red: the change is **waiting** (a new status, or `queued` with a `waiting_on` reason). The landing commit is kept; `lockmaster run` retries waiting changes on each pass and on `submit`, and fast-forwards as soon as the overlap is gone. Every other cause stays red (decision 11) | no resubmit by hand for a cause that clears itself | ✅ status `waiting`, the checked commit kept under `refs/lockmaster/waiting/<item>`; `run` re-looks without re-running checks, redoes the landing if `main` moved |
+| 3 | `lockmaster status` and `doctor` list uncommitted edits in `main`'s checkout that overlap a queued, waiting or open change's claim, with the change's id | the clash is visible before the landing | ✅ `land.checkout_overlaps`; the ledger left out |
+| 4 | A kit hook (beside `claim-guard.py`) warns a session that edits, in `main`'s checkout, a path an open change claims: *"<item> claims this file; edit it in its worktree or through lockmaster"* | the cause is stopped at the source | ✅ in `claim-guard.py` itself, which already knew the claims |
+| 5 | Tests in scratch repos: an edit in the checkout overlapping the landing → waiting with the paths named → the edit is committed elsewhere or reverted → the next `run` lands it; an edit not overlapping → lands at once; the checkout's edit is never touched (L3) | proof | ✅ `tests/test_waiting.py`, 15 tests |
 
 **Arpit, 2026-10-27:** *"Yes, let's file it as a lock master work item."* — on the proposal after the codelaw incident below.
 
@@ -32,7 +32,7 @@ A Cowork session with no lockmaster access edited codelaw's `work/OPEN-WORK.md`,
 
 ## Seen again (lockmaster, 2026-11-05) — `save` blocks itself on `work/NOW.md`
 
-`lockmaster save` from main's checkout copied 53 edited paths into its worktree; the kit's `now-ledger.py` then wrote the new worktree's row into the checkout's `work/NOW.md`. The landing held the copy without that row, so decision 8a found `work/NOW.md` differing and the fast-forward was refused (red, reason empty after the colon again). Copying the checkout's `NOW.md` into the worktree and resubmitting landed it (`9c747a7`). Fix with this item: `save` should leave `work/NOW.md` out of its copy (it is live state, SR-WORK-NOW), or 8a should accept a ledger-only difference.
+`lockmaster save` from main's checkout copied 53 edited paths into its worktree; the kit's `now-ledger.py` then wrote the new worktree's row into the checkout's `work/NOW.md`. The landing held the copy without that row, so decision 8a found `work/NOW.md` differing and the fast-forward was refused (red, reason empty after the colon again). Copying the checkout's `NOW.md` into the worktree and resubmitting landed it (`9c747a7`). Fix with this item: `save` should leave `work/NOW.md` out of its copy (it is live state, SR-WORK-NOW), or 8a should accept a ledger-only difference. **Fixed 2026-11-07 the second way:** a landing that changes the ledger carries the checkout's copy (decision 8a), so no landing — `save`'s or a worktree's — waits on it.
 
 ## Definition of done
 
