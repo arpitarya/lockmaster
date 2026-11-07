@@ -46,6 +46,7 @@ packages = [
   "lockmaster.kit.claude.skills",
   "lockmaster.kit.claude.skills.docket",
   "lockmaster.kit.claude.skills.landing",
+  "lockmaster.kit.work",
 ]
 
 [tool.setuptools.package-data]
@@ -55,6 +56,7 @@ packages = [
 "lockmaster.kit.claude.skills" = ["*"]
 "lockmaster.kit.claude.skills.docket" = ["*"]
 "lockmaster.kit.claude.skills.landing" = ["*"]
+"lockmaster.kit.work" = ["*"]
 
 [tool.setuptools.exclude-package-data]
 "*" = [".DS_Store", "*.pyc"]

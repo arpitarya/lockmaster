@@ -105,7 +105,7 @@ class WithoutTheWorkSystem(ScratchCase):
                 self.assertEqual((r.returncode, r.stdout, r.stderr), (0, "", ""))
         r = subprocess.run(["bash", str(hooks / "require-progress.sh")], input="{}", capture_output=True, text=True)
         self.assertEqual((r.returncode, r.stdout), (0, ""))
-        self.assertFalse((self.root / "work").exists())
+        self.assertFalse((self.root / "work" / "NOW.md").exists())  # install writes the six (W-15), never NOW.md
 
 
 if __name__ == "__main__":

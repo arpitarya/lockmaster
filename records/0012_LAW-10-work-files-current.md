@@ -75,7 +75,7 @@ lockmaster ships the work system with it, and every landing now happens continuo
 ### Consequences
 
 - A law outranks every record ([SR-LAW-0](0002_LAW-0-authority.md)). Where a hook skips a repository because it lacks the work system, that skip is the gap this law closes.
-- **What enforces it today:** judgment, plus `require-progress.sh`, which nudges for `work/NOW.md` only. `install` does not create the six files, and no hook or `doctor` check names a missing or stale one. Closing that is [W-15](../work/open/W-15-work-files-current-everywhere.md).
+- **What enforces it** (2026-11-07, [W-15](../archive/open/W-15-work-files-current-everywhere.md)): `lockmaster install` creates any of the six a repository lacks (decision 6); `lockmaster doctor` names a missing one, and a `WORKLOG.md` that `main` has moved more than ten commits past; the kit's `work-files.py` Stop hook tells a session, once, that changed files outside `work/` but touched none of `WORKLOG.md`, `INTERVIEW.md`, `OPEN-WORK.md` (decision 4). [SR-ARCHITECTURE](0101_architecture.md) decision 15; `tests/test_work_files.py`.
 - **What a check can never prove:** whether a lesson, a machine quirk or a backlog row should have been written at all. For those three files the law binds judgment.
 
 ### Alternatives considered
@@ -92,7 +92,7 @@ lockmaster ships the work system with it, and every landing now happens continuo
 
 **Reopen this decision if:** a repository lockmaster is installed in lacks one of the six files, or a session's landings change the state of play with no landing touching `work/WORKLOG.md`.
 
-**How to check it:** `for f in OPEN-WORK BACKLOG INTERVIEW MACHINE LESSONS WORKLOG; do test -f work/$f.md || echo "missing work/$f.md"; done` prints nothing; `PYTHONPATH=src python3 -m lockmaster doctor` names a missing or stale work file once [W-15](../work/open/W-15-work-files-current-everywhere.md) lands.
+**How to check it:** `for f in OPEN-WORK BACKLOG INTERVIEW MACHINE LESSONS WORKLOG; do test -f work/$f.md || echo "missing work/$f.md"; done` prints nothing; `PYTHONPATH=src python3 -m lockmaster doctor` names no missing or stale work file.
 
 ---
 
@@ -106,4 +106,4 @@ lockmaster ships the work system with it, and every landing now happens continuo
 
 **Project docs**
 
-- [`work/open/W-15-work-files-current-everywhere.md`](../work/open/W-15-work-files-current-everywhere.md)
+- [`archive/open/W-15-work-files-current-everywhere.md`](../archive/open/W-15-work-files-current-everywhere.md)

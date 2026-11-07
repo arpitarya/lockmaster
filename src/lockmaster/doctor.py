@@ -81,7 +81,43 @@ def check(repo):
                        "them, or `lockmaster drivers`".format(", ".join(stale)))
 
     out += kit_problems(repo.root)
+    out += work_problems(repo)
     return out
+
+
+# SR-LAW-10 / W-15: this many landings on main with no WORKLOG.md change reads as drift.
+STALE_LANDINGS = 10
+
+
+def work_problems(repo):
+    """A missing work file, and a worklog main has moved past (SR-LAW-10). Only
+    where the kit is installed; whether a lesson, a machine quirk or a backlog
+    row should have been written is judgment, never checked here."""
+    if not install_mod.read_lock(repo.root):
+        return []
+    out = []
+    missing = [f for f in install_mod.WORK_FILES if not (repo.root / "work" / f).is_file()]
+    if missing:
+        out.append("work file{} missing: {} — `lockmaster install {}` creates {} (SR-LAW-10)".format(
+            "s" * (len(missing) > 1), ", ".join("work/" + f for f in missing), repo.root,
+            "them" if len(missing) > 1 else "it"))
+    if "WORKLOG.md" not in missing:
+        n = landings_since_worklog(repo)
+        if n is not None and n > STALE_LANDINGS:
+            out.append("work/WORKLOG.md is stale: {} commits on {} since it last changed (more than {}) — "
+                       "each session appends an entry (SR-LAW-10)".format(n, repo.main, STALE_LANDINGS))
+    return out
+
+
+def landings_since_worklog(repo):
+    """First-parent commits on main since the last one that changed work/WORKLOG.md;
+    None when main has no commit that did."""
+    code, last, _ = git.run(["log", "-1", "--format=%H", repo.main, "--", "work/WORKLOG.md"], repo.root, check=False)
+    last = last.strip()
+    if code != 0 or not last:
+        return None
+    code, n, _ = git.run(["rev-list", "--count", "--first-parent", last + ".." + repo.main], repo.root, check=False)
+    return int(n.strip()) if code == 0 and n.strip().isdigit() else None
 
 
 def kit_problems(root):

@@ -11,11 +11,12 @@
     ".claude/hooks/require-progress.sh": "1f18eb786a477a21c0b27fa3abb95a27d78d157be339a6f8ef64398ca76a7d29",
     ".claude/hooks/session-lock.sh": "febe0bec484001ae2a10f0133da2e830a1ecbe161a6509a2646bd1ce0a2283f8",
     ".claude/hooks/stop-if-blocked.sh": "18f8fdbe8ca93dfc2008a4f73ac7cd04ef6bc780ae8899b680ee3f4fa1281c45",
+    ".claude/hooks/work-files.py": "cd46eebe7c00e7a404b40ce43f97bd384106b5a2bb776888ec693875bacd2e5e",
     ".claude/hooks/worktree-cleanup.py": "cdaeb8a416068f21d32ebc3b6e860bd62710729b91a78fdcc4a0b1388ef55c40",
     ".claude/skills/docket/SKILL.md": "bb5a3a52501a78e43bf6da5ca830bd7a875496fc19274a394b66dc3521b4a7e8",
     ".claude/skills/landing/SKILL.md": "7bbdbd6e543f6ecb40225ac6691963b6bc4d02854bec8b36653f8136a7230f1f"
   },
-  "kit": "edeb4d73ba1d76bf79eb92c5ca744f86fd83142a94e2f7ab2c12acde49731f35",
+  "kit": "06096e8c243beee98b431176db997770c3b6c4287a9b93c44f3705cbafe90a3a",
   "settings": [
     "$CLAUDE_PROJECT_DIR/.claude/hooks/guard-open-work-inbox.sh",
     "$CLAUDE_PROJECT_DIR/.claude/hooks/inject-inbox.sh",
@@ -36,7 +37,9 @@
     "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/now-ledger.py\" show",
     "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/now-ledger.py\" start",
     "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/now-ledger.py\" stop",
-    "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/now-ledger.py\" sync"
+    "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/now-ledger.py\" sync",
+    "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/work-files.py\" edit",
+    "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/work-files.py\" stop"
   ],
   "version": "0.0.1"
 }

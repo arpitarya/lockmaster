@@ -8,6 +8,9 @@
     <repo>/.claude/lockmaster.lock  records the version, the kit's digest and
         each installed file's hash, so `lockmaster doctor` sees a mismatch
     the merge drivers, when the repo has a lockmaster.toml
+    kit/work/<file>  ->  <repo>/work/<file>  for each of the six work files the
+        repo lacks (SR-LAW-10 decision 6); one that exists is never touched,
+        and they are the project's own papers, not kit files (decision 16)
 
 An existing file the kit would replace, and which a previous install did not
 write, is never overwritten silently: the install stops and names it, or with
@@ -26,6 +29,8 @@ from lockmaster.repo import LockmasterError
 LOCK = ".claude/lockmaster.lock"
 SETTINGS = ".claude/settings.json"
 TREES = (("claude", ".claude"), ("github", ".github"))
+# SR-LAW-10: the six work files every repository lockmaster is installed in keeps.
+WORK_FILES = ("OPEN-WORK.md", "BACKLOG.md", "INTERVIEW.md", "MACHINE.md", "LESSONS.md", "WORKLOG.md")
 
 
 def find_kit():
@@ -183,8 +188,30 @@ def install(target, backup=False, out=print):
             if drivers.install(repo):
                 out("  .gitattributes: lockmaster's [merge] block written — commit it")
             out("  merge drivers registered in .git/config")
+    made = work_files(target, kit)
+    if made:
+        out("  work files created (SR-LAW-10) — commit them: " + ", ".join("work/" + f for f in made))
     _guard(repo, out)
     return lock
+
+
+def work_files(target, kit):
+    """Write each of the six work files `target` lacks from the kit's template.
+    Never overwrites; returns the names written."""
+    made = []
+    for name in WORK_FILES:
+        dst = Path(target) / "work" / name
+        src = kit / "work" / name
+        if dst.exists() or dst.is_symlink() or not src.is_file():
+            continue
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            with open(str(dst), "xb") as fh:  # exclusive: a file written meanwhile is kept
+                fh.write(src.read_bytes())
+        except FileExistsError:
+            continue
+        made.append(name)
+    return made
 
 
 def _guard(repo, out):

@@ -8,6 +8,13 @@ All notable changes to lockmaster. The format follows
 
 ### Added
 
+- `lockmaster install` creates any of the six work files (`work/OPEN-WORK.md`,
+  `BACKLOG.md`, `INTERVIEW.md`, `MACHINE.md`, `LESSONS.md`, `WORKLOG.md`) a
+  repository lacks, from `kit/work/`, and never overwrites one; `doctor` names a
+  missing one and a `WORKLOG.md` main has moved more than ten commits past; the
+  kit's `work-files.py` tells a session, once at `Stop`, that changed files but
+  none of WORKLOG, INTERVIEW or OPEN-WORK (W-15, SR-LAW-10).
+
 - A landing stopped only by uncommitted edits in `main`'s checkout now
   **waits** instead of going red, and lands by itself — no resubmit, no
   second run of the checks — once they are committed, saved or undone; it is

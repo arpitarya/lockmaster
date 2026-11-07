@@ -114,7 +114,7 @@ Start from `TEMPLATE.md`.
 | [0009](0009_LAW-7-no-model-in-the-lander.md) | **SR-LAW-7** | **L7** — no model in the lander — lockmaster never calls an AI model | accepted | partly |
 | [0010](0010_LAW-8-parallel-requests.md) | **SR-LAW-8** | **L8** — lockmaster handles parallel requests — every request served or queued, never lost, never left for a person | accepted | yes |
 | [0011](0011_LAW-9-cowork-and-claude-code-together.md) | **SR-LAW-9** | **L9** — Cowork and Claude Code work in parallel with no manual step — every change reaches `main` without the decider | accepted | yes |
-| [0012](0012_LAW-10-work-files-current.md) | **SR-LAW-10** | **L10** — the work files are always up to date, wherever lockmaster is used | accepted | partly |
+| [0012](0012_LAW-10-work-files-current.md) | **SR-LAW-10** | **L10** — the work files are always up to date, wherever lockmaster is used | accepted | yes |
 | [0051](0051_WORK-open-queue.md) | **SR-WORK-OPEN-QUEUE** | How `OPEN-WORK.md` works — the queue discipline in eight groups | accepted | yes |
 | [0052](0052_WORK-backlog.md) | **SR-WORK-BACKLOG** | How `BACKLOG.md` works — the named-but-unclaimed in five classes | accepted | yes |
 | [0053](0053_WORK-lifecycle.md) | **SR-WORK-LIFECYCLE** | How a feature travels — compare, proposal, handoff in the item file, the model line, one record | accepted | yes |
@@ -160,6 +160,7 @@ yet is owned by an open `W-nn`.
 | `.claude/hooks/claim-guard.py` | SR-ARCHITECTURE | decision 5: warns on a write outside a change's claim |
 | `.claude/hooks/block-main.py` | SR-ARCHITECTURE | decision 12: refuses an agent's commit or push to `main` |
 | `.claude/hooks/auto-land.py` | SR-ARCHITECTURE | decisions 19–20: lands a session's changes each turn and the handoffs from Cowork |
+| `.claude/hooks/work-files.py` | SR-ARCHITECTURE | decision 15: tells a session, once at `Stop`, that it touched no work file (SR-LAW-10) |
 | `kit` | SR-ARCHITECTURE | decision 15: the hooks, settings, skill and CI lockmaster installs; `.claude/` and `.github/` here are installed copies of it |
 | `src` | SR-ARCHITECTURE | decisions 1–14: the `lockmaster` package |
 | `tests` | SR-ARCHITECTURE | scratch-repo tests for every decision as it is built |

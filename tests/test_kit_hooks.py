@@ -52,7 +52,7 @@ class Installed(ScratchCase):
 class DiskBudget(Installed):
     def setUp(self):
         super().setUp()
-        (self.root / "work").mkdir()
+        (self.root / "work").mkdir(exist_ok=True)  # install made it (W-15)
         (self.root / "work" / "MACHINE.md").write_text(
             "## Disk budget\n\n| what | value |\n|---|---|\n| budget | 5 GB for the whole project |\n")
         spec = importlib.util.spec_from_file_location("kit_disk_budget", self.hooks / "disk-budget.py")
@@ -114,7 +114,7 @@ class DiskBudget(Installed):
 class NowLedger(Installed):
     def setUp(self):
         super().setUp()
-        (self.root / "work").mkdir()
+        (self.root / "work").mkdir(exist_ok=True)  # install made it (W-15)
         (self.root / "work" / "NOW.md").write_text(NOW_MD)
 
     def flight(self):
