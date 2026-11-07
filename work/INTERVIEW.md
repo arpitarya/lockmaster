@@ -24,31 +24,28 @@ entry.**
 
 ## 1 · State of play
 
-*Updated 2026-10-28 (Cowork, Opus 5.5 — W-11 built, the queue reviewed).*
+*Updated 2026-11-07 (Claude Code, Opus 5.5 — W-10 built; W-13 and W-14 closed).*
 **Where things stand:** the tool works and is adopted in fux, codelaw, milo
 and sheetpane. `src/lockmaster/` implements SR-ARCHITECTURE decisions 1–20.
-W-11 (2026-10-28) made landing continuous: the kit's `auto-land.py` lands a
-Claude Code session's changes in the background at the end of every turn,
-keeping them open; Cowork runs `lockmaster save`, which lands where the
-surface can commit and otherwise hands the edits to the next Claude Code
-session (`lockmaster pickup`). 114 scratch-repo tests pass on Python 3.9.
-**W-11 is not on `main` yet:** built from Cowork, it waits as the handoff
-`W-11` here and `lockmaster-W-11` in the other four, landed by the next Claude
-Code session opened in each. Nothing is on PyPI until the decider finishes
-W-08. The laws in force are L0–L10. L10 (the six work files always current,
-in every repository lockmaster is installed in) is enforced by judgment
-only until W-15. L8 (parallel requests) is proven by
-`tests/test_parallel.py` (W-13). L9 (Cowork and Claude Code with no manual
-step): handoffs land at the next Claude Code session's start — no background
-job, the decider's ruling — and only what was handed over (W-14); its last
-decision waits on W-10. W-13 and W-14 are built but handed off, not landed.
+Landing is continuous (W-11): the kit's `auto-land.py` lands a Claude Code
+session's changes at the end of every turn, keeping them open; Cowork runs
+`lockmaster save`, which hands off where the surface cannot commit. **W-10
+(2026-11-07):** a landing stopped only by uncommitted edits in main's
+checkout is now **waiting**, not red — it keeps its checked commit and lands
+by itself once they clear; `status`, `doctor` and `claim-guard.py` name the
+clash first; `work/NOW.md` never makes a landing wait (the landing carries the
+checkout's copy). With it L9 is fully built (W-14 closed) and L8 is proven
+(W-13 closed). The laws in force are L0–L10. L10 (the six work files always
+current everywhere) is still enforced by judgment until W-15. Nothing is on
+PyPI until the decider finishes W-08.
 
 ## 2 · In flight, and the immediate next step
 
-**Next:** open Claude Code once in each of the five repositories — its start
-picks up the handoff and lands it (W-11; for milo and sheetpane that is also
-their first landing, W-09). Then the two rulings in the inbox: W-08 (PyPI) and
-W-12 is ruled (keep the rebuild; closed 2026-11-05). W-10 is the next agent item.
+**Next:** W-15 (enforce L10: `install` creates missing work files, `doctor`
+names a missing or stale one, a Stop hook flags a session that touched none of
+WORKLOG, INTERVIEW or OPEN-WORK), then W-09's last step — milo's and
+sheetpane's first landing, by a Claude Code session there. W-08 waits on the
+decider.
 
 ## 3 · Standing constraints
 

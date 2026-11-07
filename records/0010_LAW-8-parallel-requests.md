@@ -66,7 +66,7 @@ Every-turn landing (SR-ARCHITECTURE decision 20) and Cowork handoffs (decision 1
 ### Consequences
 
 - A law outranks every record ([SR-LAW-0](0002_LAW-0-authority.md)): where [SR-ARCHITECTURE](0101_architecture.md) disagrees with L8, L8 holds and the other is corrected.
-- **Proven by real concurrent processes** in [`tests/test_parallel.py`](../tests/test_parallel.py) ([W-13](../work/open/W-13-prove-parallel-requests.md)): sessions that start and submit at once, saves in the same second, handoffs asking for one name, and two end-of-turn landings of one session. The proof found three breaches, now fixed: saves in one second took one name; handoffs written at once overwrote each other; and two end-of-turn landings of one session could commit in one worktree at once.
+- **Proven by real concurrent processes** in [`tests/test_parallel.py`](../tests/test_parallel.py) ([W-13](../archive/open/W-13-prove-parallel-requests.md)): sessions that start and submit at once, saves in the same second, handoffs asking for one name, and two end-of-turn landings of one session. The proof found three breaches, now fixed: saves in one second took one name; handoffs written at once overwrote each other; and two end-of-turn landings of one session could commit in one worktree at once. A fourth showed on 2026-11-07, intermittently: `git worktree add` dies when it reads another worktree being added at that moment, so a `start` was refused as "started by another session" and a landing could fail. `git.worktree_add` retries it ([W-10](../archive/open/W-10-dirty-main-checkout.md)).
 - A pickup re-reads the handoffs before it lets go, so one written meanwhile is not left for the next session.
 
 ### Alternatives considered
@@ -101,4 +101,4 @@ Every-turn landing (SR-ARCHITECTURE decision 20) and Cowork handoffs (decision 1
 
 **Project docs**
 
-- [`work/open/W-13-prove-parallel-requests.md`](../work/open/W-13-prove-parallel-requests.md)
+- [`archive/open/W-13-prove-parallel-requests.md`](../archive/open/W-13-prove-parallel-requests.md)

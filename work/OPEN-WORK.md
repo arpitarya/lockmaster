@@ -27,17 +27,11 @@ here. Read that record before changing anything below it.
 
 ---
 
-## Open items (6)
+## Open items (3)
 
-### build (5)
+### build (2)
 
 🔴 **W-08** `arpit` Hold the name on PyPI: the pipeline and 0.0.1 are ready; Arpit adds the trusted publishers and environments, then pushes the tag `v0.0.1`. Keep or delete the npm org `@lockmaster`. Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
-
-🟢 **W-10** `agent` A dirty `main` checkout: a refused fast-forward waits and lands once the edits clear, not red; `status`/`doctor` and a kit hook warn first. Identical edits and named paths came with W-11. Filed by Arpit (Cowork). [detail](open/W-10-dirty-main-checkout.md)
-
-🟢 **W-13** `agent` Prove L8 with real concurrent processes: built (`tests/test_parallel.py`; three breaches found and fixed) and handed off — close it once the next Claude Code session lands it. Arpit ruled L8 on 2026-11-05. Filed by Cowork (Opus 5.5). [detail](open/W-13-prove-parallel-requests.md)
-
-🟡 **W-14** waits on **W-10** `agent` Meet L9: a handoff lands only what was handed over, at the next Claude Code session's start (no background job, Arpit 2026-11-05). Built; decision 4 is W-10's. Filed by Cowork (Opus 5.5). [detail](open/W-14-cowork-and-claude-code-unattended.md)
 
 🟢 **W-15** `agent` Enforce L10 in every repository: `install` creates any missing work file, `doctor` names a missing or stale one, a kit Stop hook flags a session that touched none of WORKLOG, INTERVIEW or OPEN-WORK. Arpit ruled L10 on 2026-11-05. Filed by Cowork (Opus 5.5). [detail](open/W-15-work-files-current-everywhere.md)
 

@@ -143,8 +143,14 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
    landing's version. When every one is byte-for-byte the same — edits made in
    the checkout and landed by `save` (decision 19), or a Cowork edit another
    session committed — they are staged, which loses nothing, and git takes the
-   fast-forward. When any differs, nothing is staged, the change goes red and
-   the reason names the differing paths, never an empty line.
+   fast-forward. When any differs, nothing is staged and the change **waits**
+   (decision 11), its reason naming the differing paths, never an empty line.
+   **The ledger, `work/NOW.md`, never makes a landing wait** (2026-11-07, W-10):
+   it is live state, rewritten by the kit's hooks and by every landing
+   ([SR-WORK-NOW](0061_WORK-now.md)), so a landing that changes it carries the
+   checkout's copy instead — the landing commit is rewritten with that one file
+   replaced, its parents, author and message kept. `save` once blocked itself
+   this way: its worktree's row was written after its copy was taken.
 9. **Generated files are never merged, only rebuilt.** Each repo lists them,
    with the command that rebuilds each, in `lockmaster.toml` `[generated]`.
    Rebuilding restores each to `main`'s version first — unless it has
@@ -169,7 +175,7 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     machine, and `doctor` names one.
 11. **Red, never forced.** A conflict outside a structural merge, a failed
     rebuild or check, a refused commit, or local edits in `main`'s checkout
-    that the fast-forward would overwrite stop that change: it is marked red
+    stop that change: it is marked red
     with the reason, and the agent is told — with the inbox row
     ([SR-WORK-OPEN-QUEUE](0051_WORK-open-queue.md) rule 42's shape) ready to
     add if it cannot fix it. lockmaster never forces, deletes an unmerged
@@ -179,6 +185,23 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     bad change does not hold up the rest. It stays in `lockmaster queue`,
     marked red with its reason, until it is fixed and resubmitted or abandoned.
     An auto-landing (decision 20) that cannot land is **held**, not red.
+    **Uncommitted edits in `main`'s checkout that the fast-forward would
+    overwrite are not red either: the change is waiting** (2026-11-07, W-10;
+    [SR-LAW-9](0011_LAW-9-cowork-and-claude-code-together.md) decision 4).
+    The landing commit — rebuilt, checked and committed — is kept under
+    `refs/lockmaster/waiting/<item>`; every `lockmaster run` (and so every
+    `submit`, `save`, `pickup` and end-of-turn `sync`) looks again and, once
+    those edits are committed, handed off or undone, fast-forwards it with no
+    resubmit and no second run of the checks. If `main` moved meanwhile, the
+    landing is redone on the new `main` (decision 8), never fast-forwarded from
+    a stale base. A change queued behind a waiting one still lands. A kept
+    landing waits the same way and stays open once it lands; `SessionEnd`
+    finishes it instead. The checkout's edits are never touched
+    ([SR-LAW-3](0005_LAW-3-never-lose-work.md)). `lockmaster status` and
+    `doctor` name each uncommitted path in the checkout that a queued, waiting
+    or open change claims, with the change, before it lands; the kit's
+    `claim-guard.py` warns a session that edits such a path there. A session
+    with no hooks (Cowork) sees only `status`, `doctor` and `queue`.
 12. **Only lockmaster writes to `main`.** A kit hook (`block-main.py`) refuses
     an agent's `git commit`, `merge`, `cherry-pick`, `revert`, `am` or `rebase`
     while `main` is checked out. **A plain push of `main` passes** (ruled
@@ -216,7 +239,7 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     | `lockmaster pickup` | the kit's hook, or anyone | land the handoffs (decision 19) |
     | `lockmaster sync` | the kit's hook | land a session's open changes now (decision 20) |
     | `lockmaster can-commit` | anyone | whether this surface can commit (exit 0) or hands off (exit 1) |
-    | `lockmaster doctor` | anyone | stale locks, orphan worktrees, unmerged branches, an installed kit that is not this lockmaster's |
+    | `lockmaster doctor` | anyone | stale locks, orphan worktrees, unmerged branches, an installed kit that is not this lockmaster's, a waiting change and the checkout edits a change's landing would wait on |
     | `lockmaster install <repo>` | the decider | install a pinned kit into a repository |
     | `lockmaster regen` | anyone | rebuild the `[generated]` files by hand |
     | `lockmaster drivers` | the decider | register the merge drivers; write `[merge]` into `.gitattributes` |
@@ -389,7 +412,7 @@ probably Claude Code should go ahead and commit it."*)
 
 ### Reference (required)
 
-- [`kit/claude/hooks/auto-land.py`](../kit/claude/hooks/auto-land.py) and [`kit/claude/skills/landing/`](../kit/claude/skills/landing/SKILL.md) — decisions 19–20; `src/lockmaster/surface.py` (19); `land.py`'s `save`, `handoff`, `pickup`, `sync`, `adopt` (19–20) and `_accept_identical` (8a); [`tests/test_autoland.py`](../tests/test_autoland.py).
+- [`kit/claude/hooks/auto-land.py`](../kit/claude/hooks/auto-land.py) and [`kit/claude/skills/landing/`](../kit/claude/skills/landing/SKILL.md) — decisions 19–20; `src/lockmaster/surface.py` (19); `land.py`'s `save`, `handoff`, `pickup`, `sync`, `adopt` (19–20), `_classify` and `_carry_ledger` (8a), `retry_waiting` and `checkout_overlaps` (11); [`tests/test_autoland.py`](../tests/test_autoland.py), [`tests/test_waiting.py`](../tests/test_waiting.py).
 - [`kit/`](../kit) — decisions 5, 12 and 15; [`kit/claude/hooks/claim-guard.py`](../kit/claude/hooks/claim-guard.py) (5), [`kit/claude/hooks/block-main.py`](../kit/claude/hooks/block-main.py) (12).
 - [`src/lockmaster/`](../src/lockmaster) — decisions 1–15: `land.py` (4–8, 11), `generated.py` (9), `merge.py` and `drivers.py` (10), `config.py` (13), `status.py` and `now.py` (14), `install.py` and `doctor.py` (14–15).
 - [`tests/`](../tests) — one scratch-repo test file per work item that built them.

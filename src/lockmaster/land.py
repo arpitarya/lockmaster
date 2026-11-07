@@ -16,7 +16,9 @@ git itself can prove the branch merged and `git branch -d` removes it
 
 Red (decision 11): a conflict, a failed rebuild or check, or a refused commit
 stops that change — marked red with the reason — and the next queued change
-lands. `main` moves only by fast-forward, at the very end, so a crash at any
+lands. Waiting (W-10): when only uncommitted edits in main's checkout refuse
+the fast-forward, the checked landing commit is kept and `run` fast-forwards
+it as soon as those edits are committed, handed off or undone. `main` moves only by fast-forward, at the very end, so a crash at any
 earlier point leaves `main` untouched and the change still queued.
 """
 import json
@@ -30,11 +32,16 @@ from pathlib import Path
 from lockmaster import git
 from lockmaster import generated
 from lockmaster import now as now_mod
-from lockmaster.repo import (ABANDONED, ITEM_RE, LANDED, LANDING, LIVE, OPEN, QUEUED, RED,
+from lockmaster.repo import (ABANDONED, ITEM_RE, LANDED, LANDING, LIVE, OPEN, QUEUED, RED, WAITING,
                              LandLock, LockmasterError, claimed, matches, norm)
 
 TRAILER = "Lockmaster-Change"
 MAIN_TRIES = 3
+# SR-WORK-NOW: the live ledger, rewritten by hooks and by every landing, so it is
+# nearly always uncommitted in main's checkout. A landing that changes it carries
+# the checkout's copy (decision 8a) instead of waiting on it.
+LEDGER = "work/NOW.md"
+WAITING_REF = "refs/lockmaster/waiting/"
 
 # SR-WORK-CLEANUP decision 1(c): the only ignored files a worktree removal may
 # take with it. The same list as the kit's worktree-cleanup.py.
@@ -49,6 +56,23 @@ BUILD_OUTPUT = {
 
 class Red(LockmasterError):
     """This change cannot land as it is; nothing was changed."""
+
+
+class Waiting(LockmasterError):
+    """W-10: the landing commit is made and checked, and only uncommitted edits
+    in main's checkout to `paths` refused the fast-forward. Nothing was changed."""
+
+    def __init__(self, checkout, paths):
+        self.checkout, self.paths = str(checkout), sorted(paths)
+        self.sha = self.base = ""
+        self.left, self.unclaimed = [], []
+        super().__init__(waiting_reason(self.checkout, self.paths))
+
+
+def waiting_reason(checkout, paths):
+    return ("main's checkout at {} has uncommitted edits to {} that this landing would overwrite; "
+            "it lands by itself once they are committed, handed off (`lockmaster save`) or undone").format(
+                checkout, ", ".join(paths))
 
 
 def _say(out, text):
@@ -75,7 +99,7 @@ def start(repo, item, paths, session=""):
         raise LockmasterError("{} already exists; it is not lockmaster's to reuse".format(wt))
     repo.exclude_worktrees()
     try:
-        git.run(["worktree", "add", "-q", "-b", branch, str(wt), main_sha], repo.root)
+        git.worktree_add(["-b", branch, str(wt), main_sha], repo.root)
     except git.GitError:
         # SR-LAW-8: two starts of one item at once — git's ref lock let one win.
         if git.ok(["rev-parse", "--verify", "--quiet", "refs/heads/" + branch], repo.root) or wt.exists():
@@ -137,6 +161,7 @@ def submit(repo, change, message="", out=None, keep=False):
     others = sorted(set(dirty) - set(mine))
     if message:
         change["message"] = message
+    _drop_waiting(repo, change)  # a resubmitted waiting change is landed afresh
     if mine:
         git.run(["add", "-A", "--"] + [":(literal)" + p for p in mine], wt)
         if not git.ok(["diff", "--cached", "--quiet"], wt):
@@ -182,6 +207,10 @@ def run(repo, out=None):
                     change["status"] = QUEUED
                     repo.save(change)
             while True:
+                # W-10: a waiting change lands as soon as main's checkout lets it.
+                for c in repo.changes():
+                    if c["status"] == WAITING and retry_waiting(repo, c, out):
+                        landed += 1
                 queued = sorted((c for c in repo.changes() if c["status"] == QUEUED),
                                 key=lambda c: (c["queued_at"] or 0, c["item"]))
                 if not queued:
@@ -202,6 +231,8 @@ def land_one(repo, change, out=None):
     repo.save(change)
     try:
         sha, left, unclaimed = land(repo, change)
+    except Waiting as w:
+        return _waiting(repo, change, w, out)
     except Red as e:
         if keep:
             return _held(repo, change, str(e), out)
@@ -210,6 +241,14 @@ def land_one(repo, change, out=None):
         if keep:
             return _held(repo, change, "lockmaster failed while landing: {}".format(e), out)
         return _red(repo, change, "lockmaster failed while landing: {}".format(e), out)
+    return _done(repo, change, sha, left, unclaimed, out)
+
+
+def _done(repo, change, sha, left, unclaimed, out):
+    """`main` is at `sha`, the change's landing: record it and clean up."""
+    item = change["item"]
+    keep = bool(change.get("keep"))
+    _drop_waiting(repo, change)
     if keep:
         # Decision 20: an auto-landing keeps the change open; its worktree follows main.
         note = _follow(repo, change, sha)
@@ -247,6 +286,85 @@ def _held(repo, change, reason, out):
     _say(out, "  Nothing on {} was changed; it lands at the end of a turn once this is fixed in {}.".format(
         repo.main, change["worktree"]))
     return False
+
+
+def _waiting(repo, change, w, out):
+    """W-10: the landing is made and checked; only main's checkout stops it. Keep
+    the landing commit (under a ref, so git keeps it) and wait — not red: the
+    cause clears by itself, and `run` fast-forwards it then."""
+    first = change.get("status") != WAITING or (change.get("waiting") or {}).get("paths") != w.paths
+    git.run(["update-ref", WAITING_REF + change["item"], w.sha], repo.root)
+    change.update(status=WAITING, reason=str(w), waiting={
+        "sha": w.sha, "base": w.base, "checkout": w.checkout, "paths": w.paths,
+        "left": w.left, "unclaimed": w.unclaimed,
+        "since": (change.get("waiting") or {}).get("since") or time.time()})
+    repo.save(change)
+    if first:
+        _say(out, "waiting: {} — {}".format(change["item"], w))
+        _say(out, "  Nothing on {} or in the checkout was changed; no resubmit is needed.".format(repo.main))
+    return False
+
+
+def _drop_waiting(repo, change):
+    """Forget a waiting landing commit: it landed, or it is superseded."""
+    if change.pop("waiting", None) is not None or git.ok(
+            ["rev-parse", "--verify", "--quiet", WAITING_REF + change["item"]], repo.root):
+        git.run(["update-ref", "-d", WAITING_REF + change["item"]], repo.root, check=False)
+
+
+def _requeue(repo, change):
+    """`main` moved under a waiting change: its landing is redone on the new main
+    (decision 8), not fast-forwarded from a stale base."""
+    _drop_waiting(repo, change)
+    change.update(status=QUEUED, reason="")
+    repo.save(change)
+
+
+def retry_waiting(repo, change, out=None):
+    """One waiting change, under the land lock. While the checkout's edits still
+    differ from its landing, it keeps waiting (nothing is rebuilt or checked
+    again); once they clear it fast-forwards — or, when main moved meanwhile, is
+    queued to be landed again on the new main. Returns True when it landed."""
+    w = change.get("waiting") or {}
+    sha, base = w.get("sha"), w.get("base")
+    holder = next((t for t in git.worktrees(repo.root) if t["branch"] == repo.main), None)
+    if not sha or not base or not git.ok(["cat-file", "-e", sha + "^{commit}"], repo.root):
+        _requeue(repo, change)
+        return False
+    if holder:
+        _, differ = _classify(Path(holder["path"]), base, sha)
+        still = [p for p in differ if p != LEDGER]
+        if still:
+            if still != w.get("paths"):
+                return _waiting(repo, change, _waiting_again(holder["path"], still, w), out)
+            return False
+    if git.out(["rev-parse", repo.main], repo.root) != base:
+        _requeue(repo, change)
+        return False
+    change["status"] = LANDING
+    repo.save(change)
+    try:
+        moved, sha = _fast_forward(repo, base, sha)
+    except Waiting as again:
+        return _waiting(repo, change, _waiting_again(again.checkout, again.paths, w), out)
+    except Exception as e:  # noqa: BLE001 — a bug is red (or held), never a half-landing
+        moved = "lockmaster failed while landing: {}".format(e)
+    if moved == "moved":
+        _requeue(repo, change)
+        return False
+    if moved:
+        _drop_waiting(repo, change)
+        if change.get("keep"):
+            return _held(repo, change, moved, out)
+        return _red(repo, change, moved, out)
+    return _done(repo, change, sha, w.get("left") or [], w.get("unclaimed") or [], out)
+
+
+def _waiting_again(checkout, paths, w):
+    again = Waiting(checkout, paths)
+    again.sha, again.base = w["sha"], w["base"]
+    again.left, again.unclaimed = w.get("left") or [], w.get("unclaimed") or []
+    return again
 
 
 def _follow(repo, change, sha):
@@ -354,7 +472,7 @@ def land(repo, change):
         msg = _message(repo, change, base, tip)
         landing = repo.state / "landing" / "{}-{}".format(change["item"], int(time.time() * 1000))
         landing.parent.mkdir(parents=True, exist_ok=True)
-        git.run(["worktree", "add", "-q", "--detach", str(landing), m0], repo.root)
+        git.worktree_add(["--detach", str(landing), m0], repo.root)
         try:
             code, o, e = git.run(["cherry-pick", "--no-commit", c], landing, check=False)
             if code != 0:
@@ -390,7 +508,11 @@ def land(repo, change):
                                   landing, env=env)
             finally:
                 msg_file.unlink()
-            moved = _fast_forward(repo, m0, sha)
+            try:
+                moved, sha = _fast_forward(repo, m0, sha)
+            except Waiting as w:
+                w.sha, w.base, w.left, w.unclaimed = sha, m0, left, unclaimed
+                raise
             if moved == "moved":
                 continue
             if moved:
@@ -402,37 +524,51 @@ def land(repo, change):
 
 
 def _fast_forward(repo, m0, sha):
-    """Move main from m0 to sha. None when done, "moved" when main moved
-    meanwhile, else the reason it could not."""
+    """Move main from m0 to sha. Returns (outcome, the sha landed): outcome None
+    when done, "moved" when main moved meanwhile, else the reason it could not.
+    Raises Waiting when only uncommitted edits in main's checkout stop it (W-10).
+    The sha differs from the one given only when the landing carried the
+    checkout's ledger (decision 8a)."""
     holder = next((t for t in git.worktrees(repo.root) if t["branch"] == repo.main), None)
-    if holder:
-        blocking = _accept_identical(Path(holder["path"]), m0, sha)
-        code, o, e = git.run(["merge", "-q", "--ff-only", sha], holder["path"], check=False)
-    else:
-        blocking = []
+    if not holder:
         code, o, e = git.run(["update-ref", "refs/heads/" + repo.main, sha, m0], repo.root, check=False)
-    if code == 0:
-        return None
-    if git.out(["rev-parse", repo.main], repo.root) != m0:
-        return "moved"
-    said = (e or o).strip()
-    if blocking:
-        said = "uncommitted edits there to {} differ from this landing".format(", ".join(blocking)) + (
-            "\n" + said if said else "")
+        if code == 0:
+            return None, sha
+        if git.out(["rev-parse", repo.main], repo.root) != m0:
+            return "moved", sha
+        return "{} could not be moved: {}".format(repo.main, (e or o).strip() or "git gave no reason"), sha
+    checkout = Path(holder["path"])
+    said = ""
+    for _ in range(MAIN_TRIES):  # the ledger can be rewritten between a look and the fast-forward
+        same, differ = _classify(checkout, m0, sha)
+        if LEDGER in differ and (checkout / LEDGER).is_file():
+            sha = _carry_ledger(repo, checkout, sha)
+            same, differ = _classify(checkout, m0, sha)
+        others = [p for p in differ if p != LEDGER]
+        if others:
+            raise Waiting(checkout, others)
+        if differ:
+            continue
+        if same:
+            git.run(["add", "-A", "--"] + [":(literal)" + p for p in same], checkout)
+        code, o, e = git.run(["merge", "-q", "--ff-only", sha], checkout, check=False)
+        if code == 0:
+            return None, sha
+        if git.out(["rev-parse", repo.main], repo.root) != m0:
+            return "moved", sha
+        said = (e or o).strip()
     return "{}'s checkout at {} refused the fast-forward:\n  {}".format(
-        repo.main, holder["path"] if holder else "-", (said or "git gave no reason").replace("\n", "\n  "))
+        repo.main, checkout, (said or "git gave no reason").replace("\n", "\n  ")), sha
 
 
-def _accept_identical(checkout, m0, sha):
-    """SR-ARCHITECTURE decision 8a. Uncommitted edits in main's checkout to paths
-    this landing changes would stop the fast-forward. Where every such edit is
-    byte-for-byte what the landing holds — the usual case when edits made in
-    the checkout are landed by `save` — they are staged, which loses nothing
-    and lets git take the fast-forward. Returns the paths whose edits differ;
-    when there are any, nothing is staged and the checkout is left as it was."""
+def _classify(checkout, m0, sha):
+    """SR-ARCHITECTURE decision 8a. The uncommitted paths in main's checkout that
+    the landing m0..sha changes, as (same, differ): same when byte-for-byte what
+    the landing holds — the usual case when edits made in the checkout are
+    landed by `save`, or another session committed a Cowork edit — else differ."""
     touched = set(_changed_in(checkout, m0, sha))
     if not touched:
-        return []
+        return [], []
     raw = git.run(["status", "--porcelain", "-z", "--untracked-files=all", "--no-renames"], checkout)
     same, differ = [], []
     for entry in filter(None, raw.split("\0")):
@@ -452,11 +588,36 @@ def _accept_identical(checkout, m0, sha):
             same.append(path)
         else:
             differ.append(path)
-    if differ:
-        return sorted(differ)
-    if same:
-        git.run(["add", "-A", "--"] + [":(literal)" + p for p in same], checkout)
-    return []
+    return sorted(same), sorted(differ)
+
+
+def _carry_ledger(repo, checkout, sha):
+    """The landing `sha` with the ledger replaced by main's checkout's copy: the
+    same tree otherwise, the same parents, author, committer and message. The
+    ledger is live state (SR-WORK-NOW), so the checkout's copy is the newest."""
+    blob = git.out(["hash-object", "-w", "--path", LEDGER, "--", LEDGER], checkout)
+    listed = git.out(["ls-tree", sha, "--", LEDGER], checkout)
+    mode = listed.split(" ", 1)[0] if listed else "100644"
+    index = repo.state / "index.ledger.{}".format(os.getpid())
+    try:
+        env = {"GIT_INDEX_FILE": str(index)}
+        git.run(["read-tree", sha], repo.root, env=env)
+        git.run(["update-index", "--add", "--cacheinfo", "{},{},{}".format(mode, blob, LEDGER)], repo.root, env=env)
+        tree = git.out(["write-tree"], repo.root, env=env)
+    finally:
+        try:
+            index.unlink()
+        except OSError:
+            pass
+    meta = git.out(["log", "-1", "--format=%an%x00%ae%x00%aI%x00%cn%x00%ce%x00%cI%x00%P", sha], repo.root)
+    an, ae, ad, cn, ce, cd, parents = meta.split("\0")
+    env = {"GIT_AUTHOR_NAME": an, "GIT_AUTHOR_EMAIL": ae, "GIT_AUTHOR_DATE": ad,
+           "GIT_COMMITTER_NAME": cn, "GIT_COMMITTER_EMAIL": ce, "GIT_COMMITTER_DATE": cd}
+    msg = git.run(["log", "-1", "--format=%B", sha], repo.root)
+    args = ["commit-tree", tree]
+    for parent in parents.split():
+        args += ["-p", parent]
+    return git.run(args, repo.root, env=env, input=msg).strip()
 
 
 def _changed_in(cwd, a, b):
@@ -519,6 +680,7 @@ def abandon(repo, change, out=None):
         raise LockmasterError("{} is already {}".format(change["item"], change["status"]))
     change["status"] = ABANDONED
     change["abandoned_at"] = time.time()
+    _drop_waiting(repo, change)
     kept = cleanup(repo, change)
     change["cleanup"] = kept
     repo.save(change)
@@ -535,7 +697,7 @@ def abandon(repo, change, out=None):
 # ---------------------------------------------------------------- queue
 
 def queue_lines(repo):
-    order = {LANDING: 0, QUEUED: 1, RED: 2, OPEN: 3, LANDED: 4, ABANDONED: 5}
+    order = {LANDING: 0, QUEUED: 1, WAITING: 2, RED: 3, OPEN: 4, LANDED: 5, ABANDONED: 6}
     rows = sorted(repo.changes(), key=lambda c: (order.get(c["status"], 9), c.get("queued_at") or 0, c["item"]))
     waiting = handoffs(repo)
     if not rows and not waiting:
@@ -554,7 +716,7 @@ def queue_lines(repo):
         if c["status"] == LANDED and c.get("landed"):
             line += "  → " + c["landed"][:10]
         out.append(line)
-        if c["status"] == RED and c.get("reason"):
+        if c["status"] in (RED, WAITING) and c.get("reason"):
             out.append("           " + c["reason"].splitlines()[0])
         if c["status"] == OPEN and c.get("held"):
             out.append("           held: " + c["held"].splitlines()[0])
@@ -748,6 +910,10 @@ def _sync(repo, session, cwd, final, adopt_cwd, out):
         c = adopt(repo, cwd, session)
         if c is not None:
             targets.append(c)
+    for c in repo.changes():
+        if final and c["status"] == WAITING and c.get("keep") and _mine(c, session, cwd):
+            c["keep"] = False  # the session is ending: when it lands, it is finished, not kept open
+            repo.save(c)
     queued = []
     for c in targets:
         if c.get("adopted"):
@@ -760,7 +926,7 @@ def _sync(repo, session, cwd, final, adopt_cwd, out):
         keep = not final or bool(c.get("adopted"))
         submit(repo, c, "", out=out, keep=keep)
         queued.append(c["item"])
-    if queued:
+    if queued or any(c["status"] == WAITING for c in repo.changes()):
         run(repo, out=out)
     return queued
 
@@ -778,6 +944,46 @@ def held_reports(repo, session="", cwd=None):
         c["held_reported"] = key
         repo.save(c)
         out.append((c["item"], c["held"]))
+    return out
+
+
+def waiting_reports(repo, session="", cwd=None):
+    """(item, reason) for each of this session's waiting changes not reported
+    yet for the paths it waits on; marks them reported. Not the agent's to
+    fix — it lands by itself — so the hook only says it."""
+    out = []
+    for c in repo.changes():
+        if c["status"] != WAITING or not _mine(c, session, cwd):
+            continue
+        key = ",".join((c.get("waiting") or {}).get("paths") or [])
+        if c.get("waiting_reported") == key:
+            continue
+        c["waiting_reported"] = key
+        repo.save(c)
+        out.append((c["item"], c.get("reason", "")))
+    return out
+
+
+def checkout_overlaps(repo):
+    """W-10 step 3: [(item, status, paths)] — uncommitted edits in main's
+    checkout to paths a queued, waiting or open change claims: the clash that
+    would make its landing wait, seen before it lands. The ledger is left out:
+    it is always live there (SR-WORK-NOW)."""
+    holder = next((t for t in git.worktrees(repo.root) if t["branch"] == repo.main), None)
+    if holder is None:
+        return []
+    dirty = [p for p in status_paths(holder["path"]) if p != LEDGER]
+    if not dirty:
+        return []
+    out = []
+    for c in sorted(repo.changes(), key=lambda c: c["item"]):
+        if c["status"] not in (OPEN, QUEUED, LANDING, WAITING) or not c.get("paths"):
+            continue
+        if os.path.realpath(c.get("worktree", "")) == os.path.realpath(holder["path"]):
+            continue
+        hit = [p for p in dirty if claimed(p, c["paths"])]
+        if hit:
+            out.append((c["item"], c["status"], hit))
     return out
 
 
@@ -1080,7 +1286,7 @@ def _pickup_group(repo, group, out):
     if prior and prior["status"] == LANDED:
         drop()
         return each("landed")
-    if prior and prior["status"] in (QUEUED, LANDING):
+    if prior and prior["status"] in (QUEUED, LANDING, WAITING):
         return each("waiting")
     files = sorted({f for h in group for f in (h.get("files") or h["paths"])})
     dirty = _checkout_dirty(repo, files)
@@ -1115,7 +1321,7 @@ def _pickup_group(repo, group, out):
         _say(out, "handoff {} landed as {}".format(
             ", ".join("{} from {}".format(h["item"], h.get("by", "?")) for h in group), change["landed"][:10]))
         return each("landed")
-    if change["status"] in (QUEUED, LANDING):  # another lander holds the lock; it lands it
+    if change["status"] in (QUEUED, LANDING, WAITING):  # another lander, or main's checkout: it lands later
         keep(change=change["item"])
         return each("waiting")
     keep(change=change["item"], tried=digest, reason=change.get("reason", ""))

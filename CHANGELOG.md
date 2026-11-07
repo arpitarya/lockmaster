@@ -8,6 +8,13 @@ All notable changes to lockmaster. The format follows
 
 ### Added
 
+- A landing stopped only by uncommitted edits in `main`'s checkout now
+  **waits** instead of going red, and lands by itself — no resubmit, no
+  second run of the checks — once they are committed, saved or undone; it is
+  redone first if `main` moved. `status` and `doctor` name the overlapping
+  edits before the landing, and the kit's `claim-guard.py` warns on them
+  (W-10, SR-ARCHITECTURE decision 11).
+
 - Laws L8 and L9: lockmaster handles parallel requests; Cowork and Claude Code
   work in parallel with no manual step (2026-11-05, SR-LAW-8, SR-LAW-9).
 - Law L10: the work files are always up to date in every repository
@@ -17,6 +24,11 @@ All notable changes to lockmaster. The format follows
   under all their messages; `queue` marks a handoff a pickup missed (W-14).
 
 ### Fixed
+
+- Sessions starting at the same moment are no longer refused when git trips
+  on another worktree being added (`git.worktree_add` retries it; SR-LAW-8).
+- `work/NOW.md`, the live ledger, no longer stops a landing: a landing that
+  changes it carries the checkout's copy (W-10, SR-ARCHITECTURE decision 8a).
 
 - Saves in the same second no longer collide; handoffs written at once no
   longer overwrite each other; two end-of-turn landings of one session no

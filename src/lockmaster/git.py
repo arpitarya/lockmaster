@@ -5,6 +5,7 @@ of SR-LAW-3 decision 3 have one place to be kept out of. Nothing here forces.
 """
 import os
 import subprocess
+import time
 
 #: `-c core.hooksPath=…` while a Repo is open: lockmaster's own git steps run the
 #: repository's gate hooks and not its post-* hooks (SR-ARCHITECTURE decision 18).
@@ -48,6 +49,29 @@ def out(args, cwd, env=None):
 def ok(args, cwd):
     """True when the git command exits 0."""
     return run(args, cwd, check=False)[0] == 0
+
+
+def worktree_add(args, cwd, tries=8):
+    """`git worktree add -q <args>`. Retried when git trips on another worktree
+    being added at that moment: it reads the other's half-written files under
+    `.git/worktrees/` and dies (SR-LAW-8 — no caller is refused for that). A
+    `-b <branch>` attempt that died after creating the branch is retried
+    without `-b`, on the branch it made."""
+    args = list(args)
+    for attempt in range(tries):
+        code, o, e = run(["worktree", "add", "-q"] + args, cwd, check=False)
+        if code == 0:
+            return
+        if ".git/worktrees/" not in e or attempt == tries - 1:
+            raise GitError(["worktree", "add", "-q"] + args, code, o, e)
+        if "-b" in args:
+            i = args.index("-b")
+            branch, path, start = args[i + 1], args[i + 2], args[i + 3]
+            head = run(["rev-parse", "--verify", "--quiet", "refs/heads/" + branch], cwd, check=False)
+            held = any(t["branch"] == branch for t in worktrees(cwd))
+            if head[0] == 0 and not held and head[1].strip() == run(["rev-parse", start], cwd).strip():
+                args = [path, branch]
+        time.sleep(0.05 * (attempt + 1))
 
 
 def worktrees(cwd):

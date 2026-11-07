@@ -7,7 +7,8 @@ Claude Code does.
                              so `lockmaster start` records whose change it is;
                              land waiting handoffs in the background
     edit   PostToolUse       note each file this session writes in main's checkout
-    stop   Stop              say what earlier landings did; tell the agent, once,
+    stop   Stop              say what earlier landings did (and, once, a landing
+                             waiting on main's checkout); tell the agent, once,
                              about a landing held back, a handoff that did not
                              land, or edits left in main's checkout; then land
                              this session's open changes (they stay open) and
@@ -195,6 +196,10 @@ def stop(sid, hook):
     for c in step(repo.changes) or []:
         if (c.get("landed_at") or 0) > since and land._mine(c, sid, cwd):
             landed.append("landed {} as {}".format(c["item"], (c.get("landed") or "")[:10]))
+    # W-10: a landing waiting on main's checkout lands by itself; it is said, never blocks.
+    for item, reason in step(lambda: getattr(land, "waiting_reports", lambda *a, **k: [])(
+            repo, session=sid, cwd=cwd)) or []:
+        landed.append("{} is waiting: {}".format(item, reason))
     told = notes.setdefault("told_handoffs", {})
     for h in step(lambda: land.handoffs(repo)) or []:
         if h.get("reason") and told.get(h["item"]) != h.get("tried"):

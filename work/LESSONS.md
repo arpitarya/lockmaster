@@ -11,6 +11,16 @@ named here only as the failure that produced it. A lesson whose remedy is
 
 ---
 
+## 2026-11-07 — installing the kit from a change's worktree points the merge drivers at that worktree
+
+Dogfooding means `lockmaster install .` after a kit edit, and the edit is made in
+a change's worktree. The install registered the merge drivers in the shared
+`.git/config` with the worktree's `src/lockmaster/merge.py`, a path that goes
+away when the change lands. Every `run` re-points a driver whose path is missing
+(the 2026-10-28 gate), so it heals, but a plain `git merge` in between would
+use a dead driver. Remedy: judgment — after installing from a worktree, run
+`lockmaster drivers` from main's checkout.
+
 ## 2026-11-05 — a one-line ruling drafted into a law grew a mechanism nobody ruled
 
 The first draft of L9 required Cowork's handoffs to land "on their own" and

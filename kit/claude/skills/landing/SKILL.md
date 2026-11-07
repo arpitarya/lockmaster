@@ -54,5 +54,15 @@ files from the Cowork bridge.
   goes red, the hook says why: fix the files where they are, in main's
   checkout — the end of the next turn retries the same change with them.
 
+- A landing that says **waiting** is stopped only by uncommitted edits in
+  main's checkout (another session's, often Cowork's). Do nothing: it lands
+  by itself once they are committed, saved or undone. Never stash, revert or
+  overwrite them to make it go.
+
+Before editing a file in main's checkout by hand, run `lockmaster status`
+(or `doctor`): it names any file there that an open change claims — edit that
+one in the change's worktree instead, or your edit makes its landing wait.
+Without hooks (Cowork), that is your only warning.
+
 `lockmaster queue` shows what is waiting, held, handed off, landed or red.
 `[land] auto = "off"` in `lockmaster.toml` turns end-of-turn landing off.

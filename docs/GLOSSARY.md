@@ -23,6 +23,7 @@ description: "Recurring terms, defined once."
 | structural merge | a merge driver that knows a file's shape (worklog entries, queue rows, lessons), so two additions never conflict |
 | red | a change that cannot land as it is — a conflict, a failed rebuild or check, a refused commit; set aside so the next change lands, it waits for its agent, then the decider; SR-ARCHITECTURE decision 11 |
 | kept landing | a landing at the end of a turn: the change stays open and its worktree follows `main`; SR-ARCHITECTURE decision 20 |
+| waiting | a change whose landing is made and checked but is stopped only by uncommitted edits in `main`'s checkout that it would overwrite; not red — `lockmaster run` fast-forwards it once they are committed, saved or undone, redoing it first if `main` moved; SR-ARCHITECTURE decision 11 (W-10) |
 | held | a kept landing that could not land — a failed check, a conflict: the change stays open with the reason for its own agent, nothing goes to the decider, the next turn retries; SR-ARCHITECTURE decision 20 |
 | adopted | a worktree lockmaster did not create (`claude --worktree`, an agent's own) made a change claiming all it changed; landed like one, never removed by lockmaster; SR-ARCHITECTURE decision 20 |
 | handoff | edits in `main`'s checkout that a surface unable to commit (the Cowork bridge) recorded with `lockmaster save`, for the next Claude Code session to land; SR-ARCHITECTURE decision 19 |

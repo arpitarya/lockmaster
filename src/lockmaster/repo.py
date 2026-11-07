@@ -19,9 +19,12 @@ from lockmaster import git
 ITEM_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 WORKTREES_DIR = ".claude/worktrees"
 
-# A change's status, in the order it moves through them.
+# A change's status, in the order it moves through them. WAITING (W-10): the
+# landing commit is made and checked, and only uncommitted edits in main's
+# checkout stop the fast-forward; it lands by itself once they clear.
 OPEN, QUEUED, LANDING, LANDED, RED, ABANDONED = "open", "queued", "landing", "landed", "red", "abandoned"
-LIVE = (OPEN, QUEUED, LANDING, RED)
+WAITING = "waiting"
+LIVE = (OPEN, QUEUED, LANDING, WAITING, RED)
 
 # SR-ARCHITECTURE decision 18: the hooks that can refuse a step. A repository's
 # post-* hooks (a re-index, a notification) are side effects of a person's or an
