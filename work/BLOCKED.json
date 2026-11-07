@@ -1,10 +1,9 @@
 {
-  "decision": "ASK",
-  "reason": "W-15: milo keeps its work files in tv-movies/work/; installing the new kit there would create a second set of six at milo's root work/",
-  "questions": [
-    "In milo, does L10 count tv-movies/work/ (install adds nothing at the root), or should milo get the six files at its root work/ like every other repository?"
-  ],
+  "decision": "PROCEED",
+  "reason": "W-15 ruled by Arpit 2026-11-07: milo gets the six work files at its root work/ (\"Root work/\"); its four trackers move up from tv-movies/work/ with git mv",
+  "questions": [],
   "safe_alternative": "milo's adoption landed with the old kit (4a99fa8); every other repository gets the new kit; milo's install waits on the ruling",
   "surfaced": true,
-  "filed": "2026-11-07"
+  "filed": "2026-11-07",
+  "ruled": "2026-11-07"
 }

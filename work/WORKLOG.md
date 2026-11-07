@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-07 — docket: the two inbox rulings  ·  Cowork (Opus 5.5)
+
+- **Asked:** *"explain me the blockers one yb one"*
+- **Done:** walked the inbox. W-08: npm org `@lockmaster` ruled keep, empty; PyPI re-checked (404, no `v0.0.1` tag) — the row stays for the decider's hands. W-15: milo ruled root `work/`; inbox row removed, W-15 re-balled 🟢 `agent`, BLOCKED.json back to PROCEED. Registry rows for OPEN-WORK, INTERVIEW, WORKLOG bumped.
+- **Decided / left open:** Arpit: *"the package is only for pypi"*, *"Keep it empty"*, *"Root work/"*. Not committed — not asked.
+- **Mistakes:** none.
+- **Next:** in milo, `git mv` the four trackers from `tv-movies/work/` to `work/`, install the new kit, land; then codelaw; close W-15.
+
 ## 2026-11-07 — W-10 and W-15 built; W-09, W-13, W-14 closed; milo and sheetpane land  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"implmenet all open work items"*
