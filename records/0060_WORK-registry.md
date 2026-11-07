@@ -100,12 +100,12 @@ into a scan anyone can do at task end.
 | `SECURITY.md` | the reporting channel or the supported versions change | 2026-10-25 | 2026-10-25 — created at setup |
 | `CODE_OF_CONDUCT.md` | the code or its contact changes | 2026-10-25 | 2026-10-25 — created at setup |
 | `work/README.md` | a file is added to or removed from `work/` | 2026-10-25 | 2026-10-25 — created at setup |
-| `work/OPEN-WORK.md` | the same change as the work it tracks | 2026-10-25 | 2026-10-25 — W-08 rows: the pipeline is ready |
+| `work/OPEN-WORK.md` | the same change as the work it tracks | 2026-11-07 | 2026-11-07 — docket: W-08 npm org ruled, milo inbox row ruled, W-15 re-balled 🟢 |
 | `work/BACKLOG.md` | a record names something nobody is doing | 2026-10-25 | 2026-10-25 — B-005 closed (the wheel carries the kit); B-006 open |
 | `work/open/README.md` | the item-file contract changes | 2026-10-25 | 2026-10-25 — created at setup |
-| `work/INTERVIEW.md` | direction, a decision or the live state changes — during the session | 2026-10-25 | 2026-10-25 — kit installed here; release pipeline; next is W-08 |
+| `work/INTERVIEW.md` | direction, a decision or the live state changes — during the session | 2026-11-07 | 2026-11-07 — docket rulings; next is milo's install (W-15) |
 | `work/IMPLEMENTATION.md` | something lands | 2026-10-25 | 2026-10-25 — W-08 step 1 row |
-| `work/WORKLOG.md` | every session, before it ends — chat-only ones too | 2026-10-25 | 2026-10-25 — the commit and release-pipeline session |
+| `work/WORKLOG.md` | every session, before it ends — chat-only ones too | 2026-11-07 | 2026-11-07 — the docket session |
 | `work/NOW.md` | kept by hooks and every landing: a row per live session; empty when nothing runs | 2026-10-25 | 2026-10-25 — written through `lockmaster status --now`'s renderer (W-07) |
 | `work/LESSONS.md` | a failure teaches something durable | 2026-10-25 | 2026-10-25 — created at setup |
 | `work/MACHINE.md` | a surface breaks in a way the code did not cause; the budget is ruled (L2) | 2026-10-25 | 2026-10-25 — the Cowork row names `lockmaster install .` |

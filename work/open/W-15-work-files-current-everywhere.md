@@ -6,8 +6,8 @@ item: W-15
 filed: 2026-11-05
 filed_by: "Cowork (Opus 5.5), on Arpit's ruling of L10"
 updated: 2026-11-07
-updated_by: "Claude Code (Opus 5.5): steps 1–3 built; step 4's tests built, its installs next"
-ball: arpit
+updated_by: "Cowork (Opus 5.5): docket — milo ruled root work/; ball back to agent"
+ball: agent
 ---
 
 # W-15 — enforce L10: the work files current in every repository
@@ -19,13 +19,17 @@ ball: arpit
 | 1 | `lockmaster install` creates any of the six files a repository lacks, from a short template in `kit/` (never overwrites one) | [SR-LAW-10](../../records/0012_LAW-10-work-files-current.md) decision 6 | ✅ `kit/work/`, `install.work_files` |
 | 2 | `lockmaster doctor` names a missing work file, and a repository whose landings since the last `WORKLOG.md` change exceed a set number | the drift is visible | ✅ `doctor.work_problems`; stale = more than 10 commits on `main` since `WORKLOG.md` last changed |
 | 3 | A kit Stop hook beside `require-progress.sh`: a session that changed tracked files outside `work/` but touched none of `WORKLOG.md`, `INTERVIEW.md`, `OPEN-WORK.md` is told once, before it stops | decision 4, at the source | ✅ `kit/claude/hooks/work-files.py` (`edit` notes each write, `stop` tells once) |
-| 4 | Scratch-repo tests for steps 1–3; install it into the five repositories | proof, and the law reaches every user | ◐ `tests/test_work_files.py` (13 tests) ✅; installed and landed in lockmaster ✅ (`599fade`), sheetpane ✅ (`1e04930`), fux ✅ (`4c135a0`); milo ⏳ the decider's ruling; codelaw ⏳ a session was live there |
+| 4 | Scratch-repo tests for steps 1–3; install it into the five repositories | proof, and the law reaches every user | ◐ `tests/test_work_files.py` (13 tests) ✅; installed and landed in lockmaster ✅ (`599fade`), sheetpane ✅ (`1e04930`), fux ✅ (`4c135a0`); milo ⏳ ruled root `work/` — `git mv` its four trackers up, then install; codelaw ⏳ a session was live there |
 
 **Arpit, 2026-11-05:** *"open work, backlog, interview, machine, lessons, worklog should always be upto date who so ever uses lockmaster."*
 
 **Model:** Sonnet.
 
-## Waiting on the decider (2026-11-07)
+## Ruled (2026-11-07)
+
+**Arpit, 2026-11-07:** *"Root work/"* — milo gets the six work files at its root `work/`, like every other repository. Next agent step: in milo, `git mv` `tv-movies/work/{OPEN-WORK,INTERVIEW,WORKLOG,IMPLEMENTATION}.md` to `work/` (history kept, nothing lost — L3), then `lockmaster install .` adds the two missing files; land with `lockmaster save`.
+
+### The question as it was put
 
 milo keeps its trackers in `tv-movies/work/` (`OPEN-WORK`, `INTERVIEW`,
 `WORKLOG`, `IMPLEMENTATION`) and has no root `work/`. A fresh `install` there

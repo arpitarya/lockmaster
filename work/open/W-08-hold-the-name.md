@@ -5,8 +5,8 @@ description: "Arpit, 2026-10-25: hold `lockmaster` on PyPI — checked free that
 item: W-08
 filed: 2026-10-25
 filed_by: "Arpit (Cowork, Opus 5.5)"
-updated: 2026-10-28
-updated_by: "Cowork (Opus 5.5): checked — still not on PyPI"
+updated: 2026-11-07
+updated_by: "Cowork (Opus 5.5): docket — npm org ruled keep; PyPI checked, still free (404, no v0.0.1 tag)"
 ball: arpit
 ---
 
@@ -19,9 +19,11 @@ ball: arpit
 | 1 | The release pipeline and 0.0.1 prepared: `.github/workflows/release.yml`, `scripts/release.py`, `__version__` 0.0.1, CHANGELOG cut | a tag publishes, no token stored | ✅ 2026-10-25 (Claude Code) |
 | 1a | The decider adds the pending trusted publishers on pypi.org and test.pypi.org and the `testpypi` / `pypi` GitHub environments (CONTRIBUTING.md §Releasing) | the pipeline may publish | 🔴 decider decides |
 | 1b | The decider pushes `main` and the tag: `git tag -a v0.0.1 -m "lockmaster 0.0.1" && git push origin main v0.0.1`, then approves the `pypi` environment | the PyPI name is ours | 🔴 decider decides |
-| 2 | Keep or delete the npm org `@lockmaster` — created 2026-10-25 in Chrome a minute before L6 was ruled; it holds nothing | no loose end on npm | 🔴 decider decides |
+| 2 | Keep or delete the npm org `@lockmaster` — created 2026-10-25 in Chrome a minute before L6 was ruled; it holds nothing | no loose end on npm | ✅ ruled 2026-11-07: kept empty, nothing published |
 
 **Arpit, 2026-10-25:** *"to create an npm org, you go ahead and do it … for lock master and lock hyphen master, both of them."* — then, before `lock-master` was created: *"I want this to be Python only project. I don't believe we need npm."*
+
+**Arpit, 2026-11-07:** *"the package is only for pypi"* — and on `@lockmaster`: *"Keep it empty"*.
 
 **Model:** NONE — the decider's PyPI and GitHub accounts; the build, the pipeline and the version are prepared (2026-10-25).
 
@@ -33,8 +35,8 @@ ball: arpit
 
 | DoD | what | state |
 |---|---|---|
-| 1 · PyPI | `pip index versions lockmaster` shows 0.0.1 | ⏳ — 2026-10-28: *"No matching distribution found"*; no `v0.0.1` tag in the Mac clone |
-| 2 · npm org | the decider has said keep or delete `@lockmaster`; `lock-master` was never created | ⏳ |
+| 1 · PyPI | `pip index versions lockmaster` shows 0.0.1 | ⏳ — 2026-11-07: still *"No matching distribution found"* (pypi.org 404); no `v0.0.1` tag in the Mac clone |
+| 2 · npm org | the decider has said keep or delete `@lockmaster`; `lock-master` was never created | ✅ 2026-11-07 — keep, empty |
 
 ## Blockers
 
