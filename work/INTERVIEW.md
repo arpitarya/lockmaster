@@ -24,28 +24,28 @@ entry.**
 
 ## 1 · State of play
 
-*Updated 2026-11-07 (Claude Code, Opus 5.5 — W-10 built; W-13 and W-14 closed).*
-**Where things stand:** the tool works and is adopted in fux, codelaw, milo
-and sheetpane. `src/lockmaster/` implements SR-ARCHITECTURE decisions 1–20.
-Landing is continuous (W-11): the kit's `auto-land.py` lands a Claude Code
-session's changes at the end of every turn, keeping them open; Cowork runs
-`lockmaster save`, which hands off where the surface cannot commit. **W-10
-(2026-11-07):** a landing stopped only by uncommitted edits in main's
-checkout is now **waiting**, not red — it keeps its checked commit and lands
-by itself once they clear; `status`, `doctor` and `claim-guard.py` name the
-clash first; `work/NOW.md` never makes a landing wait (the landing carries the
-checkout's copy). With it L9 is fully built (W-14 closed) and L8 is proven
-(W-13 closed). The laws in force are L0–L10. L10 (the six work files always
-current everywhere) is still enforced by judgment until W-15. Nothing is on
-PyPI until the decider finishes W-08.
+*Updated 2026-11-07 (Claude Code, Opus 5.5 — W-10, W-15 built; W-09, W-13, W-14 closed).*
+**Where things stand:** the tool works and lands in all five repositories:
+milo and sheetpane had their first landings on 2026-11-07 (W-09 closed), and
+fux's long-held W-11 handoff landed the same day. `src/lockmaster/` implements
+SR-ARCHITECTURE decisions 1–20. Landing is continuous (W-11). **W-10:** a
+landing stopped only by uncommitted edits in main's checkout **waits** and
+lands by itself once they clear; `work/NOW.md` never makes a landing wait.
+**W-15:** `install` creates any of the six work files a repository lacks,
+`doctor` names a missing or stale one, and the kit's `work-files.py` Stop hook
+tells a session once that it touched none of WORKLOG, INTERVIEW or OPEN-WORK.
+L8, L9 and L10 are `built: yes`. 150 scratch-repo tests pass on Python 3.9.
+Nothing is on PyPI until the decider finishes W-08.
 
 ## 2 · In flight, and the immediate next step
 
-**Next:** W-15 (enforce L10: `install` creates missing work files, `doctor`
-names a missing or stale one, a Stop hook flags a session that touched none of
-WORKLOG, INTERVIEW or OPEN-WORK), then W-09's last step — milo's and
-sheetpane's first landing, by a Claude Code session there. W-08 waits on the
-decider.
+**Blocked on the decider** (`work/BLOCKED.json`): milo keeps its trackers in
+`tv-movies/work/`; does L10 count those, or does milo get the six at its root?
+milo keeps its adopted kit until then. **Next agent step** once ruled: install
+the new kit into milo (and into codelaw, once no session is live there — one
+was on 2026-11-07), land it with `lockmaster save`, close W-15. W-08 waits on
+the decider too. `lm/W-09` and `lm/handoff-20261105-055911` are kept,
+unmerged branches `doctor` names: the decider rules (SR-WORK-CLEANUP decision 3).
 
 ## 3 · Standing constraints
 

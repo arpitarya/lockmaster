@@ -5,8 +5,8 @@ description: "Arpit, 2026-10-25: once installable, lockmaster replaces the hand-
 item: W-09
 filed: 2026-10-25
 filed_by: "Arpit (Cowork, Opus 5.5)"
-updated: 2026-10-28
-updated_by: "Cowork (Opus 5.5): the queue reviewed — landings counted, fux's time split out to W-12"
+updated: 2026-11-07
+updated_by: "Claude Code (Opus 5.5): milo's and sheetpane's adoption landed — closed"
 ball: agent
 ---
 
@@ -19,8 +19,8 @@ ball: agent
 | 1 | `lockmaster install` into each repo | one kit, four repos | ✅ sheetpane, milo 2026-10-25 · codelaw, fux 2026-10-26 (Arpit: *"implement in codelaw and fux"*; fux with a live session, by his word) |
 | 2 | A `lockmaster.toml` per repo: its checks, generated files, merge drivers | each repo's own rules | ✅ all four |
 | 3 | Retire the copied hooks and `install-agent-hooks.py` | nothing drifts | ✅ every hand copy replaced; fux's hook tests moved here as `tests/test_kit_hooks.py` (fux has no `install-agent-hooks.py` left to retire) |
-| 4 | The first real landing in each repo, on the Mac | proof, and fux's per-landing index cost measured | ◐ codelaw ✅ (64 landings by 2026-10-28) · fux ✅ (**fux W-304**, 2026-10-26; 599 s → [W-12](W-12-fux-landing-time.md)) · milo ⏳ · sheetpane ⏳ |
-| 5 | milo and sheetpane: their adoption — `.claude/`, `lockmaster.toml`, `.gitattributes` — was installed from Cowork on 2026-10-25 and never committed; it is now W-11's handoff `lockmaster-W-11` in each, landed by the next Claude Code session there. That landing is step 4 for both | the kit is on their `main` | ⏳ handed off 2026-10-28 |
+| 4 | The first real landing in each repo, on the Mac | proof, and fux's per-landing index cost measured | ◐ codelaw ✅ (64 landings by 2026-10-28) · fux ✅ (**fux W-304**, 2026-10-26; 599 s → [W-12](W-12-fux-landing-time.md)) · milo ✅ (`4a99fa8`, 2026-11-07) · sheetpane ✅ (`9285efc`, 2026-11-07) |
+| 5 | milo and sheetpane: their adoption — `.claude/`, `lockmaster.toml`, `.gitattributes` — was installed from Cowork on 2026-10-25 and never committed; it is now W-11's handoff `lockmaster-W-11` in each, landed by the next Claude Code session there. That landing is step 4 for both | the kit is on their `main` | ✅ 2026-11-07: both handoffs were **held** (written before per-file digests, their files rewritten by a later install — every kit file matches the repo's `.claude/lockmaster.lock`), so the same files were landed with `lockmaster save` and the handoffs then dropped as landed. fux held the same W-11 handoff; landed the same way |
 
 **Arpit, 2026-10-25:** *"Here is the lock master repo. Add the necessary documents, add whatever is needed for the tool to be built out."*
 

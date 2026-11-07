@@ -24,20 +24,20 @@ here. Read that record before changing anything below it.
 |---|---|
 | 🔴 **Hold the name on PyPI** — the release pipeline and 0.0.1 are ready: add the trusted publishers and the two GitHub environments (CONTRIBUTING.md §Releasing), then push `main` and the tag `v0.0.1`; and keep or delete the empty npm org `@lockmaster` ([W-08](open/W-08-hold-the-name.md)) | 2026-10-25 |
 | ↳ **blocks:** nothing else in the queue | |
+| 🔴 **milo's work files** — milo keeps its trackers in `tv-movies/work/` (4 of the six). Does L10 count those, or does `lockmaster install` create all six at milo's root `work/`, as everywhere else? ([W-15](open/W-15-work-files-current-everywhere.md)) | 2026-11-07 |
+| ↳ **blocks:** W-15 | |
 
 ---
 
-## Open items (3)
+## Open items (2)
 
 ### build (2)
 
 🔴 **W-08** `arpit` Hold the name on PyPI: the pipeline and 0.0.1 are ready; Arpit adds the trusted publishers and environments, then pushes the tag `v0.0.1`. Keep or delete the npm org `@lockmaster`. Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
 
-🟢 **W-15** `agent` Enforce L10 in every repository: built (`install` creates missing work files, `doctor` names missing or stale ones, a Stop hook). Left: install it into fux, sheetpane, codelaw and milo. Filed by Cowork (Opus 5.5). [detail](open/W-15-work-files-current-everywhere.md)
+🔴 **W-15** `arpit` Enforce L10 in every repository: built (`install` creates missing work files, `doctor` names missing or stale ones, a Stop hook). Left: milo waits on the ruling above; codelaw once its live session ends. Filed by Cowork (Opus 5.5). [detail](open/W-15-work-files-current-everywhere.md)
 
-### testing (1)
-
-🟢 **W-09** `agent` Adopt lockmaster in fux, sheetpane, codelaw and milo: codelaw and fux land for real; milo's and sheetpane's adoption was never committed and lands with W-11's handoff in the next Claude Code session there. Filed by Arpit (Cowork). [detail](open/W-09-adopt-in-three-repos.md)
+### testing (0)
 
 ### record update (0)
 
