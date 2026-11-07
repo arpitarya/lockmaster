@@ -11,6 +11,7 @@ against this file before an item may be closed
 
 | date | item | what landed | outcome | evidence |
 |---|---|---|---|---|
+| 2026-11-07 | W-15 (steps 1–3) | `kit/work/` templates, `install` writes a missing work file (never overwrites); `doctor` names a missing work file and a stale `WORKLOG.md`; the kit's `work-files.py` Stop hook; SR-LAW-10 `built: yes` | **built** — the installs into the other four repositories follow | `tests/test_work_files.py` (13 tests) |
 | 2026-11-07 | W-10 | status `waiting`: a landing stopped only by uncommitted edits in main's checkout keeps its checked commit and lands by itself once they clear (redone if `main` moved); `status`/`doctor` name the overlap; `claim-guard.py` warns on a checkout edit a change claims; a landing that changes `work/NOW.md` carries the checkout's copy | **built** — W-10 closed | `tests/test_waiting.py` (15 tests); the whole suite green on Python 3.9 |
 | 2026-11-07 | W-14 | step 4: SR-LAW-9 decision 4 met by W-10; register `built: yes` | **built** — W-14 closed | `tests/test_parallel.py`, `tests/test_waiting.py` |
 | 2026-11-05 | W-13 | `tests/test_parallel.py` (six concurrent processes per case) and its three fixes, landed in `9c747a7` | **built** — W-13 closed 2026-11-07 | `cd tests && python3 -m unittest test_parallel` green on Python 3.9, 2026-11-07 |

@@ -16,6 +16,7 @@ owns:
   - .claude/hooks/claim-guard.py
   - .claude/hooks/block-main.py
   - .claude/hooks/auto-land.py
+  - .claude/hooks/work-files.py
   - scripts/release.py
   - .github/workflows/release.yml
 laws: [L0, L1, L2, L3, L4, L5, L6, L7, L8, L9, L10]
@@ -240,7 +241,7 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     | `lockmaster sync` | the kit's hook | land a session's open changes now (decision 20) |
     | `lockmaster can-commit` | anyone | whether this surface can commit (exit 0) or hands off (exit 1) |
     | `lockmaster doctor` | anyone | stale locks, orphan worktrees, unmerged branches, an installed kit that is not this lockmaster's, a waiting change and the checkout edits a change's landing would wait on |
-    | `lockmaster install <repo>` | the decider | install a pinned kit into a repository |
+    | `lockmaster install <repo>` | the decider | install a pinned kit into a repository; create any of the six work files it lacks |
     | `lockmaster regen` | anyone | rebuild the `[generated]` files by hand |
     | `lockmaster drivers` | the decider | register the merge drivers; write `[merge]` into `.gitattributes` |
 
@@ -265,7 +266,15 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     install by name, or with `--backup` is moved aside first. This repository
     installs its own kit the same way; `scripts/bootstrap.py` is retired
     (2026-10-25, W-06). The kit's hooks read any repository's inbox heading and
-    name no law number (2026-10-26, W-09).
+    name no law number (2026-10-26, W-09). **`kit/work/` holds a short template
+    of each of the six work files** ([SR-LAW-10](0012_LAW-10-work-files-current.md)
+    decision 6; 2026-11-07, W-15): `install` writes each one the target lacks
+    and never touches one that exists; they are the project's own papers
+    (decision 16), not kit files, so the lock does not record them. `doctor`
+    names a missing one, and a `WORKLOG.md` that `main` has moved more than ten
+    commits past; the kit's `work-files.py` tells a session, once at `Stop`,
+    that wrote files outside `work/` but none of `WORKLOG.md`, `INTERVIEW.md`
+    or `OPEN-WORK.md`.
 16. **What stays in each repository:** its records, work items, backlog,
     worklog, lessons — the project's own papers — its CI, and its `lockmaster.toml`.
 
@@ -413,7 +422,7 @@ probably Claude Code should go ahead and commit it."*)
 ### Reference (required)
 
 - [`kit/claude/hooks/auto-land.py`](../kit/claude/hooks/auto-land.py) and [`kit/claude/skills/landing/`](../kit/claude/skills/landing/SKILL.md) — decisions 19–20; `src/lockmaster/surface.py` (19); `land.py`'s `save`, `handoff`, `pickup`, `sync`, `adopt` (19–20), `_classify` and `_carry_ledger` (8a), `retry_waiting` and `checkout_overlaps` (11); [`tests/test_autoland.py`](../tests/test_autoland.py), [`tests/test_waiting.py`](../tests/test_waiting.py).
-- [`kit/`](../kit) — decisions 5, 12 and 15; [`kit/claude/hooks/claim-guard.py`](../kit/claude/hooks/claim-guard.py) (5), [`kit/claude/hooks/block-main.py`](../kit/claude/hooks/block-main.py) (12).
+- [`kit/`](../kit) — decisions 5, 12 and 15; [`kit/work/`](../kit/work) and [`kit/claude/hooks/work-files.py`](../kit/claude/hooks/work-files.py), [`tests/test_work_files.py`](../tests/test_work_files.py) (15, SR-LAW-10); [`kit/claude/hooks/claim-guard.py`](../kit/claude/hooks/claim-guard.py) (5), [`kit/claude/hooks/block-main.py`](../kit/claude/hooks/block-main.py) (12).
 - [`src/lockmaster/`](../src/lockmaster) — decisions 1–15: `land.py` (4–8, 11), `generated.py` (9), `merge.py` and `drivers.py` (10), `config.py` (13), `status.py` and `now.py` (14), `install.py` and `doctor.py` (14–15).
 - [`tests/`](../tests) — one scratch-repo test file per work item that built them.
 - [`lockmaster.toml`](../lockmaster.toml) — this repository's own checks and merge drivers (decision 13).

@@ -33,7 +33,7 @@ here. Read that record before changing anything below it.
 
 🔴 **W-08** `arpit` Hold the name on PyPI: the pipeline and 0.0.1 are ready; Arpit adds the trusted publishers and environments, then pushes the tag `v0.0.1`. Keep or delete the npm org `@lockmaster`. Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
 
-🟢 **W-15** `agent` Enforce L10 in every repository: `install` creates any missing work file, `doctor` names a missing or stale one, a kit Stop hook flags a session that touched none of WORKLOG, INTERVIEW or OPEN-WORK. Arpit ruled L10 on 2026-11-05. Filed by Cowork (Opus 5.5). [detail](open/W-15-work-files-current-everywhere.md)
+🟢 **W-15** `agent` Enforce L10 in every repository: built (`install` creates missing work files, `doctor` names missing or stale ones, a Stop hook). Left: install it into fux, sheetpane, codelaw and milo. Filed by Cowork (Opus 5.5). [detail](open/W-15-work-files-current-everywhere.md)
 
 ### testing (1)
 
