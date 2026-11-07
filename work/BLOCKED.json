@@ -1,8 +1,8 @@
 {
   "decision": "PROCEED",
-  "reason": "W-15 ruled by Arpit 2026-11-07: milo gets the six work files at its root work/ (\"Root work/\"); its four trackers move up from tv-movies/work/ with git mv",
+  "reason": "W-15 ruled by Arpit 2026-11-07: \"Leave milo alone\" — milo keeps tv-movies/work/, L10 counts it, no new kit there for now (supersedes the earlier \"Root work/\" reading)",
   "questions": [],
-  "safe_alternative": "milo's adoption landed with the old kit (4a99fa8); every other repository gets the new kit; milo's install waits on the ruling",
+  "safe_alternative": "",
   "surfaced": true,
   "filed": "2026-11-07",
   "ruled": "2026-11-07"

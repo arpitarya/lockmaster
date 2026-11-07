@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-07 — green items: milo re-asked and left alone; codelaw still live  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"imlpement all green items"*
+- **Done:** landed the Cowork docket session's uncommitted rulings as they were (`f49f1ea`). W-15 is the one green item: its milo step was not done — see below; codelaw's session was still live (heartbeat under a minute), so no install there.
+- **Decided / left open:** the docket's reading of *"Root work/"* was `git mv` milo's four trackers up; before doing it, found it would make tv-movies' module trackers milo's repo-wide ones against milo's own "modules stay self-contained", rewrite ~60 links, and collide with an uncommitted edit in `tv-movies/docs/archive/open-work-rules.md`. Asked again: Arpit — *"Leave milo alone"*. Recorded in W-15, SR-LAW-10, BLOCKED.json.
+- **Mistakes:** my earlier inbox question offered only "count tv-movies/work/" or "create six at the root", not the consequence for a module repo; that left room for the move reading.
+- **Next:** codelaw's install once its session ends; then close W-15.
+
 ## 2026-11-07 — docket: the two inbox rulings  ·  Cowork (Opus 5.5)
 
 - **Asked:** *"explain me the blockers one yb one"*
