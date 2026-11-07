@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-07 — W-10 and W-15 built; W-09, W-13, W-14 closed; milo and sheetpane land  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"implmenet all open work items"*
+- **Done:** W-10 → `1bd4dfd`: a landing stopped only by main's checkout **waits** (status `waiting`, its checked commit kept) and lands by itself once the edits clear; `status`/`doctor`/`claim-guard.py` name the clash; a landing carries the checkout's `work/NOW.md`; `git.worktree_add` retries a git race `test_parallel` hit. W-13 and W-14 closed with it (L8, L9 `built: yes`). W-15 → `599fade`: `install` writes missing work files from `kit/work/`, `doctor` names missing/stale ones, the kit's `work-files.py` Stop hook. W-09: milo's (`4a99fa8`) and sheetpane's (`9285efc`) adoption landed, their first landings; fux's held W-11 handoff landed too (`6312dda`). The new kit installed and landed in sheetpane (`1e04930`) and fux (`4c135a0`).
+- **Decided / left open:** all three W-11 handoffs were **held** (written before per-file digests; files rewritten by a later install, every kit file matching the repo's lock), so their files were landed with `save` and the handoffs dropped. sheetpane's `.gitignore` left out (it mixes another session's lines). Put to the decider (BLOCKED.json, inbox): milo keeps its trackers in `tv-movies/work/` — does L10 count those, or does milo get the six at its root? codelaw not reinstalled: a Claude Code session was live there.
+- **Mistakes:** `install` from a change's worktree pointed the shared merge drivers at the worktree (re-pointed with `lockmaster drivers`; LESSONS). milo's landing message says "2025-10-25/28" for 2026 — history is not rewritten. One test asserted NOW.md's exact text, which every landing re-renders; fixed the test.
+- **Next:** the decider's ruling on milo's work files; then install the new kit into milo and codelaw and close W-15.
+
 ## 2026-11-05 — the waiting Cowork handoffs landed on main  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"commit everything"*

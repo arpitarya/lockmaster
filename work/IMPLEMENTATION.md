@@ -11,6 +11,8 @@ against this file before an item may be closed
 
 | date | item | what landed | outcome | evidence |
 |---|---|---|---|---|
+| 2026-11-07 | W-15 (step 4, in part) | the new kit (W-10, W-15) installed and landed in sheetpane `1e04930` and fux `4c135a0`; both already had all six work files | **built** — milo waits on the decider, codelaw on its live session | `lockmaster queue` in each |
+| 2026-11-07 | W-09 (step 4–5) | milo's and sheetpane's adoption (the kit, `lockmaster.toml`, `.gitattributes`) landed — their first landings, milo `4a99fa8`, sheetpane `9285efc`; fux's held W-11 handoff landed the same way | **built** — W-09 closed | `lockmaster queue` in each: the handoff dropped as landed |
 | 2026-11-07 | W-15 (steps 1–3) | `kit/work/` templates, `install` writes a missing work file (never overwrites); `doctor` names a missing work file and a stale `WORKLOG.md`; the kit's `work-files.py` Stop hook; SR-LAW-10 `built: yes` | **built** — the installs into the other four repositories follow | `tests/test_work_files.py` (13 tests) |
 | 2026-11-07 | W-10 | status `waiting`: a landing stopped only by uncommitted edits in main's checkout keeps its checked commit and lands by itself once they clear (redone if `main` moved); `status`/`doctor` name the overlap; `claim-guard.py` warns on a checkout edit a change claims; a landing that changes `work/NOW.md` carries the checkout's copy | **built** — W-10 closed | `tests/test_waiting.py` (15 tests); the whole suite green on Python 3.9 |
 | 2026-11-07 | W-14 | step 4: SR-LAW-9 decision 4 met by W-10; register `built: yes` | **built** — W-14 closed | `tests/test_parallel.py`, `tests/test_waiting.py` |
