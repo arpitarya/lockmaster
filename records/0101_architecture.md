@@ -277,7 +277,23 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     names a missing one, and a `WORKLOG.md` that `main` has moved more than ten
     commits past; the kit's `work-files.py` tells a session, once at `Stop`,
     that wrote files outside `work/` but none of `WORKLOG.md`, `INTERVIEW.md`
-    or `OPEN-WORK.md`.
+    or `OPEN-WORK.md`. **`kit/scaffold/` holds the rest of the work system**
+    (2026-11-08, W-18): `AGENTS.md`, `docs/GLOSSARY.md`, the generic records
+    (the register, `TEMPLATE.md`, `RULE-SINCE`, SR-LAWS, SR-LAW-0 to SR-LAW-2,
+    the WORK records and SR-WORK-LANDING, which owns the four landing hooks in
+    a repository that is not lockmaster), `work/README.md`, `NOW.md`,
+    `BLOCKED.json`, `IMPLEMENTATION.md` and the `open/`, `compare/` and
+    `proposals/` indexes, `archive/README.md` (kept as `_archive/`, so lockmaster's own
+    one-archive check does not read it as a second archive), and the work system's three
+    scripts. `install` writes each file the target lacks at the same path and
+    never touches one that exists; `records/` and `scripts/` only when the
+    target has no `records/` at all, so a register of its own is never mixed
+    with the kit's numbering. Like the six, they are the project's own papers,
+    not kit files, and the lock does not record them. The one template slot is
+    `{{installed}}`, today's date, so the empty inbox is well-formed (rule 45a).
+    `tests/test_scaffold.py` installs into a scratch repository and runs its
+    own `check-work-system.py`, `check-open-work-inbox.py`, `doctor` and commit
+    guard over the result.
 16. **What stays in each repository:** its records, work items, backlog,
     worklog, lessons — the project's own papers — its CI, and its `lockmaster.toml`.
 

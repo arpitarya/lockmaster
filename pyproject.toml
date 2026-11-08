@@ -47,6 +47,15 @@ packages = [
   "lockmaster.kit.claude.skills.docket",
   "lockmaster.kit.claude.skills.landing",
   "lockmaster.kit.work",
+  "lockmaster.kit.scaffold",
+  "lockmaster.kit.scaffold._archive",
+  "lockmaster.kit.scaffold.docs",
+  "lockmaster.kit.scaffold.records",
+  "lockmaster.kit.scaffold.scripts",
+  "lockmaster.kit.scaffold.work",
+  "lockmaster.kit.scaffold.work.compare",
+  "lockmaster.kit.scaffold.work.open",
+  "lockmaster.kit.scaffold.work.proposals",
 ]
 
 [tool.setuptools.package-data]
@@ -57,6 +66,15 @@ packages = [
 "lockmaster.kit.claude.skills.docket" = ["*"]
 "lockmaster.kit.claude.skills.landing" = ["*"]
 "lockmaster.kit.work" = ["*"]
+"lockmaster.kit.scaffold" = ["*"]
+"lockmaster.kit.scaffold._archive" = ["*"]
+"lockmaster.kit.scaffold.docs" = ["*"]
+"lockmaster.kit.scaffold.records" = ["*"]
+"lockmaster.kit.scaffold.scripts" = ["*"]
+"lockmaster.kit.scaffold.work" = ["*"]
+"lockmaster.kit.scaffold.work.compare" = ["*"]
+"lockmaster.kit.scaffold.work.open" = ["*"]
+"lockmaster.kit.scaffold.work.proposals" = ["*"]
 
 [tool.setuptools.exclude-package-data]
 "*" = [".DS_Store", "*.pyc"]

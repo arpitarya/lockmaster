@@ -1,0 +1,5 @@
+# The guard's baseline. Commits after this sha are subject to "changed an
+# owned component without touching its owning record". Write the sha of the
+# first commit that carries records/ on the line below, once it exists; move
+# it forward only after a bulk review, noting each move here with its reason —
+# the cost is that commits before it are no longer re-auditable.
