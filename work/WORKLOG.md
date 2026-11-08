@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-08 — lockmaster 0.0.2 published; W-08 closed  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"commit push and publish a new version"*
+- **Done:** found 0.0.1 on PyPI — the decider uploaded the first build (`d5718d3b…`), from before W-16 — so 0.0.2 carries W-16. CHANGELOG's `[0.0.1]` re-cut to what that upload held; `release.py prepare 0.0.2`; landed `10e6c67`. Built, `twine check --strict`, every kit file in the wheel, the wheel alone on Python 3.9.6 and 3.14.2 installs the kit and lands a change; uploaded with the decider's `~/.pypirc`. `uv tool install lockmaster==0.0.2` from PyPI; the kit re-pinned to 0.0.2 in milo (`ca6f646`) and codelaw (`cca940b`); fux's landing was still in its own `fux ingest` regen (load average 46) and sheetpane queued behind it when this entry was written. Tags `v0.0.1` (`943afe6`) and `v0.0.2` made locally; `main` pushed.
+- **Decided / left open:** no GitHub environment exists, so a tag cannot publish: the decider's word covers uploading 0.0.2 by hand (decision 17 amended), and the tags stay local until W-17 — pushed, each would start a pipeline that fails at TestPyPI. GitHub reports the repository public; decision 17 says private until 0.1.0 — in W-17 for the decider. W-08 closed and archived.
+- **Mistakes:** none.
+- **Next:** W-17 — the decider's.
+
 ## 2026-11-08 — W-16: every repository consumes the published package; milo at its root  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"setup lockmaster for milo at root migrate whatever it on the list to root"* and *"setup milo as a package in all the repo's from her on we publish the package then have all consumer consume it"* — read as lockmaster, the package being published.

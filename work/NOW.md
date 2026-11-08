@@ -12,7 +12,7 @@ Rule: [SR-WORK-NOW](../records/0061_WORK-now.md).
 
 | session | surface | started | working on |
 |---|---|---|---|
-| 641d8f75-a5c6-4dfb-8130-fcf5cc1675e0 | Claude Code | 2026-11-07 10:33 | W-16 closed; idle — W-08 waits on the decider's upload |
+| 641d8f75-a5c6-4dfb-8130-fcf5cc1675e0 | Claude Code | 2026-11-07 10:33 | lockmaster 0.0.2 published; idle — W-17 is the decider's |
 
 ## Resources this session created
 
