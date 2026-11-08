@@ -37,18 +37,22 @@ tells a session once that it touched none of WORKLOG, INTERVIEW or OPEN-WORK.
 L8, L9 and L10 are `built: yes`. **W-16:** every repository but lockmaster runs
 the installed `lockmaster` command (`uv tool install`), never the checkout
 beside it. 154 scratch-repo tests pass on Python 3.9.
-Nothing is on PyPI until the decider uploads 0.0.1 (W-08).
+**On PyPI:** 0.0.1 (the decider's upload, before W-16) and 0.0.2 (W-16);
+the `lockmaster` command every repository runs is 0.0.2 from PyPI.
 
 ## 2 · In flight, and the immediate next step
 
-*Updated 2026-11-08 (Claude Code, Opus 5.5 — W-16 closed).* **No agent item is
-open.** The kit runs from the installed package in lockmaster's five
-repositories; milo now keeps its six work files at its root `work/` (the
-decider, 2026-11-08, reversing *"Leave milo alone"*). **W-08** waits on the
-decider's `twine upload dist/*` — `dist/` was rebuilt after W-16 — and then on
-one agent step: `uv tool install --reinstall lockmaster` from PyPI. `lm/W-09`
-and `lm/handoff-20261105-055911` are kept, unmerged branches `doctor` names:
-the decider rules (SR-WORK-CLEANUP decision 3).
+*Updated 2026-11-08 (Claude Code, Opus 5.5 — 0.0.2 published).* **No agent item
+is open.** 0.0.2 is on PyPI, uploaded from the decider's machine (no GitHub
+environment exists, so a tag cannot publish — SR-ARCHITECTURE decision 17); the
+kit in milo and codelaw is pinned to it; fux's and sheetpane's re-pin were
+landing when this was written. `main` is pushed; the
+tags `v0.0.1` (`943afe6`) and `v0.0.2` are local only — a pushed tag starts the
+release pipeline, which cannot publish yet. **W-17** is the decider's: the
+trusted publishers and environments, and the repository's visibility (GitHub
+shows it public; decision 17 says private until 0.1.0). `lm/W-09` and
+`lm/handoff-20261105-055911` are kept, unmerged branches `doctor` names: the
+decider rules (SR-WORK-CLEANUP decision 3).
 
 ## 3 · Standing constraints
 
