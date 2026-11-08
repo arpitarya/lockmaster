@@ -41,5 +41,5 @@
     "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/work-files.py\" edit",
     "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/work-files.py\" stop"
   ],
-  "version": "0.0.2"
+  "version": "0.0.3"
 }
