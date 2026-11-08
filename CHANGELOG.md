@@ -6,6 +6,20 @@ All notable changes to lockmaster. The format follows
 
 ## [Unreleased]
 
+## [0.0.2] - 2026-11-08
+
+### Changed
+
+- Every repository but lockmaster runs the published package: the kit's hooks
+  find lockmaster in the `lockmaster` command's own environment (`uv tool
+  install lockmaster`, pipx) and no longer in a checkout beside the repository;
+  the `landing` skill says the same (W-16).
+
+## [0.0.1] - 2026-11-08
+
+Uploaded from the decider's machine on 2026-11-08, built from `943afe6`: it
+holds everything below, the 2026-10-25 cut and what landed after it.
+
 ### Added
 
 - `lockmaster install` creates any of the six work files (`work/OPEN-WORK.md`,
@@ -69,11 +83,6 @@ All notable changes to lockmaster. The format follows
 
 ### Changed
 
-- Every repository but lockmaster runs the published package: the kit's hooks
-  find lockmaster in the `lockmaster` command's own environment (`uv tool
-  install lockmaster`, pipx) and no longer in a checkout beside the repository;
-  the `landing` skill says the same (W-16).
-
 - Uncommitted edits in `main`'s checkout identical to a landing no longer stop
   its fast-forward; differing ones are named in the red reason instead of an
   empty line (W-11, decision 8a).
@@ -87,9 +96,7 @@ All notable changes to lockmaster. The format follows
   lockmaster's own `ci.yml`, which `lockmaster install --backup` would have
   moved a target repository's CI aside for. A repository's CI is its own.
 
-## [0.0.1] - 2026-10-25
-
-### Added
+### Added (cut 2026-10-25)
 
 - The core loop (2026-10-25): `start`, `claim add`, `submit` (which starts
   landing), `run`, `queue`, `abandon` — claimed paths only, landed one at a
