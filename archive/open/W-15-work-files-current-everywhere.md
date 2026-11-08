@@ -5,8 +5,8 @@ description: "Arpit, 2026-11-05: L10 — the six work files are always up to dat
 item: W-15
 filed: 2026-11-05
 filed_by: "Cowork (Opus 5.5), on Arpit's ruling of L10"
-updated: 2026-11-07
-updated_by: "Claude Code (Opus 5.5): milo re-ruled — left alone; only codelaw left"
+updated: 2026-11-08
+updated_by: "Claude Code (Opus 5.5): installed in codelaw — closed"
 ball: agent
 ---
 
@@ -19,11 +19,22 @@ ball: agent
 | 1 | `lockmaster install` creates any of the six files a repository lacks, from a short template in `kit/` (never overwrites one) | [SR-LAW-10](../../records/0012_LAW-10-work-files-current.md) decision 6 | ✅ `kit/work/`, `install.work_files` |
 | 2 | `lockmaster doctor` names a missing work file, and a repository whose landings since the last `WORKLOG.md` change exceed a set number | the drift is visible | ✅ `doctor.work_problems`; stale = more than 10 commits on `main` since `WORKLOG.md` last changed |
 | 3 | A kit Stop hook beside `require-progress.sh`: a session that changed tracked files outside `work/` but touched none of `WORKLOG.md`, `INTERVIEW.md`, `OPEN-WORK.md` is told once, before it stops | decision 4, at the source | ✅ `kit/claude/hooks/work-files.py` (`edit` notes each write, `stop` tells once) |
-| 4 | Scratch-repo tests for steps 1–3; install it into the five repositories | proof, and the law reaches every user | ◐ `tests/test_work_files.py` (13 tests) ✅; installed and landed in lockmaster ✅ (`599fade`), sheetpane ✅ (`1e04930`), fux ✅ (`4c135a0`); milo — left alone by the decider's ruling (`tv-movies/work/` counts); codelaw ⏳ a session was live there |
+| 4 | Scratch-repo tests for steps 1–3; install it into the five repositories | proof, and the law reaches every user | ✅ `tests/test_work_files.py` (13 tests); landed in lockmaster (`599fade`), sheetpane (`1e04930`, docket `6c971b6`), fux (`4c135a0`, docket `7e7cfe7`), codelaw (`794da39`, 2026-11-08 — its kit-file rows added to its own SR-WORK-SESSION and register); milo left alone by the decider's ruling |
 
 **Arpit, 2026-11-05:** *"open work, backlog, interview, machine, lessons, worklog should always be upto date who so ever uses lockmaster."*
 
 **Model:** Sonnet.
+
+## Installed in codelaw (2026-11-08)
+
+The decider asked for it with a session live in codelaw; none of that session's
+four open changes claimed a kit file, so the install went ahead. It first
+refused: codelaw had hand-edited its installed `docket` skill to add its own
+queue group (`reporting and benchmarks`). The kit's skill now names no group
+(`a86244f`), codelaw's edit was moved aside by `--backup` and removed only once
+its bytes matched codelaw's `HEAD`. codelaw's `work-system` check then wanted
+`work-files.py` in its ownership table: added to its SR-WORK-SESSION `owns:`
+and register.
 
 ## Ruled (2026-11-07)
 

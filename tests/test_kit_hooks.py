@@ -242,5 +242,23 @@ class ReleaseLocks(Installed):
         self.assertEqual(sorted(p.name for p in locks.iterdir()), ["theirs"])
 
 
+class KitNamesNoRepositoryRule(unittest.TestCase):
+    """Two strikes, a gate (SR-WORK-SESSION decision 13): the kit's docket skill
+    restated fux's rule 41 (W-09) and then a fixed list of queue groups, which
+    codelaw had to hand-edit (W-15). A kit skill lists no queue groups: each
+    repository's queue names its own (a shared rule may still name one)."""
+
+    LIST = r"`[a-z ]+`\s*→\s*`[a-z ]+`"
+
+    def test_no_kit_skill_lists_the_queue_groups(self):
+        import re
+        from support import ROOT
+        for f in sorted((ROOT / "kit" / "claude" / "skills").rglob("SKILL.md")):
+            text = f.read_text(encoding="utf-8")
+            with self.subTest(f.parent.name):
+                self.assertEqual(re.findall(self.LIST, text), [])
+        self.assertTrue(re.search(self.LIST, "`build` → `testing` → `research`"))  # the shape it catches
+
+
 if __name__ == "__main__":
     unittest.main()

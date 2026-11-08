@@ -39,14 +39,14 @@ Nothing is on PyPI until the decider finishes W-08.
 
 ## 2 · In flight, and the immediate next step
 
-*Updated 2026-11-07 (Claude Code, Opus 5.5).* **Next agent step (W-15, 🟢):**
-install the new kit into codelaw once no session is live there (one was all of
-2026-11-07), land it with `lockmaster save`, close W-15. **milo is left alone**
-(the decider, 2026-11-07): its trackers stay in `tv-movies/work/` and count for
-L10. **W-08** is ruled — PyPI only, `@lockmaster` kept empty — and waits on the
-decider's hands: the trusted publishers, the GitHub environments, the `v0.0.1`
-tag. `lm/W-09` and `lm/handoff-20261105-055911` are kept, unmerged branches
-`doctor` names: the decider rules (SR-WORK-CLEANUP decision 3).
+*Updated 2026-11-08 (Claude Code, Opus 5.5 — W-15 closed).* **No agent item is
+open.** The new kit (W-10, W-15) runs in lockmaster, codelaw, fux and
+sheetpane; milo keeps the kit it adopted and its trackers in `tv-movies/work/`
+(the decider, 2026-11-07: *"Leave milo alone"*). **W-08** is ruled — PyPI only,
+`@lockmaster` kept empty — and waits on the decider's hands: the trusted
+publishers, the GitHub environments, the `v0.0.1` tag. `lm/W-09` and
+`lm/handoff-20261105-055911` are kept, unmerged branches `doctor` names: the
+decider rules (SR-WORK-CLEANUP decision 3).
 
 ## 3 · Standing constraints
 

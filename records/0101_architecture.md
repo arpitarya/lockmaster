@@ -268,7 +268,8 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     (2026-10-25, W-06). The kit's hooks read any repository's inbox heading and
     name no law number (2026-10-26, W-09); the `docket` skill names no queue
     group, and walks the groups each queue lists (2026-11-08, W-15: codelaw
-    had edited its copy to add its own). **`kit/work/` holds a short template
+    had edited its copy to add its own; `tests/test_kit_hooks.py` fails on a
+    kit skill that lists the queue's groups). **`kit/work/` holds a short template
     of each of the six work files** ([SR-LAW-10](0012_LAW-10-work-files-current.md)
     decision 6; 2026-11-07, W-15): `install` writes each one the target lacks
     and never touches one that exists; they are the project's own papers
