@@ -6,7 +6,7 @@ item: W-08
 filed: 2026-10-25
 filed_by: "Arpit (Cowork, Opus 5.5)"
 updated: 2026-11-08
-updated_by: "Claude Code (Opus 5.5): the decider ruled a first upload from his machine; dist/ built and verified"
+updated_by: "Claude Code (Opus 5.5): the decider ruled a first upload from his machine; dist/ built and verified; rebuilt after W-16"
 ball: arpit
 ---
 
@@ -20,6 +20,7 @@ ball: arpit
 | 1a | ~~The decider adds the pending trusted publishers and the `testpypi` / `pypi` GitHub environments, then pushes the tag~~ | — | ⤵ replaced 2026-11-08 by 1c–1d; trusted publishing is still how 0.1.0 and later publish |
 | 1c | Claude Code builds `dist/` from `main` and runs the pipeline's checks on it: tests, lint, `twine check --strict`, every kit file in the wheel, the wheel installed alone and one change landed with it | the files to upload | ✅ 2026-11-08 (Claude Code) |
 | 1d | The decider uploads 0.0.1 from his machine: `twine upload dist/*` | the PyPI name is ours | 🔴 decider decides |
+| 1e | Claude Code, once 0.0.1 is on PyPI: `uv tool install --reinstall lockmaster` — the command every repository runs (W-16) comes from PyPI, not the local wheel | the published package in use | ⏳ after 1d |
 | 2 | Keep or delete the npm org `@lockmaster` — created 2026-10-25 in Chrome a minute before L6 was ruled; it holds nothing | no loose end on npm | ✅ ruled 2026-11-07: kept empty, nothing published |
 
 **Arpit, 2026-10-25:** *"to create an npm org, you go ahead and do it … for lock master and lock hyphen master, both of them."* — then, before `lock-master` was created: *"I want this to be Python only project. I don't believe we need npm."*
