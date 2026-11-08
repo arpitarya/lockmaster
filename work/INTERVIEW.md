@@ -45,8 +45,7 @@ the `lockmaster` command every repository runs is 0.0.2 from PyPI.
 *Updated 2026-11-08 (Claude Code, Opus 5.5 — 0.0.2 published).* **No agent item
 is open.** 0.0.2 is on PyPI, uploaded from the decider's machine (no GitHub
 environment exists, so a tag cannot publish — SR-ARCHITECTURE decision 17); the
-kit in milo and codelaw is pinned to it; fux's and sheetpane's re-pin were
-landing when this was written. `main` is pushed; the
+kit in milo, codelaw, fux and sheetpane is pinned to it. `main` is pushed; the
 tags `v0.0.1` (`943afe6`) and `v0.0.2` are local only — a pushed tag starts the
 release pipeline, which cannot publish yet. **W-17** is the decider's: the
 trusted publishers and environments, and the repository's visibility (GitHub

@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-08 — 0.0.2's re-pin finished in fux and sheetpane  ·  Claude Code (Opus 5.5)
+
+- **Asked:** (the same session, *"commit push and publish a new version"*)
+- **Done:** the entry below was written while fux's landing ran its `fux ingest` regen (~30 min at load average 46); it then landed — fux `a271cf7`, sheetpane `d5800f0`. `main` pushed (`3361b15..77d3d31`, then this).
+- **Decided / left open:** none.
+- **Mistakes:** none.
+- **Next:** W-17 — the decider's.
+
 ## 2026-11-08 — lockmaster 0.0.2 published; W-08 closed  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"commit push and publish a new version"*
