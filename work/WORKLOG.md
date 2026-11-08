@@ -34,6 +34,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-08 — W-18 committed; lockmaster 0.0.3 published  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"commit everything and push"* — then *"and then publish a new version"*
+- **Done:** the checkout held a Cowork session's finished, uncommitted W-18 (`install` scaffolds the work system; 47 paths): 161 tests and the work-system checks green, landed for it unchanged (`4cb3442`). 0.0.3 cut (`6b9f3a3`; the guard wanted `no SR affected` for the version bump), built, `twine check --strict`, kit complete, the wheel alone on Python 3.9.6 and 3.14.2 installs the kit and scaffold and lands a change; uploaded with the decider's `~/.pypirc`; the command reinstalled from PyPI once its index served 0.0.3. Re-pinned: codelaw `24dc502`, sheetpane `c9828e0` (the scaffold added `AGENTS.md` — a pointer to `CLAUDE.md`), fux `6dd4994`. Tag `v0.0.3` local; `main` pushed.
+- **Decided / left open:** milo left on 0.0.2 — another session's reorganisation of `apps/tv-movies/` is uncommitted in its checkout. W-17 stays the decider's.
+- **Mistakes:** none.
+- **Next:** W-17 — the decider's; milo's re-pin once its reorganisation lands.
+
 ## 2026-11-08 — 0.0.2's re-pin finished in fux and sheetpane  ·  Claude Code (Opus 5.5)
 
 - **Asked:** (the same session, *"commit push and publish a new version"*)

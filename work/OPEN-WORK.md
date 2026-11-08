@@ -31,7 +31,7 @@ here. Read that record before changing anything below it.
 
 ### build (1)
 
-🔴 **W-17** `arpit` Releases publish from a tag: the trusted publishers and environments, then the tags `v0.0.1` and `v0.0.2` pushed; and the repository's visibility ruled. Filed by Claude Code (from W-08). [detail](open/W-17-release-from-a-tag.md)
+🔴 **W-17** `arpit` Releases publish from a tag: the trusted publishers and environments, then the local tags `v0.0.1`–`v0.0.3` pushed; and the repository's visibility ruled. Filed by Claude Code (from W-08). [detail](open/W-17-release-from-a-tag.md)
 
 
 ### testing (0)
