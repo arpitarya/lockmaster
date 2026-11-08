@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-08 — W-15 closed: the kit installed in codelaw  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"implement w-15"*
+- **Done:** codelaw's session was still live; none of its open changes claimed a kit file, so on the decider's word the kit went in. `install` refused codelaw's hand-edited `docket` skill (it added codelaw's `reporting and benchmarks` group): the kit's skill now walks the queue's own groups (`a86244f`), codelaw's copy moved aside and removed once identical to `HEAD`, the kit landed in codelaw (`794da39`) after its `work-system` check wanted `work-files.py` in its SR-WORK-SESSION `owns:` and register (added). The new docket skill re-landed in sheetpane (`6c971b6`) and fux (`7e7cfe7`). W-15 archived.
+- **Decided / left open:** a gate, two strikes on the kit restating a repository's rule: `tests/test_kit_hooks.py` fails on a kit skill that lists queue groups (`` `a` → `b` ``); naming one group for a shared rule stays allowed.
+- **Mistakes:** the first codelaw landing said "no SR affected" and went red on codelaw's ownership check; fixed and resubmitted.
+- **Next:** none for an agent; W-08 is the decider's.
+
 ## 2026-11-07 — green items: milo re-asked and left alone; codelaw still live  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"imlpement all green items"*

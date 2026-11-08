@@ -11,6 +11,7 @@ against this file before an item may be closed
 
 | date | item | what landed | outcome | evidence |
 |---|---|---|---|---|
+| 2026-11-08 | W-15 (step 4) | the kit installed and landed in codelaw `794da39`; the kit's docket skill names no queue group (`a86244f`), re-landed in sheetpane `6c971b6` and fux `7e7cfe7`; a test fails on a kit skill listing queue groups | **built** — W-15 closed; milo left alone (ruled) | `tests/test_kit_hooks.py`, `tests/test_work_files.py` |
 | 2026-11-07 | W-15 (step 4, in part) | the new kit (W-10, W-15) installed and landed in sheetpane `1e04930` and fux `4c135a0`; both already had all six work files | **built** — milo waits on the decider, codelaw on its live session | `lockmaster queue` in each |
 | 2026-11-07 | W-09 (step 4–5) | milo's and sheetpane's adoption (the kit, `lockmaster.toml`, `.gitattributes`) landed — their first landings, milo `4a99fa8`, sheetpane `9285efc`; fux's held W-11 handoff landed the same way | **built** — W-09 closed | `lockmaster queue` in each: the handoff dropped as landed |
 | 2026-11-07 | W-15 (steps 1–3) | `kit/work/` templates, `install` writes a missing work file (never overwrites); `doctor` names a missing work file and a stale `WORKLOG.md`; the kit's `work-files.py` Stop hook; SR-LAW-10 `built: yes` | **built** — the installs into the other four repositories follow | `tests/test_work_files.py` (13 tests) |

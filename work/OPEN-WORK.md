@@ -27,13 +27,11 @@ here. Read that record before changing anything below it.
 
 ---
 
-## Open items (2)
+## Open items (1)
 
-### build (2)
+### build (1)
 
 🔴 **W-08** `arpit` Hold the name on PyPI: the pipeline and 0.0.1 are ready; Arpit adds the trusted publishers and environments, then pushes the tag `v0.0.1`. `@lockmaster` kept empty (ruled 2026-11-07). Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
-
-🟢 **W-15** `agent` Enforce L10 in every repository: built and installed everywhere but codelaw, which gets it once its live session ends; milo left alone (ruled 2026-11-07: `tv-movies/work/` counts). Filed by Cowork (Opus 5.5). [detail](open/W-15-work-files-current-everywhere.md)
 
 ### testing (0)
 
