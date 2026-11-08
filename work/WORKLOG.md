@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-08 — W-16: every repository consumes the published package; milo at its root  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"setup lockmaster for milo at root migrate whatever it on the list to root"* and *"setup milo as a package in all the repo's from her on we publish the package then have all consumer consume it"* — read as lockmaster, the package being published.
+- **Done:** W-16 filed and closed. The kit's `auto-land.py` and `now-ledger.py` find lockmaster in the `lockmaster` command's environment, never `../lockmaster/src` (`963c3e5`, 3 tests); `dist/` rebuilt and `uv tool install`ed. milo: a Cowork session's uncommitted #21–#25 filing landed for it first (`2e14f57`), then `tv-movies/work/`'s four trackers moved to `work/` with 48 files re-linked, the kit from the command (`de3be12`). codelaw `5ca829a`, fux `ddd49f5`, sheetpane `b1de5c8`: the kit and merge drivers from the package. `doctor` all well in each (codelaw: its three earlier kept branches).
+- **Decided / left open:** the decider reversed *"Leave milo alone"*. milo's other sessions' uncommitted edits (root `CHANGELOG`, `CLAUDE`, `PLAN`, `README`, `tv-movies/server`, `open-work-rules.md`, `apps/`) left alone — milo's #21. W-08 gains step 1e.
+- **Mistakes:** one `save` in milo passed its 64 paths as one zsh word and landed nothing — caught, redone through a file (LESSONS 2026-11-08).
+- **Next:** the decider uploads 0.0.1; then `uv tool install --reinstall lockmaster` and W-08 closes.
+
 ## 2026-11-08 — W-08: 0.0.1 built for the decider's first upload  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"commit everything generate the build i will do the first publish from local"*

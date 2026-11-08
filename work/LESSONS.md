@@ -11,6 +11,15 @@ named here only as the failure that produced it. A lesson whose remedy is
 
 ---
 
+## 2026-11-08 — the shell here is zsh: an unquoted `$PATHS` is one argument
+
+A list of 64 paths built with `PATHS=$(…)` and passed as `lockmaster save … $PATHS`
+reached `save` as a single path made of newlines; it answered *nothing uncommitted
+under …* and landed nothing. bash splits that word; zsh does not. Pass a list
+through a file — `tr '\n' '\0' < list | xargs -0 lockmaster save -m … ` — which
+reads the same under either shell and gets past the safety check that zsh-only
+expansions such as `${(f)…}` trip.
+
 ## 2026-11-07 — installing the kit from a change's worktree points the merge drivers at that worktree
 
 Dogfooding means `lockmaster install .` after a kit edit, and the edit is made in

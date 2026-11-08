@@ -11,6 +11,7 @@ against this file before an item may be closed
 
 | date | item | what landed | outcome | evidence |
 |---|---|---|---|---|
+| 2026-11-08 | W-16 | the kit's hooks find lockmaster in the installed `lockmaster` command's environment, never `../lockmaster/src` (`963c3e5`); `uv tool install` of the 0.0.1 wheel; milo's trackers moved to its root `work/` (milo `2e14f57`, `de3be12`); the kit from the package in codelaw `5ca829a`, fux `ddd49f5`, sheetpane `b1de5c8` | **built** — W-16 closed | `tests/test_kit_hooks.py` (`HooksFindThePublishedPackage`); `lockmaster doctor` in each repository |
 | 2026-11-08 | W-15 (step 4) | the kit installed and landed in codelaw `794da39`; the kit's docket skill names no queue group (`a86244f`), re-landed in sheetpane `6c971b6` and fux `7e7cfe7`; a test fails on a kit skill listing queue groups | **built** — W-15 closed; milo left alone (ruled) | `tests/test_kit_hooks.py`, `tests/test_work_files.py` |
 | 2026-11-07 | W-15 (step 4, in part) | the new kit (W-10, W-15) installed and landed in sheetpane `1e04930` and fux `4c135a0`; both already had all six work files | **built** — milo waits on the decider, codelaw on its live session | `lockmaster queue` in each |
 | 2026-11-07 | W-09 (step 4–5) | milo's and sheetpane's adoption (the kit, `lockmaster.toml`, `.gitattributes`) landed — their first landings, milo `4a99fa8`, sheetpane `9285efc`; fux's held W-11 handoff landed the same way | **built** — W-09 closed | `lockmaster queue` in each: the handoff dropped as landed |
