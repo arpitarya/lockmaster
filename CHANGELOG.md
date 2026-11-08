@@ -69,6 +69,11 @@ All notable changes to lockmaster. The format follows
 
 ### Changed
 
+- Every repository but lockmaster runs the published package: the kit's hooks
+  find lockmaster in the `lockmaster` command's own environment (`uv tool
+  install lockmaster`, pipx) and no longer in a checkout beside the repository;
+  the `landing` skill says the same (W-16).
+
 - Uncommitted edits in `main`'s checkout identical to a landing no longer stop
   its fast-forward; differing ones are named in the red reason instead of an
   empty line (W-11, decision 8a).

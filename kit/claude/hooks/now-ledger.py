@@ -89,13 +89,31 @@ def read_now():
     return head.rstrip() + "\n", flight, res
 
 
+def command_env():
+    """The site-packages of the `lockmaster` command on PATH (`uv tool`, pipx)."""
+    import shutil
+    exe = shutil.which("lockmaster")
+    if not exe:
+        return None
+    env = Path(exe).resolve().parent.parent
+    for site in sorted(env.glob("lib/python3*/site-packages")) + [env / "Lib" / "site-packages"]:
+        if (site / "lockmaster" / "now.py").is_file():
+            return site
+    return None
+
+
 def renderer():
-    """lockmaster's NOW.md renderer (`lockmaster.now`) when it is importable —
-    installed, or this repository's own src/ — so NOW.md always equals
-    `lockmaster status --now` (SR-ARCHITECTURE decision 14, W-07)."""
-    for extra in (None, ROOT / "src"):
+    """lockmaster's NOW.md renderer (`lockmaster.now`) when it is reachable —
+    this repository's own src/, importable, or the `lockmaster` command's
+    environment — so NOW.md always equals `lockmaster status --now`
+    (SR-ARCHITECTURE decision 14, W-07)."""
+    for extra in (None, ROOT / "src", "command"):
+        if extra == "command":
+            extra = command_env()
+            if extra is None:
+                continue
         if extra is not None:
-            if not (extra / "lockmaster" / "now.py").is_file():
+            if not (Path(extra) / "lockmaster" / "now.py").is_file():
                 continue
             sys.path.insert(0, str(extra))
         try:

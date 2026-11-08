@@ -289,6 +289,16 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     a placeholder 0.0.1 on PyPI holds the name before then (W-08). **0.0.1
     alone is uploaded by the decider from his own machine** (ruled
     2026-11-08); every release after it publishes from a tag.
+    **Every repository but lockmaster runs the published package** (ruled
+    2026-11-08, W-16: *"from here on we publish the package then have all
+    consumer consume it"*): `uv tool install lockmaster` (or pipx) once per
+    machine; `lockmaster install .` and `lockmaster drivers` run from that
+    command, so the kit and the merge drivers come from the release. The
+    kit's hooks find lockmaster at `$LOCKMASTER_SRC`, in the repository's own
+    `src/` (lockmaster itself), as an importable package, or in the
+    `lockmaster` command's own environment — never in a checkout beside the
+    repository; a change to lockmaster reaches another repository only by a
+    release.
     **A release is a tag `v<version>`, and only a tag publishes.**
     `.github/workflows/release.yml` — lockmaster's own, never in `kit/` —
     runs the tests on Linux, macOS and Windows under Python 3.9 and 3.13 and

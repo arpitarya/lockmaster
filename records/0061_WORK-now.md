@@ -102,7 +102,9 @@ where someone will pick it up, not in a live view.
   cell), `end` on `SessionEnd` (cleans or queues what the session left — SR-WORK-CLEANUP — then removes the rows).
 - **Every write goes through one renderer** — `lockmaster.now`
   ([SR-ARCHITECTURE](0101_architecture.md) decision 14) when lockmaster is
-  importable, else the same shape in `now-ledger.py` — and drops any resource
+  reachable — importable, the repository's own `src/`, or the `lockmaster`
+  command's own environment (2026-11-08, W-16; never a checkout beside the
+  repository) — else the same shape in `now-ledger.py` — and drops any resource
   row whose path is gone, so NOW.md equals `lockmaster status --now` after
   each session end, as it does after each landing.
 - **No `work/NOW.md`, no ledger:** in a repository that has lockmaster's kit

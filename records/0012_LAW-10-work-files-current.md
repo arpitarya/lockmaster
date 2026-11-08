@@ -76,7 +76,7 @@ lockmaster ships the work system with it, and every landing now happens continuo
 
 - A law outranks every record ([SR-LAW-0](0002_LAW-0-authority.md)). Where a hook skips a repository because it lacks the work system, that skip is the gap this law closes.
 - **What enforces it** (2026-11-07, [W-15](../archive/open/W-15-work-files-current-everywhere.md)): `lockmaster install` creates any of the six a repository lacks (decision 6); `lockmaster doctor` names a missing one, and a `WORKLOG.md` that `main` has moved more than ten commits past; the kit's `work-files.py` Stop hook tells a session, once, that changed files outside `work/` but touched none of `WORKLOG.md`, `INTERVIEW.md`, `OPEN-WORK.md` (decision 4). [SR-ARCHITECTURE](0101_architecture.md) decision 15; `tests/test_work_files.py`.
-- **milo** keeps its work files in its module, `tv-movies/work/`, and they count (Arpit, 2026-11-07: *"Leave milo alone"*); `doctor` there still names the root files missing.
+- **milo** has its six work files at its root `work/` like every other repository (Arpit, 2026-11-08: *"setup lockmaster for milo at root migrate whatever it on the list to root"*, reversing 2026-11-07's *"Leave milo alone"*); `tv-movies/work/`'s four trackers moved there with their history (W-16).
 - **What a check can never prove:** whether a lesson, a machine quirk or a backlog row should have been written at all. For those three files the law binds judgment.
 
 ### Alternatives considered
