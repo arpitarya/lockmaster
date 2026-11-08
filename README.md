@@ -10,7 +10,7 @@ lockmaster puts the changes onto `main` one at a time — only the claimed files
 generated files rebuilt, your checks run — and cleans up after each. Like a
 canal lock-keeper: one boat through at a time, the water levels kept safe.
 
-> **Status: 0.0.2, pre-alpha.** On PyPI since 0.0.1 (2026-11-08). Claims, the
+> **Status: 0.0.3, pre-alpha.** On PyPI since 0.0.1 (2026-11-08). Claims, the
 > queue, landing, generated files, structural merges, the kit's hooks and
 > `install` are built and tested on scratch repositories; commands and files
 > may still change before 0.1.0. The design of
