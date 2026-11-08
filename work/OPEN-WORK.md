@@ -27,11 +27,13 @@ here. Read that record before changing anything below it.
 
 ---
 
-## Open items (1)
+## Open items (2)
 
-### build (1)
+### build (2)
 
 🔴 **W-08** `arpit` Hold the name on PyPI: 0.0.1 built and verified in `dist/`; Arpit uploads it from his machine (ruled 2026-11-08). `@lockmaster` kept empty (ruled 2026-11-07). Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
+
+🟢 **W-16** `agent` Every repository consumes the published package: the hooks use the `lockmaster` command, never a sibling checkout; milo's trackers move to root `work/`; the kit reinstalled from the command in milo, codelaw, fux, sheetpane. Filed by Arpit (Claude Code). [detail](open/W-16-consume-the-package.md)
 
 ### testing (0)
 

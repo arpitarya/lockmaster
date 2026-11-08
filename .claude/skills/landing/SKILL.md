@@ -11,9 +11,11 @@ a session that can. **Do not ask the decider about commits, lock files,
 worktrees, `index.lock` or "Operation not permitted". Do not try another git
 command to get around a refusal.**
 
-`lockmaster` below means `lockmaster` if it is on the PATH, else
-`PYTHONPATH=<the lockmaster checkout>/src python3 -m lockmaster` (beside this
-repository, e.g. `../lockmaster/src`).
+`lockmaster` below is the published package's command: `uv tool install
+lockmaster` (or `pipx install lockmaster`) puts it on the PATH once per
+machine. A lockmaster checkout beside this repository is never used — this
+repository runs the release on PyPI. Not on the PATH → say so in one line
+and stop; do not run lockmaster from a checkout.
 
 ## Cowork, or any session editing main's checkout directly
 

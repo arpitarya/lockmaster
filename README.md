@@ -20,7 +20,7 @@ canal lock-keeper: one boat through at a time, the water levels kept safe.
 ## Install
 
 ```bash
-pip install lockmaster            # Python ≥ 3.9, no dependencies
+uv tool install lockmaster        # or pipx / pip; Python ≥ 3.9, no dependencies
 lockmaster install .              # the work-system kit into this repository, pinned
 ```
 

@@ -262,3 +262,51 @@ class KitNamesNoRepositoryRule(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HooksFindThePublishedPackage(Installed):
+    """W-16: a repository runs the published package. The hooks find lockmaster in
+    the `lockmaster` command's own environment (`uv tool`, pipx) and never in a
+    checkout beside the repository."""
+
+    PROBE = ("import importlib.util, sys\n"
+             "s = importlib.util.spec_from_file_location('h', sys.argv[1])\n"
+             "m = importlib.util.module_from_spec(s); s.loader.exec_module(m)\n"
+             "print(getattr(m, sys.argv[2])())\n")
+
+    def probe(self, hook, fn, path):
+        env = {k: v for k, v in os.environ.items() if k not in ("LOCKMASTER_SRC", "PYTHONPATH")}
+        env["PATH"] = path
+        r = subprocess.run([sys.executable, "-I", "-c", self.PROBE, str(self.root / ".claude" / "hooks" / hook), fn],
+                           capture_output=True, text=True, env=env, cwd=str(self.root))
+        self.assertEqual(r.returncode, 0, r.stderr)
+        return r.stdout.strip()
+
+    def tool_env(self):
+        env = self.root.parent / "tools" / "lockmaster"
+        site = env / "lib" / "python3.13" / "site-packages"
+        shutil.copytree(str(ROOT_SRC / "lockmaster"), str(site / "lockmaster"))
+        (env / "bin").mkdir(parents=True)
+        exe = env / "bin" / "lockmaster"
+        exe.write_text("#!/bin/sh\n")
+        exe.chmod(0o755)
+        return env / "bin", site
+
+    def test_auto_land_finds_the_commands_environment(self):
+        bindir, site = self.tool_env()
+        path = os.pathsep.join([str(bindir), os.path.dirname(shutil.which("git"))])
+        self.assertEqual(self.probe("auto-land.py", "find_src", path), str(site.resolve()))
+
+    def test_now_ledger_finds_the_commands_environment(self):
+        bindir, _ = self.tool_env()
+        path = os.pathsep.join([str(bindir), os.path.dirname(shutil.which("git"))])
+        self.assertNotEqual(self.probe("now-ledger.py", "renderer", path), "None")
+
+    def test_a_checkout_beside_the_repository_is_never_used(self):
+        beside = self.root.parent / "lockmaster" / "src"
+        shutil.copytree(str(ROOT_SRC / "lockmaster"), str(beside / "lockmaster"))
+        path = os.path.dirname(shutil.which("git"))
+        self.assertEqual(self.probe("auto-land.py", "find_src", path), "None")
+
+
+from support import SRC as ROOT_SRC  # noqa: E402
