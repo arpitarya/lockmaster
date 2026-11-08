@@ -158,7 +158,7 @@ class FiledItems(Installed):
     QUEUE = "# OPEN-WORK\n\n## Blocked on the decider\n\n| what | filed |\n|---|---|\n\n*Empty since 2026-10-01*\n\n---\n\n## Open items (1)\n\n### {build} (1)\n\n{row}\n\n### testing (0)\n\n---\n"
 
     def leave_a_file(self, queue):
-        (self.root / "work" / "open").mkdir(parents=True)
+        (self.root / "work" / "open").mkdir(parents=True, exist_ok=True)  # install scaffolds it
         (self.root / "work" / "OPEN-WORK.md").write_text(queue)
         (self.root / "left.txt").write_text("x\n")
         (self.root / "work" / "NOW.md").write_text(NOW_MD.replace(

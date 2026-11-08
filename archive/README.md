@@ -42,6 +42,7 @@ Rules: [SR-WORK-ARCHIVE](../records/0057_WORK-archive.md).
 | [W-15-work-files-current-everywhere.md](open/W-15-work-files-current-everywhere.md) | 2026-11-08 — built: `install` creates missing work files, `doctor` names missing or stale ones, the `work-files.py` Stop hook; installed in every repository but milo (ruled: left alone) | [SR-LAW-10](../records/0012_LAW-10-work-files-current.md) · [SR-ARCHITECTURE](../records/0101_architecture.md) decision 15 · `tests/test_work_files.py` |
 | [W-16-consume-the-package.md](open/W-16-consume-the-package.md) | 2026-11-08 — built: the kit's hooks run the installed `lockmaster` command, never a sibling checkout; milo's trackers at its root `work/`; the kit from the package in milo, codelaw, fux, sheetpane | [SR-ARCHITECTURE](../records/0101_architecture.md) decision 17 · [SR-LAW-10](../records/0012_LAW-10-work-files-current.md) · `tests/test_kit_hooks.py` |
 | [W-08-hold-the-name.md](open/W-08-hold-the-name.md) | 2026-11-08 — done: `lockmaster` held on PyPI (0.0.1 uploaded by the decider; 0.0.2 published); `@lockmaster` on npm kept empty | [SR-ARCHITECTURE](../records/0101_architecture.md) decision 17 · [W-17](../work/open/W-17-release-from-a-tag.md) |
+| [W-18-install-scaffolds-the-work-system.md](open/W-18-install-scaffolds-the-work-system.md) | 2026-11-08 — built: `install` scaffolds the whole work system | [SR-ARCHITECTURE](../records/0101_architecture.md) decision 15 |
 
 ## `records/`
 

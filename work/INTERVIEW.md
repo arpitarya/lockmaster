@@ -36,7 +36,7 @@ lands by itself once they clear; `work/NOW.md` never makes a landing wait.
 tells a session once that it touched none of WORKLOG, INTERVIEW or OPEN-WORK.
 L8, L9 and L10 are `built: yes`. **W-16:** every repository but lockmaster runs
 the installed `lockmaster` command (`uv tool install`), never the checkout
-beside it. 154 scratch-repo tests pass on Python 3.9.
+beside it. **W-18 (2026-11-08):** `install` also scaffolds the rest of the work system — `kit/scaffold/` (records, AGENTS.md, the rest of `work/`, the scripts) — where a repository lacks it; it reaches the others with the next release. 154 scratch-repo tests pass on Python 3.9.
 **On PyPI:** 0.0.1 (the decider's upload, before W-16) and 0.0.2 (W-16);
 the `lockmaster` command every repository runs is 0.0.2 from PyPI.
 

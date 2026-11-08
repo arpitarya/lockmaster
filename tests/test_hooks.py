@@ -91,11 +91,13 @@ class BlockMain(ScratchCase):
 
 class WithoutTheWorkSystem(ScratchCase):
     """W-09: a repository that has lockmaster but not the work system (no
-    work/NOW.md) gets no NOW ledger and no progress nudge — and no traceback."""
+    work/NOW.md — `install` scaffolds one since W-18, so it was removed) gets no
+    NOW ledger and no progress nudge — and no traceback."""
 
     def test_the_now_hooks_are_silent_and_write_nothing(self):
         code, _, err = self.cli("install", str(self.root))
         self.assertEqual(code, 0, err)
+        (self.root / "work" / "NOW.md").unlink()  # install scaffolds it (W-18); this repository opted out
         (self.root / "a.txt").write_text("changed\n")
         hooks = self.root / ".claude" / "hooks"
         for mode in ("start", "show", "sync", "stop", "end"):
@@ -105,7 +107,7 @@ class WithoutTheWorkSystem(ScratchCase):
                 self.assertEqual((r.returncode, r.stdout, r.stderr), (0, "", ""))
         r = subprocess.run(["bash", str(hooks / "require-progress.sh")], input="{}", capture_output=True, text=True)
         self.assertEqual((r.returncode, r.stdout), (0, ""))
-        self.assertFalse((self.root / "work" / "NOW.md").exists())  # install writes the six (W-15), never NOW.md
+        self.assertFalse((self.root / "work" / "NOW.md").exists())  # the hooks never re-create it
 
 
 if __name__ == "__main__":

@@ -24,6 +24,16 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-08 — `install` scaffolds the whole work system (W-18)  ·  Cowork (Opus 5.5)
+
+- **Asked:** *"what all things is milo missing like records dir and what else ?"*, then *"All these things should be part of Lock Master as well"* and *"implement what we just talked"* — records, AGENTS.md, the full work/ from the latest lockmaster, milo's docs/ to its root, no CI.
+- **Done:** `kit/scaffold/` and `install.scaffold_files` (SR-ARCHITECTURE decision 15); the kit's OPEN-WORK template now passes rule 45a (`{{installed}}`); `tests/test_scaffold.py`; `test_kit_hooks.py` and `test_hooks.py` adjusted for the scaffolded `work/open/` and `work/NOW.md`. Simulated against the other repositories: fux, codelaw and lockmaster get nothing, sheetpane only `AGENTS.md`.
+- **Decided / left open:** a repository with its own `records/` gets none of the kit's records or scripts. It reaches milo and the others only with the next release, which waits on W-17.
+- **Mistakes:** a stray `git stash` from the Cowork bridge left an empty `.git/index.lock` (the MACHINE.md row); removed with the decider's delete permission, nothing stashed.
+- **Next:** W-17 — the decider's tag and trusted publishers, then a release carrying W-18.
+
+---
+
 ## 2026-11-08 — 0.0.2's re-pin finished in fux and sheetpane  ·  Claude Code (Opus 5.5)
 
 - **Asked:** (the same session, *"commit push and publish a new version"*)

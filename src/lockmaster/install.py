@@ -11,6 +11,11 @@
     kit/work/<file>  ->  <repo>/work/<file>  for each of the six work files the
         repo lacks (SR-LAW-10 decision 6); one that exists is never touched,
         and they are the project's own papers, not kit files (decision 16)
+    kit/scaffold/**  ->  <repo>/**  the rest of the work system — AGENTS.md,
+        docs/GLOSSARY.md, the generic records, the rest of work/, archive/ and
+        the work system's scripts — each file the repo lacks; `records/` and
+        `scripts/` only when the repo has no records/ at all, so a register of
+        its own is never mixed with the kit's numbering. Also the project's own papers (decision 16).
 
 An existing file the kit would replace, and which a previous install did not
 write, is never overwritten silently: the install stops and names it, or with
@@ -20,6 +25,7 @@ import hashlib
 import json
 import os
 import stat
+from datetime import date
 from pathlib import Path
 
 from lockmaster import __version__
@@ -31,6 +37,12 @@ SETTINGS = ".claude/settings.json"
 TREES = (("claude", ".claude"), ("github", ".github"))
 # SR-LAW-10: the six work files every repository lockmaster is installed in keeps.
 WORK_FILES = ("OPEN-WORK.md", "BACKLOG.md", "INTERVIEW.md", "MACHINE.md", "LESSONS.md", "WORKLOG.md")
+# SR-ARCHITECTURE decision 15: scaffolded only into a repository that has no records/
+# of its own — the records, and the scripts that are their executable form.
+WITH_RECORDS = ("records", "scripts")
+# kit/scaffold/_archive -> <repo>/archive: under its own name lockmaster's one-archive
+# check (SR-WORK-ARCHIVE decision 1) would read the template as a second archive.
+RENAMED = {"_archive": "archive"}
 
 
 def find_kit():
@@ -191,8 +203,17 @@ def install(target, backup=False, out=print):
     made = work_files(target, kit)
     if made:
         out("  work files created (SR-LAW-10) — commit them: " + ", ".join("work/" + f for f in made))
+    made = scaffold_files(target, kit)
+    if made:
+        out("  work system scaffolded (decision 15) — commit them: " + _summary(made))
     _guard(repo, out)
     return lock
+
+
+def render(src):
+    """A template's bytes, `{{installed}}` replaced by today's date — the one slot
+    (the inbox's `*Empty since …*` line, SR-WORK-OPEN-QUEUE rule 45a)."""
+    return src.read_bytes().replace(b"{{installed}}", date.today().isoformat().encode())
 
 
 def work_files(target, kit):
@@ -207,11 +228,53 @@ def work_files(target, kit):
         dst.parent.mkdir(parents=True, exist_ok=True)
         try:
             with open(str(dst), "xb") as fh:  # exclusive: a file written meanwhile is kept
-                fh.write(src.read_bytes())
+                fh.write(render(src))
         except FileExistsError:
             continue
         made.append(name)
     return made
+
+
+def scaffold_files(target, kit):
+    """Write each kit/scaffold file `target` lacks, at the same path. The
+    WITH_RECORDS directories are written only when `target` has no records/. Never
+    overwrites; keeps a script executable; returns the paths written."""
+    base = kit / "scaffold"
+    if not base.is_dir():
+        return []
+    target = Path(target)
+    own = (target / "records").exists() or (target / "records").is_symlink()
+    skip = set(WITH_RECORDS) if own else set()
+    made = []
+    for src in sorted(base.rglob("*")):
+        if src.is_dir() or "__pycache__" in src.parts or src.name == ".DS_Store":
+            continue
+        rel = src.relative_to(base)
+        rel = Path(RENAMED.get(rel.parts[0], rel.parts[0]), *rel.parts[1:])
+        if rel.parts[0] in skip:
+            continue
+        dst = target / rel
+        if dst.exists() or dst.is_symlink():
+            continue
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            with open(str(dst), "xb") as fh:  # exclusive: a file written meanwhile is kept
+                fh.write(render(src))
+        except FileExistsError:
+            continue
+        if src.stat().st_mode & stat.S_IXUSR:
+            dst.chmod(dst.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+        made.append(rel.as_posix())
+    return made
+
+
+def _summary(paths):
+    """`records/ (19), AGENTS.md, …` — a directory's files counted, a top-level file named."""
+    groups = {}
+    for rel in paths:
+        head = rel.split("/", 1)[0] + "/" if "/" in rel else rel
+        groups[head] = groups.get(head, 0) + 1
+    return ", ".join(h if h[-1] != "/" else "{} ({})".format(h, n) for h, n in groups.items())
 
 
 def _guard(repo, out):

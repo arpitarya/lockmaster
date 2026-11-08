@@ -6,6 +6,20 @@ All notable changes to lockmaster. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `lockmaster install` scaffolds the rest of the work system a repository
+  lacks: `AGENTS.md`, `docs/GLOSSARY.md`, the generic records, `work/README.md`,
+  `NOW.md`, `BLOCKED.json`, `IMPLEMENTATION.md`, the `open/`, `compare/` and
+  `proposals/` indexes, `archive/README.md` and the work system's scripts. A
+  file that exists is never touched; a repository with its own `records/` gets
+  none of the kit's records or scripts (W-18).
+
+### Fixed
+
+- The kit's `work/OPEN-WORK.md` template declares its empty inbox, so a fresh
+  install passes `check-open-work-inbox.py` (W-18).
+
 ## [0.0.2] - 2026-11-08
 
 ### Changed

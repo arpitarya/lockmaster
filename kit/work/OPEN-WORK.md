@@ -19,6 +19,8 @@ change as the work**.
 | what the decider decides | filed |
 |---|---|
 
+*Empty since {{installed}} — nothing waits on the decider.*
+
 ---
 
 ## Open items (0)
