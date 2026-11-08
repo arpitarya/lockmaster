@@ -22,7 +22,7 @@ here. Read that record before changing anything below it.
 
 | what the decider decides | filed |
 |---|---|
-| 🔴 **Hold the name on PyPI** — ruled 2026-11-08: the first upload from your machine. `dist/` is built from `main` and verified; left, your hands: `twine upload dist/*` ([W-08](open/W-08-hold-the-name.md)) | 2026-10-25 |
+| 🔴 **Publish from a tag; rule the repo's visibility** — add the trusted publishers and the two GitHub environments (CONTRIBUTING.md §Releasing); GitHub shows the repo public, decision 17 says private until 0.1.0 ([W-17](open/W-17-release-from-a-tag.md)) | 2026-11-08 |
 | ↳ **blocks:** nothing else in the queue | |
 
 ---
@@ -31,7 +31,7 @@ here. Read that record before changing anything below it.
 
 ### build (1)
 
-🔴 **W-08** `arpit` Hold the name on PyPI: 0.0.1 built and verified in `dist/`; Arpit uploads it from his machine (ruled 2026-11-08). `@lockmaster` kept empty (ruled 2026-11-07). Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
+🔴 **W-17** `arpit` Releases publish from a tag: the trusted publishers and environments, then the tags `v0.0.1` and `v0.0.2` pushed; and the repository's visibility ruled. Filed by Claude Code (from W-08). [detail](open/W-17-release-from-a-tag.md)
 
 
 ### testing (0)

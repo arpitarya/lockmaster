@@ -286,9 +286,13 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
 17. **Python only, on PyPI only** ([SR-LAW-6](0008_LAW-6-python-only.md)):
     one package, `lockmaster`; no npm package. **The repository stays private
     until 0.1.0** — public once the core loop works (ruled 2026-10-25, W-02);
-    a placeholder 0.0.1 on PyPI holds the name before then (W-08). **0.0.1
-    alone is uploaded by the decider from his own machine** (ruled
-    2026-11-08); every release after it publishes from a tag.
+    a placeholder 0.0.1 on PyPI holds the name before then (W-08). **Until
+    the trusted publishers and the GitHub environments exist, a release is
+    uploaded from the decider's machine** (ruled 2026-11-08: 0.0.1 by the
+    decider, *"commit push and publish a new version"* for 0.0.2 — no
+    environment exists, so a tag cannot publish); the release is tagged, and
+    its tag pushed only once they exist — a pushed tag starts the pipeline,
+    which cannot publish yet. Once they exist (W-17), only a tag publishes.
     **Every repository but lockmaster runs the published package** (ruled
     2026-11-08, W-16: *"from here on we publish the package then have all
     consumer consume it"*): `uv tool install lockmaster` (or pipx) once per
