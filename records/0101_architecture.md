@@ -266,7 +266,9 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     install by name, or with `--backup` is moved aside first. This repository
     installs its own kit the same way; `scripts/bootstrap.py` is retired
     (2026-10-25, W-06). The kit's hooks read any repository's inbox heading and
-    name no law number (2026-10-26, W-09). **`kit/work/` holds a short template
+    name no law number (2026-10-26, W-09); the `docket` skill names no queue
+    group, and walks the groups each queue lists (2026-11-08, W-15: codelaw
+    had edited its copy to add its own). **`kit/work/` holds a short template
     of each of the six work files** ([SR-LAW-10](0012_LAW-10-work-files-current.md)
     decision 6; 2026-11-07, W-15): `install` writes each one the target lacks
     and never touches one that exists; they are the project's own papers

@@ -32,6 +32,10 @@ All notable changes to lockmaster. The format follows
 
 ### Fixed
 
+- The kit's `docket` skill no longer lists the queue's groups; it walks the
+  groups each repository's queue names, so a repository with its own group
+  needs no hand edit to the installed skill (W-15).
+
 - Sessions starting at the same moment are no longer refused when git trips
   on another worktree being added (`git.worktree_add` retries it; SR-LAW-8).
 - `work/NOW.md`, the live ledger, no longer stops a landing: a landing that
