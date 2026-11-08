@@ -12,11 +12,9 @@ Rule: [SR-WORK-NOW](../records/0061_WORK-now.md).
 
 | session | surface | started | working on |
 |---|---|---|---|
-| 4b39f56b-a885-4c6e-8830-403016355ea6 | Claude Code | 2026-11-05 11:39 |  |
+| 641d8f75-a5c6-4dfb-8130-fcf5cc1675e0 | Claude Code | 2026-11-07 10:33 | W-08: dist/ built and verified; the decider uploads |
 
 ## Resources this session created
 
 | kind | where | host | session | created |
 |---|---|---|---|---|
-| worktree | `/Users/arpitarya/my_programs/lockmaster/.claude/worktrees/handoff-20261105-055911` | Arpits-MacBook | 4b39f56b-a885-4c6e-8830-403016355ea6 | 2026-11-05 |
-| worktree | `/Users/arpitarya/my_programs/lockmaster/.claude/worktrees/W-11-land` | Arpits-MacBook | 4b39f56b-a885-4c6e-8830-403016355ea6 | 2026-11-05 |

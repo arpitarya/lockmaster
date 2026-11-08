@@ -5,8 +5,8 @@ description: "Arpit, 2026-10-25: hold `lockmaster` on PyPI — checked free that
 item: W-08
 filed: 2026-10-25
 filed_by: "Arpit (Cowork, Opus 5.5)"
-updated: 2026-11-07
-updated_by: "Cowork (Opus 5.5): docket — npm org ruled keep; PyPI checked, still free (404, no v0.0.1 tag)"
+updated: 2026-11-08
+updated_by: "Claude Code (Opus 5.5): the decider ruled a first upload from his machine; dist/ built and verified"
 ball: arpit
 ---
 
@@ -17,15 +17,18 @@ ball: arpit
 | step | what we do | what it gives us | state |
 |---|---|---|---|
 | 1 | The release pipeline and 0.0.1 prepared: `.github/workflows/release.yml`, `scripts/release.py`, `__version__` 0.0.1, CHANGELOG cut | a tag publishes, no token stored | ✅ 2026-10-25 (Claude Code) |
-| 1a | The decider adds the pending trusted publishers on pypi.org and test.pypi.org and the `testpypi` / `pypi` GitHub environments (CONTRIBUTING.md §Releasing) | the pipeline may publish | 🔴 decider decides |
-| 1b | The decider pushes `main` and the tag: `git tag -a v0.0.1 -m "lockmaster 0.0.1" && git push origin main v0.0.1`, then approves the `pypi` environment | the PyPI name is ours | 🔴 decider decides |
+| 1a | ~~The decider adds the pending trusted publishers and the `testpypi` / `pypi` GitHub environments, then pushes the tag~~ | — | ⤵ replaced 2026-11-08 by 1c–1d; trusted publishing is still how 0.1.0 and later publish |
+| 1c | Claude Code builds `dist/` from `main` and runs the pipeline's checks on it: tests, lint, `twine check --strict`, every kit file in the wheel, the wheel installed alone and one change landed with it | the files to upload | ✅ 2026-11-08 (Claude Code) |
+| 1d | The decider uploads 0.0.1 from his machine: `twine upload dist/*` | the PyPI name is ours | 🔴 decider decides |
 | 2 | Keep or delete the npm org `@lockmaster` — created 2026-10-25 in Chrome a minute before L6 was ruled; it holds nothing | no loose end on npm | ✅ ruled 2026-11-07: kept empty, nothing published |
 
 **Arpit, 2026-10-25:** *"to create an npm org, you go ahead and do it … for lock master and lock hyphen master, both of them."* — then, before `lock-master` was created: *"I want this to be Python only project. I don't believe we need npm."*
 
 **Arpit, 2026-11-07:** *"the package is only for pypi"* — and on `@lockmaster`: *"Keep it empty"*.
 
-**Model:** NONE — the decider's PyPI and GitHub accounts; the build, the pipeline and the version are prepared (2026-10-25).
+**Arpit, 2026-11-08:** *"commit everything generate the build i will do the first publish from local"*.
+
+**Model:** NONE — the decider's PyPI account; `dist/` is built and verified (2026-11-08).
 
 ## Goal
 
