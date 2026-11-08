@@ -22,7 +22,7 @@ here. Read that record before changing anything below it.
 
 | what the decider decides | filed |
 |---|---|
-| 🔴 **Hold the name on PyPI** — ruled 2026-11-07: PyPI only, `@lockmaster` kept empty. Left, your hands: add the trusted publishers and the two GitHub environments (CONTRIBUTING.md §Releasing), then push `main` and the tag `v0.0.1` ([W-08](open/W-08-hold-the-name.md)) | 2026-10-25 |
+| 🔴 **Hold the name on PyPI** — ruled 2026-11-08: the first upload from your machine. `dist/` is built from `main` and verified; left, your hands: `twine upload dist/*` ([W-08](open/W-08-hold-the-name.md)) | 2026-10-25 |
 | ↳ **blocks:** nothing else in the queue | |
 
 ---
@@ -31,7 +31,7 @@ here. Read that record before changing anything below it.
 
 ### build (1)
 
-🔴 **W-08** `arpit` Hold the name on PyPI: the pipeline and 0.0.1 are ready; Arpit adds the trusted publishers and environments, then pushes the tag `v0.0.1`. `@lockmaster` kept empty (ruled 2026-11-07). Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
+🔴 **W-08** `arpit` Hold the name on PyPI: 0.0.1 built and verified in `dist/`; Arpit uploads it from his machine (ruled 2026-11-08). `@lockmaster` kept empty (ruled 2026-11-07). Filed by Arpit (Cowork). [detail](open/W-08-hold-the-name.md)
 
 ### testing (0)
 

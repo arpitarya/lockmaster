@@ -24,6 +24,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-08 — W-08: 0.0.1 built for the decider's first upload  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"commit everything generate the build i will do the first publish from local"*
+- **Done:** the ruling recorded in W-08 (steps 1c–1d replace 1a–1b), the queue and SR-ARCHITECTURE decision 17. The pipeline's checks run locally: 151 tests, the work-system and inbox checks, the forced-operation grep. `uv build` made `dist/lockmaster-0.0.1.tar.gz` and `…-py3-none-any.whl`; `twine check --strict` passes, every kit file is in the wheel, and the wheel installed alone under Python 3.9.6 and 3.14.2 installs the kit, passes `doctor` and lands one change. `lockmaster` is still free on PyPI and TestPyPI (404).
+- **Decided / left open:** the decider ruled a first upload by hand; no tag is made — `release.py check` wants `v0.0.1`, and pushing it would rerun the pipeline against a version already on PyPI.
+- **Mistakes:** none.
+- **Next:** the decider runs `twine upload dist/*`; then W-08's DoD 1 is checked and W-08 closed.
+
 ## 2026-11-08 — W-15 closed: the kit installed in codelaw  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"implement w-15"*

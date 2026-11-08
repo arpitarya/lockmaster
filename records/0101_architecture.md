@@ -286,7 +286,9 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
 17. **Python only, on PyPI only** ([SR-LAW-6](0008_LAW-6-python-only.md)):
     one package, `lockmaster`; no npm package. **The repository stays private
     until 0.1.0** — public once the core loop works (ruled 2026-10-25, W-02);
-    a placeholder 0.0.1 on PyPI holds the name before then (W-08).
+    a placeholder 0.0.1 on PyPI holds the name before then (W-08). **0.0.1
+    alone is uploaded by the decider from his own machine** (ruled
+    2026-11-08); every release after it publishes from a tag.
     **A release is a tag `v<version>`, and only a tag publishes.**
     `.github/workflows/release.yml` — lockmaster's own, never in `kit/` —
     runs the tests on Linux, macOS and Windows under Python 3.9 and 3.13 and

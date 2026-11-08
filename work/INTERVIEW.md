@@ -34,17 +34,18 @@ lands by itself once they clear; `work/NOW.md` never makes a landing wait.
 **W-15:** `install` creates any of the six work files a repository lacks,
 `doctor` names a missing or stale one, and the kit's `work-files.py` Stop hook
 tells a session once that it touched none of WORKLOG, INTERVIEW or OPEN-WORK.
-L8, L9 and L10 are `built: yes`. 150 scratch-repo tests pass on Python 3.9.
-Nothing is on PyPI until the decider finishes W-08.
+L8, L9 and L10 are `built: yes`. 151 scratch-repo tests pass on Python 3.9.
+Nothing is on PyPI until the decider uploads 0.0.1 (W-08).
 
 ## 2 · In flight, and the immediate next step
 
-*Updated 2026-11-08 (Claude Code, Opus 5.5 — W-15 closed).* **No agent item is
+*Updated 2026-11-08 (Claude Code, Opus 5.5 — W-08's files built).* **No agent item is
 open.** The new kit (W-10, W-15) runs in lockmaster, codelaw, fux and
 sheetpane; milo keeps the kit it adopted and its trackers in `tv-movies/work/`
 (the decider, 2026-11-07: *"Leave milo alone"*). **W-08** is ruled — PyPI only,
-`@lockmaster` kept empty — and waits on the decider's hands: the trusted
-publishers, the GitHub environments, the `v0.0.1` tag. `lm/W-09` and
+`@lockmaster` kept empty, and 0.0.1 uploaded from the decider's machine
+(2026-11-08); `dist/` is built from `main` and verified, and waits on his
+`twine upload dist/*`. Trusted publishing stays for 0.1.0 and later. `lm/W-09` and
 `lm/handoff-20261105-055911` are kept, unmerged branches `doctor` names: the
 decider rules (SR-WORK-CLEANUP decision 3).
 
