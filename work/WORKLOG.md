@@ -34,6 +34,14 @@ entry is corrected by a new one. Distinct from `INTERVIEW.md`, which is the
 
 ---
 
+## 2026-11-09 — W-19: CI green on every runner, for a release through the pipeline  ·  Claude Code (Opus 5.5)
+
+- **Asked:** *"push and publish the latest package through cicd pipeline"*
+- **Done:** found CI red on every push since 2026-10-26 and no GitHub environment. W-19 filed and closed: the guard's CI replay walks `main`'s first-parent line; `ubuntu-24.04` for Python 3.9; twelve Windows failures fixed — one a real gap (`block-main.py` let `git -C C:\repo commit` through on Windows). Proved on draft PR #1 (Windows 3.9 and 3.13 green) before landing.
+- **Decided / left open:** creating the `testpypi`/`pypi` environments with `gh api` was refused by Claude Code's permission check — W-17 step 1 stays the decider's, with the PyPI and TestPyPI trusted publishers (his login). No version is tagged for the pipeline until then.
+- **Mistakes:** none this session; LESSONS 2026-11-09 records the eleven unread red runs.
+- **Next:** W-17 — the decider adds the trusted publishers and environments; then 0.0.4 is cut and its tag pushed.
+
 ## 2026-11-08 — W-18 committed; lockmaster 0.0.3 published  ·  Claude Code (Opus 5.5)
 
 - **Asked:** *"commit everything and push"* — then *"and then publish a new version"*

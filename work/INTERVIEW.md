@@ -42,6 +42,11 @@ beside it. **W-18 (2026-11-08):** `install` also scaffolds the rest of the work 
 
 ## 2 · In flight, and the immediate next step
 
+*Updated 2026-11-09 (Claude Code, Opus 5.5 — W-19, CI green).* CI passes on
+Linux, macOS and Windows under 3.9 and 3.13 (it had failed on every push since
+2026-10-26). Publishing through the pipeline waits only on W-17 step 1, the
+decider's: the trusted publishers and the two GitHub environments.
+
 *Updated 2026-11-08 (Claude Code, Opus 5.5 — 0.0.3 published).* **No agent item
 is open.** 0.0.3 (W-18, built by a Cowork session and landed for it) is on
 PyPI, uploaded from the decider's machine (SR-ARCHITECTURE decision 17); the

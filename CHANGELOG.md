@@ -6,6 +6,16 @@ All notable changes to lockmaster. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Windows: the kit's `block-main.py` read a Windows path's backslashes as
+  escapes, so `git -C C:\repo commit` on `main` passed; `status`, `doctor` and
+  `worktree-cleanup.py` print worktree paths in the platform's form (W-19).
+- CI: the commit guard replays `main`'s own line, each landing against its
+  first parent, so a resubmitted landing's refused first attempt no longer
+  fails every run; Linux runs on `ubuntu-24.04`, which still has Python 3.9
+  (W-19).
+
 ## [0.0.3] - 2026-11-08
 
 ### Added
