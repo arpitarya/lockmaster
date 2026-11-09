@@ -2,6 +2,7 @@
 with the user's global and system git config shut out so their hooks and
 settings cannot change the result."""
 import io
+import json
 import os
 import subprocess
 import sys
@@ -13,6 +14,15 @@ from pathlib import Path
 SRC = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(SRC))
 ROOT = SRC.parent
+
+def toml_str(s):
+    """`s` as a TOML basic string: JSON's escaping is TOML's, so a Windows path survives."""
+    return json.dumps(s)
+
+
+# A check that fails while a.txt holds an "x". Checks run in the platform's shell
+# (cmd.exe on Windows), so it is Python, not `! grep` (W-19).
+NO_X = toml_str('"{}" -c "import sys; sys.exit(\'x\' in open(\'a.txt\').read())"'.format(sys.executable))
 
 ENV = {
     "GIT_CONFIG_GLOBAL": os.devnull,

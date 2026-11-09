@@ -105,8 +105,9 @@ class WithoutTheWorkSystem(ScratchCase):
                 r = subprocess.run([sys.executable, str(hooks / "now-ledger.py"), mode],
                                    input=json.dumps({"session_id": "s1"}), capture_output=True, text=True)
                 self.assertEqual((r.returncode, r.stdout, r.stderr), (0, "", ""))
-        r = subprocess.run(["bash", str(hooks / "require-progress.sh")], input="{}", capture_output=True, text=True)
-        self.assertEqual((r.returncode, r.stdout), (0, ""))
+        if sys.platform != "win32":  # sh hooks: `bash` on Windows may be WSL's, with no Linux installed
+            r = subprocess.run(["bash", str(hooks / "require-progress.sh")], input="{}", capture_output=True, text=True)
+            self.assertEqual((r.returncode, r.stdout), (0, ""))
         self.assertFalse((self.root / "work" / "NOW.md").exists())  # the hooks never re-create it
 
 

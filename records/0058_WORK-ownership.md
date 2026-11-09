@@ -76,9 +76,14 @@ check that slips on the first busy day.
    exist at `pre-commit` time. Install once:
    `ln -sf ../../scripts/sr-guard.sh .git/hooks/commit-msg`.
 7. `--no-verify` leaves no trace locally, so **CI replays the guard over every
-   commit since `records/RULE-SINCE`** (`.github/workflows/ci.yml`, job `lint`),
-   each judged against the register as it stood in that commit
-   (`SR_GUARD_COMMIT=<sha> scripts/sr-guard.sh`).
+   commit on `main`'s own line since `records/RULE-SINCE`**
+   (`git rev-list --first-parent`; `.github/workflows/ci.yml`, job `lint`),
+   each judged by what it brought to its first parent, against the register
+   and message as they stood in that commit (`SR_GUARD_COMMIT=<sha>
+   scripts/sr-guard.sh`). A lockmaster landing is a merge carrying the message
+   `main` received; its branch's own commits are not replayed — a resubmit
+   after a refusal leaves the refused first attempt on the branch (2026-11-09,
+   W-19: three such commits had failed every CI run since 2026-10-26).
 8. The guard proves a record was **touched**, never that it is coherent.
 9. The register's `built` column is never `no` for a record whose `owns:` is
    non-empty and every one of whose components exists: code that exists
@@ -94,8 +99,9 @@ check that slips on the first busy day.
   names a record whose `owns:` lists it, and each component exists. The same
   script fails a top-level entry of the four folders that no row covers
   (decision 2) and a `built: no` that decision 9 forbids.
-- A `--no-verify` commit fails CI on its first push (decision 7); a merge
-  commit is not replayed, since its changes are its parents'.
+- A `--no-verify` commit fails CI on its first push (decision 7) — a
+  `--no-verify` landing as much as a direct commit, since the landing carries
+  the branch's changes against `main`.
 - Coherence is not checked (decision 8; backlog row B-001).
 
 ### Alternatives considered

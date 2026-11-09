@@ -84,8 +84,8 @@ of it and the decider's call on the other.
 5. **A dead session's worktrees** ([SR-WORK-NOW](0061_WORK-now.md) decision 5) are cleaned
    the same way at the next session's first prompt.
 6. **At any time:** `python3 .claude/hooks/worktree-cleanup.py` reports every
-   worktree's verdict; `--apply` removes the safe ones. A red one is never
-   touched.
+   worktree's verdict, its path in the platform's own form (2026-11-09, W-19);
+   `--apply` removes the safe ones. A red one is never touched.
 
 **Other leftovers**
 

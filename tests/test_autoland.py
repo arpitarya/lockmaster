@@ -4,10 +4,11 @@ import json
 import os
 import subprocess
 import sys
+import time
 import unittest
 from pathlib import Path
 
-from support import ROOT, SRC, ScratchCase, git
+from support import NO_X, ROOT, SRC, ScratchCase, git
 
 from lockmaster import land, surface
 from lockmaster.repo import LANDED, OPEN, RED, WAITING
@@ -53,7 +54,7 @@ class AutoLand(ScratchCase):
         self.assertEqual(land.sync(self.repo(), session="s-1", cwd=str(w)), ["W-1"])
 
     def test_a_failed_check_holds_the_change_and_reports_once(self):
-        (self.root / "lockmaster.toml").write_text('[checks]\nno-x = "! grep -q x a.txt"\n')
+        (self.root / "lockmaster.toml").write_text("[checks]\nno-x = {}\n".format(NO_X))
         self.commit("config")
         w = self.start("W-1", "a.txt")
         (w / "a.txt").write_text("x marks it\n")
@@ -150,7 +151,7 @@ class AutoLand(ScratchCase):
         self.assertFalse(land.pending(self.repo(), self.repo().load("W-1")))
 
     def test_a_red_handoff_is_retried_on_the_same_change_once_the_checkout_is_fixed(self):
-        (self.root / "lockmaster.toml").write_text('[checks]\nno-x = "! grep -q x a.txt"\n')
+        (self.root / "lockmaster.toml").write_text("[checks]\nno-x = {}\n".format(NO_X))
         self.commit("config")
         (self.root / "a.txt").write_text("x\n")
         land.handoff(self.repo(), ["a.txt"], "W-6: a")
@@ -256,7 +257,7 @@ class AutoLand(ScratchCase):
         self.assertEqual(land.handoffs(self.repo()), [])
 
     def test_a_handoff_that_goes_red_waits_for_new_edits(self):
-        (self.root / "lockmaster.toml").write_text('[checks]\nno-x = "! grep -q x a.txt"\n')
+        (self.root / "lockmaster.toml").write_text("[checks]\nno-x = {}\n".format(NO_X))
         self.commit("config")
         (self.root / "a.txt").write_text("x\n")
         land.handoff(self.repo(), ["a.txt"], "W-5: x")
@@ -359,6 +360,12 @@ class Hook(ScratchCase):
         subprocess.run([sys.executable, str(HOOK), "start"], input=json.dumps({"session_id": "s-9", "cwd": str(self.root)}),
                        capture_output=True, text=True, env=env, cwd=str(self.root), check=True)
         self.assertIn("export CLAUDE_SESSION_ID=s-9", env_file.read_text())
+        log = self.repo().state / "auto-land.log"  # the detached pickup: let it finish before the
+        for _ in range(100):                       # repository is deleted (Windows keeps the log locked)
+            if log.exists() and log.read_text(errors="replace").strip():
+                break
+            time.sleep(0.1)
+        time.sleep(0.5)
 
 
 if __name__ == "__main__":

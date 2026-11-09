@@ -210,6 +210,8 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     forces (`+`) or deletes, so the remote takes only a fast-forward of the
     landings. Any other push that would update `main` is refused, an unknown
     option included. A heredoc's body is input, not commands, and is not judged.
+    On Windows a backslash in the command is a path's, not an escape
+    (2026-11-09, W-19: `git -C C:\…` was read as `C:…` and passed).
     lockmaster's own landing runs git inside `lockmaster`, not through the
     agent's shell tool, so it passes. The hook binds agent sessions only: the
     decider's own terminal can still commit to `main`.
@@ -217,7 +219,8 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
 **Configuration**
 
 13. **`lockmaster.toml` at the repo root** — `[main]` (the branch), `[checks]`
-    (name → command; each must pass), `[generated]` (path or glob → rebuild
+    (name → command, run in the platform's shell — `cmd.exe` on Windows; each
+    must pass), `[generated]` (path or glob → rebuild
     command), `[merge]` (path or glob → structural driver), and an optional
     `[land]` whose only key, `auto`, is `"on"` (the default) or `"off"`
     (decision 20). Five tables of string values, nothing else; anything outside that subset is a loud error.
@@ -321,7 +324,8 @@ the same ideas fit on top of git (`work/compare/source-control.compare.md`).
     release.
     **A release is a tag `v<version>`, and only a tag publishes.**
     `.github/workflows/release.yml` — lockmaster's own, never in `kit/` —
-    runs the tests on Linux, macOS and Windows under Python 3.9 and 3.13 and
+    runs the tests on Linux (`ubuntu-24.04`: Python 3.9 has no build for
+    26.04), macOS and Windows under Python 3.9 and 3.13 and
     the work-system checks; checks that the tag, `lockmaster.__version__` (the
     one version source) and a `CHANGELOG.md` section agree
     (`scripts/release.py check`); builds the sdist and wheel, `twine check`s
