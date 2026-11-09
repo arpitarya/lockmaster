@@ -1,7 +1,7 @@
 {
   "files": {
     ".claude/hooks/auto-land.py": "3d0e5b76a98236b8d3bb9d2a6ed79a20c935cb1345f32e973456d6169d5bbb3d",
-    ".claude/hooks/block-main.py": "57d209ceeed9292dca00442ea3c6e004348fbd47487def79cb4238c01567fdfb",
+    ".claude/hooks/block-main.py": "b32764ae5c71a0ac7319ee5ef5572fc5d74850ebb2fc08e6c437d56d88ad1a73",
     ".claude/hooks/claim-guard.py": "ad102d604eda2d9a0383850dec08e99e9d6e3e51e836e90c59c0498fe75b49dc",
     ".claude/hooks/disk-budget.py": "56ac3beaf5cbff2e17acae976d45d8eee5be3fedeb7a62507167ccd408d324cc",
     ".claude/hooks/guard-open-work-inbox.sh": "2100bea49ebe037c7c0b35cedef6c4a2f5e8189c4ea3e7d76e7292e44737d10c",
@@ -12,11 +12,11 @@
     ".claude/hooks/session-lock.sh": "febe0bec484001ae2a10f0133da2e830a1ecbe161a6509a2646bd1ce0a2283f8",
     ".claude/hooks/stop-if-blocked.sh": "18f8fdbe8ca93dfc2008a4f73ac7cd04ef6bc780ae8899b680ee3f4fa1281c45",
     ".claude/hooks/work-files.py": "cd46eebe7c00e7a404b40ce43f97bd384106b5a2bb776888ec693875bacd2e5e",
-    ".claude/hooks/worktree-cleanup.py": "cdaeb8a416068f21d32ebc3b6e860bd62710729b91a78fdcc4a0b1388ef55c40",
+    ".claude/hooks/worktree-cleanup.py": "a63bec759e3d9f6f7c01ff47c718e12aa7a35c082b68ceaa8ffadaf429b24507",
     ".claude/skills/docket/SKILL.md": "86e2b5e7b7144285d884f547e02dfca80dd403df86f1f7640fd710088560b093",
     ".claude/skills/landing/SKILL.md": "8b0ecf1f87f180e8fa9e125ab8bfddfa78872346a00c3e95728e973d330af8b0"
   },
-  "kit": "d9ea75382fb5a05f2268d1a53610ecf73b33ef243ee344b4f3e166b5617477dd",
+  "kit": "e24d51c9144ede669d4d0e6b7d3634f7523da0de50ae9979e45d48875cb1da46",
   "settings": [
     "$CLAUDE_PROJECT_DIR/.claude/hooks/guard-open-work-inbox.sh",
     "$CLAUDE_PROJECT_DIR/.claude/hooks/inject-inbox.sh",

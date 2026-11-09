@@ -77,6 +77,8 @@ def segments(command):
     command = without_heredocs(command)
     lexer = shlex.shlex(command.replace("\n", " ; "), posix=True, punctuation_chars=True)
     lexer.whitespace_split = True
+    if os.name == "nt":
+        lexer.escape = ""  # `C:\Users\…` is a path here, not a run of escapes
     seg = []
     try:
         for tok in lexer:

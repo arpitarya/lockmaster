@@ -57,7 +57,7 @@ def check(repo):
     for t in git.worktrees(repo.root):
         p = os.path.realpath(t["path"])
         if p.startswith(root_wt + os.sep) and p not in owned:
-            out.append("orphan worktree {} [{}]: no live change owns it".format(t["path"], t["branch"] or "detached"))
+            out.append("orphan worktree {} [{}]: no live change owns it".format(os.path.normpath(t["path"]), t["branch"] or "detached"))
 
     live_branches = {c["branch"] for c in live + kept}
     for b in git.out(["for-each-ref", "--format=%(refname:short)", "refs/heads/lm/"], repo.root).split():

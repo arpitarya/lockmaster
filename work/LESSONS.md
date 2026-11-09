@@ -11,6 +11,16 @@ named here only as the failure that produced it. A lesson whose remedy is
 
 ---
 
+## 2026-11-09 — a red CI nobody reads is a red CI nobody fixes
+
+CI on `main` failed on every push from 2026-10-26 to 2026-11-08 — eleven runs — and
+no session looked: the work moved through local landings, which run the local
+checks. The causes had piled up: three historical commits (refused first attempts of
+resubmitted landings) the guard replay judged, a runner image upgrade that dropped
+Python 3.9, and twelve Windows failures, one of them a real gap in `block-main.py`.
+A release through the pipeline found it. Look at `gh run list` before saying the
+pipeline can publish.
+
 ## 2026-11-08 — the shell here is zsh: an unquoted `$PATHS` is one argument
 
 A list of 64 paths built with `PATHS=$(…)` and passed as `lockmaster save … $PATHS`

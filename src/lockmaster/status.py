@@ -103,7 +103,7 @@ def report(repo):
         c = by_path.get(os.path.realpath(t["path"]))
         label = "main checkout" if os.path.realpath(t["path"]) == os.path.realpath(str(repo.root)) else (
             "change " + c["item"] if c else "not a live change's")
-        lines.append("  {} [{}] {}".format(t["path"], t["branch"] or "detached", label))
+        lines.append("  {} [{}] {}".format(os.path.normpath(t["path"]), t["branch"] or "detached", label))
 
     size, gb = disk_bytes(repo.root), budget_gb(repo.root)
     if gb:

@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from support import ROOT, ScratchCase, git
+from support import NO_X, ROOT, ScratchCase, git, toml_str
 
 from lockmaster import doctor, land, status
 from lockmaster.repo import LANDED, OPEN, QUEUED, RED, WAITING
@@ -69,7 +69,7 @@ class Waiting(ScratchCase):
 
     def test_waiting_does_not_run_the_checks_again(self):
         count = Path(self._tmp.name) / "checks-ran"
-        (self.root / "lockmaster.toml").write_text('[checks]\ncount = "echo x >> {}"\n'.format(count))
+        (self.root / "lockmaster.toml").write_text("[checks]\ncount = {}\n".format(toml_str("echo x >> {}".format(count))))
         self.commit("config")
         w = self.start("W-1", "a.txt")
         (w / "a.txt").write_text("mine\n")
@@ -106,7 +106,7 @@ class Waiting(ScratchCase):
         self.assertEqual(git(self.root, "status", "--porcelain"), "M b.txt")
 
     def test_other_refusals_stay_red(self):
-        (self.root / "lockmaster.toml").write_text('[checks]\nno-x = "! grep -q x a.txt"\n')
+        (self.root / "lockmaster.toml").write_text("[checks]\nno-x = {}\n".format(NO_X))
         self.commit("config")
         w = self.start("W-1", "a.txt")
         (w / "a.txt").write_text("x\n")

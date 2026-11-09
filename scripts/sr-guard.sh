@@ -16,7 +16,7 @@
 # CI replays it over history (decision 7): with SR_GUARD_COMMIT=<sha> the files
 # and the message are that commit's, not the index's.
 #
-#     for c in $(git rev-list --no-merges "$(grep -v '^#' records/RULE-SINCE)"..HEAD); do
+#     for c in $(git rev-list --first-parent "$(grep -v '^#' records/RULE-SINCE)"..HEAD); do
 #       SR_GUARD_COMMIT=$c scripts/sr-guard.sh; done
 set -euo pipefail
 
@@ -32,7 +32,13 @@ fi
 [ -f "$REGISTER" ] || exit 0
 
 if [ -n "${SR_GUARD_COMMIT:-}" ]; then
-  staged="$(git diff-tree --no-commit-id --name-only -r "$SR_GUARD_COMMIT")"
+  # what the commit brought to its first parent: a landing is a merge whose
+  # message is the one main received; its branch's own commits are not replayed
+  if git rev-parse -q --verify "$SR_GUARD_COMMIT^1" >/dev/null; then
+    staged="$(git diff --no-renames --name-only "$SR_GUARD_COMMIT^1" "$SR_GUARD_COMMIT")"
+  else
+    staged="$(git diff-tree --root --no-commit-id --name-only -r "$SR_GUARD_COMMIT")"
+  fi
 else
   staged="$(git --no-optional-locks diff --cached --name-only)"
   msg_file="${1:?sr-guard.sh must run as a commit-msg hook with the message file as \$1}"

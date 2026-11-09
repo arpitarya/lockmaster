@@ -284,13 +284,15 @@ class HooksFindThePublishedPackage(Installed):
 
     def tool_env(self):
         env = self.root.parent / "tools" / "lockmaster"
-        site = env / "lib" / "python3.13" / "site-packages"
+        if sys.platform == "win32":  # a Windows venv: Scripts\lockmaster.exe, Lib\site-packages
+            bindir, site, exe = env / "Scripts", env / "Lib" / "site-packages", "lockmaster.exe"
+        else:
+            bindir, site, exe = env / "bin", env / "lib" / "python3.13" / "site-packages", "lockmaster"
         shutil.copytree(str(ROOT_SRC / "lockmaster"), str(site / "lockmaster"))
-        (env / "bin").mkdir(parents=True)
-        exe = env / "bin" / "lockmaster"
-        exe.write_text("#!/bin/sh\n")
-        exe.chmod(0o755)
-        return env / "bin", site
+        bindir.mkdir(parents=True)
+        (bindir / exe).write_text("#!/bin/sh\n")
+        (bindir / exe).chmod(0o755)
+        return bindir, site
 
     def test_auto_land_finds_the_commands_environment(self):
         bindir, site = self.tool_env()

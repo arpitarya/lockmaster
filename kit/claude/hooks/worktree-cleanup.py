@@ -147,9 +147,9 @@ def main(argv):
     paths = [a for a in argv if not a.startswith("--")] or None
     cleaned, red = sweep(paths, apply)
     for path, msg in cleaned:
-        print(f"ok   {path} — {msg}")
+        print(f"ok   {os.path.normpath(path)} — {msg}")
     for path, reasons in red:
-        print(f"RED  {path} — " + "; ".join(reasons))
+        print(f"RED  {os.path.normpath(path)} — " + "; ".join(reasons))
     if not cleaned and not red:
         print("no worktrees besides main")
     return 0
